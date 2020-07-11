@@ -1,0 +1,52 @@
+<section>
+    <form fxLayout="column" fxLayoutAlign="center center" #f="ngForm" fxLayoutGap="10px" (ngSubmit)="onSubmit(f)">
+        <mat-form-field>
+            <input type="text" matInput placeholder="UserName" #userNameInput="ngModel"
+                name="userName" id="userName" ngModel required minlength="8">
+                <mat-error *ngIf="!userNameInput.hasError('required')">UserName is invalid</mat-error>
+                <mat-error *ngIf="userNameInput.hasError('required')">UserName should contain at least 8 characters long.</mat-error>
+        </mat-form-field>
+        <mat-form-field hintLabel="Password should be at least 8 characters long.">
+            <input type="password" matInput placeholder="Password" #pwInput="ngModel"
+                name="password" id="password" ngModel required minlength="8">
+                <mat-hint align="end">{{ pwInput.value?.length }} / 8 </mat-hint>
+                <mat-error>Password should contain at least 8 characters long.</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Birthdate" [matDatepicker]="picker" [max]="maxDate" ngModel name="birthday">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+            <mat-form-field>
+                <mat-label> Currency </mat-label>
+                <mat-select #currencyInput="ngModel" name="currency" id="currency" ngModel required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let currency of currencies" [value]="currency">
+                        {{currency}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Category is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label> Country </mat-label>
+                <mat-select #countryInput="ngModel" name="country" id="country" (selectionChange)="filterCity(f)" ngModel required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let country of countries" [value]="country">
+                        {{country}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Country is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label> City </mat-label>
+                <mat-select #cityInput="ngModel" name="city" id="city" ngModel required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let city of cities" [value]="city">
+                        {{city}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>City is required.</mat-error>
+            </mat-form-field>
+        <button type="submit" [disabled]="f.invalid" mat-raised-button color="warn">Submit</button>
+    </form>
+</section>
