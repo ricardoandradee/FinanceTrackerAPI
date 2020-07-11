@@ -39,6 +39,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   private paymentDate = "All";
   private category = "All";
   private totalPrice = 0;
+  userBaseCurrency: string;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -56,6 +57,10 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
       this.categoryCount = categoryList.length;
     });
     
+    this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
+      this.userBaseCurrency = userBaseCurrency;
+    });
+
     this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
       this.paymentService.setPayments = payments;
     });
@@ -119,15 +124,9 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     });
   }
 
-  get userCurrency(): string {
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    return user.userCurrency;
-  }
-
   getTotalCost() {
-    
-    const currencyMapperList = this.dataSource.filteredData.map((Payment: Payment) => {
-      return { currencyFrom: Payment.currency, currencyTo: this.userCurrency, price: Payment.price } as CurrencyConverterMapper;
+    const currencyMapperList = this.dataSource.filteredData.map((payment: Payment) => {
+      return { currencyFrom: payment.currency, currencyTo: this.userBaseCurrency, price: payment.price } as CurrencyConverterMapper;
     });
 
     return this.currencyService.convertCurrencyList(currencyMapperList);

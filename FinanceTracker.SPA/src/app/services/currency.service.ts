@@ -11,8 +11,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class CurrencyService {
     private baseUrl = environment.apiUrl;
     private currencyRates: KeyValuePair<string, number>[] = [];
+    private dataSource$: BehaviorSubject<string> = new BehaviorSubject("");
 
     constructor(private http: HttpClient) {
+    }
+
+    get getUserBaseCurrency(): Observable<string> {
+        return this.dataSource$.asObservable();
+    }
+
+    set setUserBaseCurrency(userCurrency: string) {
+        this.dataSource$.next(userCurrency);
     }
     
     populateCurrencyRates() {

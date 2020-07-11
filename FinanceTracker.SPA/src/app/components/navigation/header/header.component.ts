@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
    }
 
   ngOnInit() {
-    const user: User = JSON.parse(localStorage.getItem('user'));
+    const user: User = this.setUserBaseCurrencyInLocalStorage();
     this.userBaseCurrency = user.userCurrency ? user.userCurrency : 'EUR';
   }
 
@@ -31,10 +31,17 @@ export class HeaderComponent implements OnInit {
 
   saveUserBaseCurrency() {
     this.currencyService.updateUserBaseCurrency(this.userBaseCurrency).subscribe(response => {
-      const user: User = JSON.parse(localStorage.getItem('user'));
+      const user = this.setUserBaseCurrencyInLocalStorage();
       user.userCurrency = this.userBaseCurrency;
       localStorage.setItem('user', JSON.stringify(user));
+      
     });
+  }
+
+  private setUserBaseCurrencyInLocalStorage() : User {    
+      const user: User = JSON.parse(localStorage.getItem('user'));
+      this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
+      return user;
   }
 
   onToggleSidenav() {

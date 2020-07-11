@@ -125,6 +125,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "finance-tracker"
+    }
+  },
+  "defaultProject": "finance-tracker",
+  "cli": {
+    "analytics": "b3a1ea0a-1313-47dd-bb79-fd76c4a80a8e"
+  }
 }

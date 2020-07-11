@@ -100,7 +100,7 @@ namespace FinanceTracker.API.Controllers
 
             if (await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(id))
             {
-                return BadRequest("There are payments connected to this category.");
+                return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
             }
 
             if (await _categoryRepository.CategoryBelongsToUser(userId, id) == false)

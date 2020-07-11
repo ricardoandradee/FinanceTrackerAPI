@@ -55,7 +55,7 @@ export class AuthService {
         if (responseBody.user) {
           localStorage.setItem('user', JSON.stringify(responseBody.user));
           this.currentUser = responseBody.user;
-          this.currencyService.setCurrency = responseBody.user.userCurrency;
+          this.currencyService.setUserBaseCurrency = this.currentUser.userCurrency;
         }
         this.router.navigate(['/finance']);
         this.uiService.showSnackBar('Successfully logged in.', 3000);

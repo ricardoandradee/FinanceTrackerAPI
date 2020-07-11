@@ -39,6 +39,7 @@ export class CategoryListComponent implements OnInit {
     this.categoryService.getCategories.subscribe((categories: Category[]) => {
       this.dataSource.data = categories
     });
+    
   }
   
   openDialog() {
@@ -84,7 +85,7 @@ export class CategoryListComponent implements OnInit {
 
   onDelete(category: Category) {
     if (!category.canBeDeleted) {
-      this.uiService.showSnackBar('There are payments linked to this category, please, update or remove those linked payments before proceding with this category removal.', 3000);
+      this.uiService.showSnackBar('This category has payments linked to it, therefore, it cannot be removed.', 3000);
     } else {
       const dialogRef = this.dialog.open(YesNoDialogComponent, { data: { message: "Are you sure you want to delete this category?", title: "Are you sure?" } });
       dialogRef.afterClosed().subscribe((result) => {
