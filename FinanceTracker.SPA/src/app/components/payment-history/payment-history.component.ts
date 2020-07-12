@@ -136,17 +136,18 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
 
     this.dataSource.filterPredicate = (pr, filter) => {
-      setTimeout(() => { this.setTotalPrice(); }, 300);
       return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
     };
   }
 
   doFilterByDate() {
     this.dataSource.filter = this.getDateFilter();
+    setTimeout(() => { this.setTotalPrice(); }, 500);
   }
 
   doFilterByCategory() {
     this.dataSource.filter = '[FilterByCategory]' + this.category;
+    setTimeout(() => { this.setTotalPrice(); }, 500);
   }
 
   dateFilterMatches(payment: Payment): boolean {
