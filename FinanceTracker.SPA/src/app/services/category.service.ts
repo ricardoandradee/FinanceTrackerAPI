@@ -14,7 +14,7 @@ export class CategoryService {
     private dataSource$: BehaviorSubject<Category[]> = new BehaviorSubject([]);
 
     constructor(private http: HttpClient,
-        private datePipe: DatePipe) {
+                private datePipe: DatePipe) {
     }
 
     get getCategories(): Observable<Category[]> {

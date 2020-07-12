@@ -7,11 +7,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrencyService } from './currency.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   private baseUrl = environment.apiUrl + 'auth/';
   private jwtHelper = new JwtHelperService();
+    private dataSource$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   currentUser: User;
   decodedToken: any;
 
@@ -24,6 +26,10 @@ export class AuthService {
     return this.http.post(this.baseUrl + 'register', user);
   }
 
+  get getIsAuthenticated(): Observable<boolean> {
+    return this.dataSource$.asObservable();
+  }
+
   loggedIn() {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
@@ -34,6 +40,7 @@ export class AuthService {
     localStorage.removeItem('user');
     this.decodedToken = null;
     this.uiService.showSnackBar('Logged out.', 3000);
+    this.dataSource$.next(false);
     this.router.navigate(['/login']);
   }
 
@@ -57,6 +64,7 @@ export class AuthService {
           this.currencyService.setUserBaseCurrency = this.currentUser.userCurrency;
         }
         this.router.navigate(['/finance']);
+        this.dataSource$.next(true);
         this.uiService.showSnackBar('Successfully logged in.', 3000);
       }
     }, (err) => {

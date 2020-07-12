@@ -57,6 +57,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     
     this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
       this.userBaseCurrency = userBaseCurrency;
+      this.getTotalCost();
     });
 
     this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
