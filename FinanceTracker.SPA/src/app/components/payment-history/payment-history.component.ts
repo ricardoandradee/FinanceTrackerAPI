@@ -34,10 +34,9 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   private categoriesFromTable: Category[] = [];
   private allCategories: Category[] = [];
 
-  private categoryCount = 0;
   private paymentDates = [];
-  private paymentDate = "All";
-  private category = "All";
+  private paymentDate = 'All';
+  private category = 'All';
   private totalPrice = 0;
   userBaseCurrency: string;
 
@@ -54,7 +53,6 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.allCategories = categoryList;
-      this.categoryCount = categoryList.length;
     });
     
     this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
@@ -69,11 +67,12 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
       this.populateDropDownLists(payments);
       this.bindDataSource(payments);
       this.updateCategoriesDeletionCondition();
+      this.getTotalCost();
     });
   }
 
   updateCategoriesDeletionCondition() {
-    var payments: Payment[] = this.dataSource.data as Payment[];
+    const payments: Payment[] = this.dataSource.data as Payment[];
     this.allCategories.forEach(c => {
       c.canBeDeleted = !payments.some(b => b.categoryId === c.id);
     });
@@ -88,7 +87,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.categoriesFromTable = [];
     this.paymentDates = [];
 
-    for (let payment of payments) {
+    for (const payment of payments) {
       if (!this.categoriesFromTable.some(x => x.id === payment.categoryId)) {
         this.categoriesFromTable.push({ id: payment.categoryId, name: payment.categoryName } as Category);
       }
@@ -106,10 +105,9 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
         this.store.dispatch(new UI.StartLoading());
         const paymentToBeCreated = result.data as Payment;
         this.paymentService.createPayment(paymentToBeCreated).subscribe(response => {
-          if(response.ok) {
+          if (response.ok) {
             const paymentCreated = response.body as Payment;
-            
-            var paymentsFromDataSource = this.dataSource.data;
+            const paymentsFromDataSource = this.dataSource.data;
             paymentsFromDataSource.push(paymentCreated);
             this.paymentService.setPayments = paymentsFromDataSource;
 
@@ -128,8 +126,8 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     const currencyMapperList = this.dataSource.filteredData.map((payment: Payment) => {
       return { currencyFrom: payment.currency, currencyTo: this.userBaseCurrency, price: payment.price } as CurrencyConverterMapper;
     });
-
-    return this.currencyService.convertCurrencyList(currencyMapperList);
+    const price = this.currencyService.convertCurrencyList(currencyMapperList);
+    this.totalPrice = price;
   }
 
   ngAfterViewInit() {
@@ -137,7 +135,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
 
     this.dataSource.filterPredicate = (pr, filter) => {
-
+      setTimeout(() => { this.getTotalCost(); }, 300);
       return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
     };
   }
@@ -150,35 +148,43 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = '[FilterByCategory]' + this.category;
   }
 
-  dateFilterMatches(Payment: Payment): boolean {
-    var filter = this.getDateFilter();
-    const value = '[FilterByDate]' + Payment.createdDateString;
-    return filter.indexOf('[FilterByDate]') === -1 || (filter === "[FilterByDate]All" || value.indexOf(filter) >= 0);
+  dateFilterMatches(payment: Payment): boolean {
+    const filter = this.getDateFilter();
+    const value = '[FilterByDate]' + payment.createdDateString;
+    return filter.indexOf('[FilterByDate]') === -1 || (filter === '[FilterByDate]All' || value.indexOf(filter) >= 0);
   }
 
-  categoryFilterMatches(Payment: Payment): boolean {
-    var filter = '[FilterByCategory]' + this.category;
-    const value = '[FilterByCategory]' + Payment.categoryId;
-    return filter.indexOf('[FilterByCategory]') === -1 || (filter === "[FilterByCategory]All" || value.indexOf(filter) >= 0);
+  categoryFilterMatches(payment: Payment): boolean {
+    const filter = '[FilterByCategory]' + this.category;
+    const value = '[FilterByCategory]' + payment.categoryId;
+    return filter.indexOf('[FilterByCategory]') === -1 || (filter === '[FilterByCategory]All' || value.indexOf(filter) >= 0);
   }
 
   getDateFilter(): string {
-    let dateToBeSearched = this.paymentDate === "All" ? "All" : this.paymentDate;
+    const dateToBeSearched = this.paymentDate === 'All' ? 'All' : this.paymentDate;
     return '[FilterByDate]' + dateToBeSearched;
   }
 
-  onDelete(Payment: Payment) {
-    const dialogRef = this.dialog.open(YesNoDialogComponent, { data: { message: "Are you sure you want to delete this item from your history?", title: "Are you sure?" } });
+  onDelete(payment: Payment) {
+    const dialogRef = this.dialog.open(YesNoDialogComponent,
+    { data:
+      {
+        message: 'Are you sure you want to delete this item from your history?',
+        title: 'Are you sure?'
+      }
+    });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.store.dispatch(new UI.StartLoading());
-        this.paymentService.deletePayment(Payment.id).subscribe(response => {
-          var paymentsFromDataSource = this.dataSource.data;
-          let paymentIndex = paymentsFromDataSource.findIndex(x => x.id === Payment.id);
+        this.paymentService.deletePayment(payment.id).subscribe(response => {
+          const paymentsFromDataSource = this.dataSource.data;
+          const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === payment.id);
           if (paymentIndex > -1) {
             paymentsFromDataSource.splice(paymentIndex, 1);
           }
           this.paymentService.setPayments = paymentsFromDataSource;
+          this.getTotalCost();
       }, (err) => {
           this.uiService.showSnackBar(err.error, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
@@ -186,8 +192,8 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onEdit(Payment: Payment) {
-    this.editPayment = Payment && Payment.id ? Payment : {} as Payment;
+  onEdit(payment: Payment) {
+    this.editPayment = payment && payment.id ? payment : {} as Payment;
     this.oldPayment = {...this.editPayment};
     this.rowInEditMode = true;
   }
@@ -196,22 +202,22 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.store.dispatch(new UI.StartLoading());
     this.paymentService.updatePayment(this.editPayment).subscribe(response => {
       if (response.ok) {
-        var paymentsFromDataSource = this.dataSource.data;
-
-        let paymentIndex = paymentsFromDataSource.findIndex(x => x.id === this.editPayment.id);
+        const paymentsFromDataSource = this.dataSource.data;
+        const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === this.editPayment.id);
 
         if (paymentIndex > -1) {
           paymentsFromDataSource.splice(paymentIndex, 1);
-          let category = this.allCategories.find(x => x.id === this.editPayment.categoryId);
+          const category = this.allCategories.find(x => x.id === this.editPayment.categoryId);
           this.editPayment.categoryName = category.name;
           paymentsFromDataSource.splice(paymentIndex, 0, this.editPayment);
         }
 
         this.paymentService.setPayments = paymentsFromDataSource;
+        this.getTotalCost();
         this.editPayment = {} as Payment;
         this.onCancelEdit();
         this.uiService.showSnackBar('Payment successfully updated.', 3000);
-        }else{
+        } else {
           this.uiService.showSnackBar('There was an error while trying to update your Payment. Please, try again later!', 3000);
         }
     }, (err) => {
@@ -220,7 +226,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     }, () => { this.store.dispatch(new UI.StopLoading()); });
   }
 
-  onCancelEdit(){
+  onCancelEdit() {
     this.rowInEditMode = false;
     this.editPayment = {} as Payment;
     this.oldPayment = {} as Payment;

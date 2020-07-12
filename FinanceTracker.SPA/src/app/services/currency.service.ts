@@ -6,14 +6,18 @@ import { environment } from 'src/environments/environment';
 import { KeyValuePair } from '../models/key-value-pair.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class CurrencyService {
     private baseUrl = environment.apiUrl;
     private currencyRates: KeyValuePair<string, number>[] = [];
-    private dataSource$: BehaviorSubject<string> = new BehaviorSubject("");
+    private dataSource$: BehaviorSubject<string> = new BehaviorSubject('');
 
     constructor(private http: HttpClient) {
+      if (localStorage.getItem('token')) {
+          this.populateCurrencyRates();
+      }
     }
 
     get getUserBaseCurrency(): Observable<string> {

@@ -50,7 +50,6 @@ export class AuthService {
         if (responseBody.token) {
           localStorage.setItem('token', responseBody.token);
           this.decodedToken = this.jwtHelper.decodeToken(responseBody.token);
-          this.currencyService.populateCurrencyRates();
         }
         if (responseBody.user) {
           localStorage.setItem('user', JSON.stringify(responseBody.user));

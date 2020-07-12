@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from './models/user.model';
+import { CurrencyService } from './services/currency.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +11,13 @@ export class AppComponent implements OnInit {
   title = 'finance-tracker';
   openSideNav = false;
 
-  constructor () {}
+  constructor(private currencyService: CurrencyService) {}
   
   unToggle() {
   }
 
   ngOnInit() {
+      const user: User = JSON.parse(localStorage.getItem('user'));
+      this.currencyService.setUserBaseCurrency = user.userCurrency;
   }
 }
