@@ -11,9 +11,9 @@ import { User } from 'src/app/models/user.model';
 })
 export class HeaderComponent implements OnInit {
   @Output() sidenavToggle = new EventEmitter<void>();
-  private currencies = [];
-  private userBaseCurrency = '';
-  private disableBaseCurrency = true;
+  currencies = [];
+  userBaseCurrency = '';
+  disableBaseCurrency = true;
 
   constructor(private authService: AuthService,
               private currencyService: CurrencyService) {
@@ -22,7 +22,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     const user: User = this.getUserBaseCurrencyFromLocalStorage();
-    this.userBaseCurrency = user.userCurrency ? user.userCurrency : 'EUR';
+    if (user) {
+      this.userBaseCurrency = user.userCurrency ? user.userCurrency : 'EUR';
+    }
   }
 
   loggedIn() {

@@ -4,7 +4,7 @@
             <mat-icon>menu</mat-icon>
         </button>
     </div>
-    <div><a class="toolbar-link" routerLink="/">Finance Tracker</a></div>
+    <div><a class="toolbar-link" [routerLink]="loggedIn() ? ['/finance'] : ['/']">Finance Tracker</a></div>
     <div fxLayoutGap="40px" fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
         <mat-form-field *ngIf="loggedIn()" [style.width.px]=100 [style.height.px]=40 [style.fontSize.px]=12>
             <mat-label> Currency </mat-label>

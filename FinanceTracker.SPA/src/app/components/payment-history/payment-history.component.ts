@@ -57,7 +57,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     
     this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
       this.userBaseCurrency = userBaseCurrency;
-      this.getTotalCost();
+      this.setTotalPrice();
     });
 
     this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
@@ -68,7 +68,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
       this.populateDropDownLists(payments);
       this.bindDataSource(payments);
       this.updateCategoriesDeletionCondition();
-      this.getTotalCost();
+      this.setTotalPrice();
     });
   }
 
@@ -123,7 +123,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getTotalCost() {
+  setTotalPrice() {
     const currencyMapperList = this.dataSource.filteredData.map((payment: Payment) => {
       return { currencyFrom: payment.currency, currencyTo: this.userBaseCurrency, price: payment.price } as CurrencyConverterMapper;
     });
@@ -136,7 +136,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
 
     this.dataSource.filterPredicate = (pr, filter) => {
-      setTimeout(() => { this.getTotalCost(); }, 300);
+      setTimeout(() => { this.setTotalPrice(); }, 300);
       return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
     };
   }
@@ -185,7 +185,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
             paymentsFromDataSource.splice(paymentIndex, 1);
           }
           this.paymentService.setPayments = paymentsFromDataSource;
-          this.getTotalCost();
+          this.setTotalPrice();
       }, (err) => {
           this.uiService.showSnackBar(err.error, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
@@ -214,7 +214,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
         }
 
         this.paymentService.setPayments = paymentsFromDataSource;
-        this.getTotalCost();
+        this.setTotalPrice();
         this.editPayment = {} as Payment;
         this.onCancelEdit();
         this.uiService.showSnackBar('Payment successfully updated.', 3000);

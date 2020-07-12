@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
       const user: User = JSON.parse(localStorage.getItem('user'));
-      this.currencyService.setUserBaseCurrency = user.userCurrency;
+      if (user) {
+        this.currencyService.setUserBaseCurrency = user.userCurrency;
+      }
   }
 }

@@ -37,7 +37,7 @@ export class CategoryListComponent implements OnInit {
     });
     
     this.categoryService.getCategories.subscribe((categories: Category[]) => {
-      this.dataSource.data = categories
+      this.dataSource.data = categories;
     });
     
   }
@@ -54,10 +54,10 @@ export class CategoryListComponent implements OnInit {
   private createCategory(category: Category) {
     this.store.dispatch(new UI.StartLoading());
     this.categoryService.createCategory(category).subscribe(response => {
-      if(response.ok) {
+      if (response.ok) {
         const categoryCreated = response.body as Category;
 
-        var categoriesFromDataSource = this.dataSource.data;
+        const categoriesFromDataSource = this.dataSource.data;
         categoriesFromDataSource.push(categoryCreated);
         this.categoryService.setCategories = categoriesFromDataSource;
 
