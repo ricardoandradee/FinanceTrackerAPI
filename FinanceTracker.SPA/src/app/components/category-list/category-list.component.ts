@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -23,23 +23,21 @@ export class CategoryListComponent implements OnInit {
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  
   editCategory: Category;
   oldCategory: { id: number; userId: string; name: string; description: string; createdDate?: Date; };
   rowInEditMode: boolean;
   
   constructor(private dialog: MatDialog, private uiService: UiService,
-              private categoryService: CategoryService, private store: Store<{ui: fromRoot.State}>) { }
+              private categoryService: CategoryService,
+              private store: Store<{ui: fromRoot.State}>,
+              private changeDetectorRefs: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.categoryService.getCategoriesForUser().subscribe((categories: Category[]) => {
       this.categoryService.setCategories = categories;
     });
-    
-    this.categoryService.getCategories.subscribe((categories: Category[]) => {
-      this.dataSource.data = categories;
-    });
-    
   }
   
   openDialog() {
@@ -73,10 +71,17 @@ export class CategoryListComponent implements OnInit {
   onSave(form: NgForm) {
     this.createCategory({ name: form.value.name, description: form.value.description, createdDate: new Date() } as Category);
   }
-  
+  refreshCategoryDataSource() {
+    this.categoryService.getCategories.subscribe((categories: Category[]) => {
+      this.dataSource.data = categories;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
+    this.changeDetectorRefs.detectChanges();
+ }
+
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.refreshCategoryDataSource();
   }
 
   doFilter(filterValue: string) {
@@ -87,13 +92,20 @@ export class CategoryListComponent implements OnInit {
     if (!category.canBeDeleted) {
       this.uiService.showSnackBar('This category has payments linked to it, therefore, it cannot be removed.', 3000);
     } else {
-      const dialogRef = this.dialog.open(YesNoDialogComponent, { data: { message: "Are you sure you want to delete this category?", title: "Are you sure?" } });
+      const dialogRef = this.dialog.open(YesNoDialogComponent,
+      {
+        data:
+          {
+            message: 'Are you sure you want to delete this category?',
+            title: 'Are you sure?'
+          }
+      });
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           this.store.dispatch(new UI.StartLoading());
           this.categoryService.deleteCategory(category.id).subscribe(response => {
-            var categoriesFromDataSource = this.dataSource.data;
-            let categoryIndex = categoriesFromDataSource.findIndex(x => x.id === category.id);
+            const categoriesFromDataSource = this.dataSource.data;
+            const categoryIndex = categoriesFromDataSource.findIndex(x => x.id === category.id);
             if (categoryIndex > -1) {
               categoriesFromDataSource.splice(categoryIndex, 1);
             }
@@ -116,19 +128,18 @@ export class CategoryListComponent implements OnInit {
     this.store.dispatch(new UI.StartLoading());
     this.categoryService.updateCategory(this.editCategory).subscribe(response => {
       if (response.ok) {
-        var categoriesFromDataSource = this.dataSource.data;
+        const categoriesFromDataSource = this.dataSource.data;
+        const categoryIndex = categoriesFromDataSource.findIndex(x => x.id === this.editCategory.id);
 
-        let categoryIndex = categoriesFromDataSource.findIndex(x => x.id === this.editCategory.id);
         if (categoryIndex > -1) {
           categoriesFromDataSource.splice(categoryIndex, 1);
           categoriesFromDataSource.splice(categoryIndex, 0, this.editCategory);
         }
-
         this.categoryService.setCategories = categoriesFromDataSource;
         this.editCategory = {} as Category;
         this.onCancelEdit();
         this.uiService.showSnackBar('Category successfully updated.', 3000);
-        }else{
+        } else {
           this.uiService.showSnackBar('There was an error while trying to update category. Please, try again later!', 3000);
         }
     }, (err) => {
