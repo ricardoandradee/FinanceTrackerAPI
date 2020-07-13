@@ -73,7 +73,7 @@ export class CategoryListComponent implements OnInit {
   }
   refreshCategoryDataSource() {
     this.categoryService.getCategories.subscribe((categories: Category[]) => {
-      this.dataSource.data = categories;
+      this.dataSource = new MatTableDataSource(categories);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
@@ -81,7 +81,15 @@ export class CategoryListComponent implements OnInit {
  }
 
   ngAfterViewInit() {
-    this.refreshCategoryDataSource();
+    this.isLoading$.subscribe(loading => {
+    if (loading) {
+      setTimeout(() => {
+        this.refreshCategoryDataSource();
+      }, 500);
+    } else {
+      this.refreshCategoryDataSource();
+    }
+    });
   }
 
   doFilter(filterValue: string) {

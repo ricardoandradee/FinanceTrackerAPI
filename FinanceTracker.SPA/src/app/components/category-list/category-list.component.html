@@ -49,4 +49,4 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
 
-<mat-paginator *ngIf="!(isLoading$ | async)" #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+<mat-paginator *ngIf="!(isLoading$ | async)" #paginator [pageSize]="10" showFirstLastButtons></mat-paginator>

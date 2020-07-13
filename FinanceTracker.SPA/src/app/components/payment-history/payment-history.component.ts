@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Payment } from '../../models/payment.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -45,7 +45,8 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   constructor(private uiService: UiService, private paymentService: PaymentService,
               private currencyService: CurrencyService, private dialog: MatDialog,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>) {
+              private store: Store<{ui: fromRoot.State}>,
+              private changeDetectorRefs: ChangeDetectorRef) {
                 this.currencies = CurrencyList;
               }
 
@@ -63,13 +64,6 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
       this.paymentService.setPayments = payments;
     });
-    
-    this.paymentService.getPayments.subscribe((payments: Payment[]) => {
-      this.populateDropDownLists(payments);
-      this.bindDataSource(payments);
-      this.updateCategoriesDeletionCondition();
-      this.setTotalPrice();
-    });
   }
 
   updateCategoriesDeletionCondition() {
@@ -81,7 +75,9 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   }
 
   bindDataSource(payments: Payment[]) {
-    this.dataSource.data = payments;
+    this.dataSource = new MatTableDataSource(payments);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   populateDropDownLists(payments: Payment[]) {
@@ -132,13 +128,31 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.isLoading$.subscribe(loading => {
+    if (loading) {
+      setTimeout(() => {
+        this.refreshPaymentDataSource();
+      }, 500);
+    } else {
+      this.refreshPaymentDataSource();
+    }
+    });
 
     this.dataSource.filterPredicate = (pr, filter) => {
       return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
     };
   }
+
+  refreshPaymentDataSource() {
+    this.paymentService.getPayments.subscribe((payments: Payment[]) => {
+      this.populateDropDownLists(payments);
+      this.bindDataSource(payments);
+      this.updateCategoriesDeletionCondition();
+      this.setTotalPrice();
+    });
+    this.changeDetectorRefs.detectChanges();
+ }
+
 
   doFilterByDate() {
     this.dataSource.filter = this.getDateFilter();
