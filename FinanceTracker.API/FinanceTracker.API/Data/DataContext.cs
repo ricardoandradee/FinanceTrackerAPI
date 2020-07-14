@@ -10,5 +10,7 @@ namespace FinanceTracker.API.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Bank> Banks { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }

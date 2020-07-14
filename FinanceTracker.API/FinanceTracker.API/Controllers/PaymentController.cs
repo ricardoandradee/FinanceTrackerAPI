@@ -81,7 +81,7 @@ namespace FinanceTracker.API.Controllers
             {
                 return BadRequest($"CategoryId {categoryId} was not found.");
             }
-            else if (await _categoryRepository.CategoryBelongsToUser(userId, categoryId) == false)
+            else if (await _categoryRepository.BelongsToUser(userId, categoryId) == false)
             {
                 return BadRequest($"Category id {categoryId} does not belong to the logged in user.");
             }

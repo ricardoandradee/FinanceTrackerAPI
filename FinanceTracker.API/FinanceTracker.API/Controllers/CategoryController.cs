@@ -103,7 +103,7 @@ namespace FinanceTracker.API.Controllers
                 return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
             }
 
-            if (await _categoryRepository.CategoryBelongsToUser(userId, id) == false)
+            if (await _categoryRepository.BelongsToUser(userId, id) == false)
             {
                 return BadRequest("This category does not belong to the logged in user.");
             }
@@ -127,7 +127,7 @@ namespace FinanceTracker.API.Controllers
                 return Unauthorized();
             }
 
-            if (await _categoryRepository.CategoryBelongsToUser(userId, id) == false)
+            if (await _categoryRepository.BelongsToUser(userId, id) == false)
             {
                 return BadRequest("This category does not belong to the logged in user.");
             }

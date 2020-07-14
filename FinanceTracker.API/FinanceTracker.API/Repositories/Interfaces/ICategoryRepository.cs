@@ -8,6 +8,6 @@ namespace FinanceTracker.API.Repositories.Interfaces
     {
         Task<IEnumerable<Category>> GetCategoriesForUser(int userId);
         Task<bool> ExistsAnyPaymentsConnectedToCategory(int categoryId);
-        Task<bool> CategoryBelongsToUser(int userId, int categoryId);
+        Task<bool> BelongsToUser(int userId, int categoryId);
     }
 }

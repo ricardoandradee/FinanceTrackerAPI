@@ -15,7 +15,7 @@ namespace FinanceTracker.API.Repositories
         {
         }
 
-        public async Task<bool> CategoryBelongsToUser(int userId, int categoryId)
+        public async Task<bool> BelongsToUser(int userId, int categoryId)
         {
             return await _context.Categories.AnyAsync(c => c.Id == categoryId && c.User.Id == userId);
         }

@@ -52,6 +52,22 @@ namespace FinanceTracker.API.Mapping
             CreateMap<PaymentForUpdateDto, Payment>().ReverseMap();
 
             #endregion
+
+            #region Bank related mappings
+
+            CreateMap<BankToReturnDto, Bank>().ReverseMap();
+            CreateMap<BankForCreationDto, Bank>().ReverseMap();
+            CreateMap<BankForUpdateDto, Bank>().ReverseMap();
+
+            #endregion
+
+            #region Account related mappings
+
+            CreateMap<AccountToReturnDto, Account>().ReverseMap();
+            CreateMap<AccountForCreationDto, Account>().ReverseMap();
+            CreateMap<AccountForUpdateDto, Account>().ReverseMap();
+
+            #endregion
         }
     }
 }

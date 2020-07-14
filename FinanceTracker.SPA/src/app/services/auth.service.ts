@@ -38,6 +38,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('currencyRates');
     this.decodedToken = null;
     this.uiService.showSnackBar('Logged out.', 3000);
     this.dataSource$.next(false);
@@ -61,6 +62,7 @@ export class AuthService {
         if (responseBody.user) {
           localStorage.setItem('user', JSON.stringify(responseBody.user));
           this.currentUser = responseBody.user;
+          this.currencyService.fetchListOfCurrencies();
           this.currencyService.setUserBaseCurrency = this.currentUser.userCurrency;
         }
         this.router.navigate(['/finance']);

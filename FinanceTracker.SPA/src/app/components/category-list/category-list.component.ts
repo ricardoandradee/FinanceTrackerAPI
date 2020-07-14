@@ -30,8 +30,7 @@ export class CategoryListComponent implements OnInit {
   
   constructor(private dialog: MatDialog, private uiService: UiService,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>,
-              private changeDetectorRefs: ChangeDetectorRef) { }
+              private store: Store<{ui: fromRoot.State}>) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
@@ -77,18 +76,17 @@ export class CategoryListComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
-    this.changeDetectorRefs.detectChanges();
  }
 
   ngAfterViewInit() {
     this.isLoading$.subscribe(loading => {
-    if (loading) {
-      setTimeout(() => {
+      if (loading) {
+        setTimeout(() => {
+          this.refreshCategoryDataSource();
+        }, 500);
+      } else {
         this.refreshCategoryDataSource();
-      }, 500);
-    } else {
-      this.refreshCategoryDataSource();
-    }
+      }
     });
   }
 

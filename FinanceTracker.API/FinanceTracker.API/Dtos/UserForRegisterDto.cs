@@ -9,6 +9,7 @@ namespace FinanceTracker.API.Dtos
         public string UserName { get; set; }
         [Required]
         public string UserCurrency { get; set; }
+        public decimal Wallet { get; set; }
 
         [Required]
         [StringLength(8, MinimumLength = 4, ErrorMessage = "You must specify password between 4 and 8 characters.")]

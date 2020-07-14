@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -48,12 +49,13 @@ namespace FinanceTracker.API
             services.AddSingleton(mapper);
 
             services.AddTransient<Seed>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IPaymentRepository, PaymentRepository>();
-            //services.AddScoped<IRepository<User>, Repository<User>>();
-            //services.AddScoped<IRepository<Payment>, Repository<Payment>>();
-            //services.AddScoped<IRepository<Category>, Repository<Category>>();
+            var assembly = System.Reflection.Assembly.GetEntryAssembly(); 
+            var types = assembly.ExportedTypes.Where(x => x.IsClass && !x.IsGenericType && x.IsPublic && x.Name.Contains("Repository"));
+
+            foreach (var type in types)
+            {
+                services.AddScoped(type.GetInterface($"I{type.Name}"), type);
+            }
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {

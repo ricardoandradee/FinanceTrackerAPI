@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Payment } from '../../models/payment.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -15,7 +15,6 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-payment-history',
@@ -23,7 +22,7 @@ import { User } from 'src/app/models/user.model';
   styleUrls: ['./payment-history.component.scss']
 })
 
-export class PaymentHistoryComponent implements OnInit, AfterViewInit {
+export class PaymentHistoryComponent implements OnInit {
   displayedColumns = ['CreatedDate', 'Category', 'Description', 'Establishment', 'Price', 'Actions'];
   dataSource = new MatTableDataSource<Payment>();
   isLoading$: Observable<boolean>;
@@ -45,8 +44,7 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   constructor(private uiService: UiService, private paymentService: PaymentService,
               private currencyService: CurrencyService, private dialog: MatDialog,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>,
-              private changeDetectorRefs: ChangeDetectorRef) {
+              private store: Store<{ui: fromRoot.State}>) {
                 this.currencies = CurrencyList;
               }
 
@@ -64,6 +62,16 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
       this.paymentService.setPayments = payments;
     });
+    
+    this.isLoading$.subscribe(loading => {
+      if (loading) {
+        setTimeout(() => {
+          this.refreshPaymentDataSource();
+        }, 500);
+      } else {
+        this.refreshPaymentDataSource();
+      }
+    });
   }
 
   updateCategoriesDeletionCondition() {
@@ -78,6 +86,10 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource(payments);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    
+    this.dataSource.filterPredicate = (pr, filter) => {
+      return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
+    };
   }
 
   populateDropDownLists(payments: Payment[]) {
@@ -120,27 +132,16 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
   }
 
   setTotalPrice() {
-    const currencyMapperList = this.dataSource.filteredData.map((payment: Payment) => {
-      return { currencyFrom: payment.currency, currencyTo: this.userBaseCurrency, price: payment.price } as CurrencyConverterMapper;
-    });
-    const price = this.currencyService.convertCurrencyList(currencyMapperList);
-    this.totalPrice = price;
-  }
+    const allCurrenciesToConvert = this.dataSource.filteredData.map(x => x.currency);
 
-  ngAfterViewInit() {
-    this.isLoading$.subscribe(loading => {
-    if (loading) {
-      setTimeout(() => {
-        this.refreshPaymentDataSource();
-      }, 500);
+    if (this.currencyService.checkIfCurrenciesAreLoaded(allCurrenciesToConvert)) {
+      const currencyMapperList = this.dataSource.filteredData.map((payment: Payment) => {
+        return { currencyFrom: payment.currency, currencyTo: this.userBaseCurrency, price: payment.price } as CurrencyConverterMapper;
+      });
+      this.totalPrice = this.currencyService.convertCurrencyList(currencyMapperList);
     } else {
-      this.refreshPaymentDataSource();
+      setTimeout(() => { this.setTotalPrice(); }, 500);
     }
-    });
-
-    this.dataSource.filterPredicate = (pr, filter) => {
-      return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
-    };
   }
 
   refreshPaymentDataSource() {
@@ -150,34 +151,32 @@ export class PaymentHistoryComponent implements OnInit, AfterViewInit {
       this.updateCategoriesDeletionCondition();
       this.setTotalPrice();
     });
-    this.changeDetectorRefs.detectChanges();
  }
-
-
-  doFilterByDate() {
-    this.dataSource.filter = this.getDateFilter();
-    setTimeout(() => { this.setTotalPrice(); }, 500);
+ 
+ doFilterByDate() {
+   this.dataSource.filter = this.getDateFilter();
+   setTimeout(() => { this.setTotalPrice(); }, 500);
   }
-
+  
   doFilterByCategory() {
     this.dataSource.filter = '[FilterByCategory]' + this.category;
     setTimeout(() => { this.setTotalPrice(); }, 500);
   }
 
   dateFilterMatches(payment: Payment): boolean {
-    const filter = this.getDateFilter();
+    var filter = this.getDateFilter();
     const value = '[FilterByDate]' + payment.createdDateString;
-    return filter.indexOf('[FilterByDate]') === -1 || (filter === '[FilterByDate]All' || value.indexOf(filter) >= 0);
+    return filter.indexOf('[FilterByDate]') === -1 || (filter == '[FilterByDate]All' || value.indexOf(filter) >= 0);
   }
 
   categoryFilterMatches(payment: Payment): boolean {
-    const filter = '[FilterByCategory]' + this.category;
+    var filter = '[FilterByCategory]' + this.category;
     const value = '[FilterByCategory]' + payment.categoryId;
-    return filter.indexOf('[FilterByCategory]') === -1 || (filter === '[FilterByCategory]All' || value.indexOf(filter) >= 0);
+    return filter.indexOf('[FilterByCategory]') === -1 || (filter == '[FilterByCategory]All' || value.indexOf(filter) >= 0);
   }
 
   getDateFilter(): string {
-    const dateToBeSearched = this.paymentDate === 'All' ? 'All' : this.paymentDate;
+    let dateToBeSearched = this.paymentDate === "All" ? "All" : this.paymentDate;
     return '[FilterByDate]' + dateToBeSearched;
   }
 

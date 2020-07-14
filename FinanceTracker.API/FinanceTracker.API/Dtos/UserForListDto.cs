@@ -6,6 +6,7 @@ namespace FinanceTracker.API.Dtos
     {
         public int Id { get; set; }
         public string UserCurrency { get; set; }
+        public decimal Wallet { get; set; }
         public string UserName { get; set; }
         public int Age { get; set; }
         public DateTime Created { get; set; }

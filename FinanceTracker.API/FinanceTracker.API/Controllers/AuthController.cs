@@ -28,7 +28,8 @@ namespace FinanceTracker.API.Controllers
             _config = config;
         }
 
-        [HttpPost("register")]
+        [HttpPost]
+        [Route("Register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower();
@@ -51,7 +52,8 @@ namespace FinanceTracker.API.Controllers
             }, userToReturn);
         }
 
-        [HttpPost("login")]
+        [HttpPost]
+        [Route("Login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
             var userFromRepo = await _userRepository.Login(userForLoginDto.UserName.ToLower(), userForLoginDto.Password);
