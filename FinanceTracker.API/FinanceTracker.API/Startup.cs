@@ -1,8 +1,6 @@
 using AutoMapper;
 using FinanceTracker.API.Data;
 using FinanceTracker.API.Mapping;
-using FinanceTracker.API.Repositories;
-using FinanceTracker.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -16,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.API
 {
@@ -34,7 +33,8 @@ namespace FinanceTracker.API
         {
             services.AddDbContext<DataContext>(x =>
             {
-                x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                x.UseLazyLoadingProxies();
+                x.UseSqlite(Configuration.GetConnectionString("DefaultConnectionSqlite"));
             });
             services.AddControllers();
             services.AddCors();
