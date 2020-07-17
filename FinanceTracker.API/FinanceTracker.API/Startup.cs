@@ -49,12 +49,18 @@ namespace FinanceTracker.API
             services.AddSingleton(mapper);
 
             services.AddTransient<Seed>();
+            services.AddScoped<IDataContext, DataContext>();
+
             var assembly = System.Reflection.Assembly.GetEntryAssembly(); 
             var types = assembly.ExportedTypes.Where(x => x.IsClass && !x.IsGenericType && x.IsPublic && x.Name.Contains("Repository"));
 
             foreach (var type in types)
             {
-                services.AddScoped(type.GetInterface($"I{type.Name}"), type);
+                var repositoryType = type.GetInterface($"I{type.Name}");
+                if (repositoryType != null)
+                {
+                    services.AddScoped(repositoryType, type);
+                }
             }
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

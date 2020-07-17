@@ -10,7 +10,7 @@ namespace FinanceTracker.API.Repositories
 {
     public class AccountRepository : Repository<Account>, IAccountRepository
     {
-        public AccountRepository(DataContext context)
+        public AccountRepository(IDataContext context)
             : base(context)
         {
         }

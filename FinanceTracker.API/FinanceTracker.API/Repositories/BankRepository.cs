@@ -10,14 +10,14 @@ namespace FinanceTracker.API.Repositories
 {
     public class BankRepository : Repository<Bank>, IBankRepository
     {
-        public BankRepository(DataContext context)
+        public BankRepository(IDataContext context)
             : base(context)
         {
         }
         
         public async Task<IEnumerable<Bank>> GetBanksForUser(int userId)
         {
-            var banks = await _context.Banks.Where(u => u.User.Id == userId).ToListAsync();
+            var banks = await _context.Banks.Where(b => b.User.Id == userId).Include(a => a.Accounts).ToListAsync();
             return banks;
         }
 

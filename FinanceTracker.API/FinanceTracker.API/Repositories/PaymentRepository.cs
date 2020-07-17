@@ -11,7 +11,7 @@ namespace FinanceTracker.API.Repositories
 {
     public class PaymentRepository : Repository<Payment>, IPaymentRepository
     {
-        public PaymentRepository(DataContext context)
+        public PaymentRepository(IDataContext context)
             : base(context)
         {
         }

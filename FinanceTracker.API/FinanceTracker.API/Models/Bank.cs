@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FinanceTracker.API.Models
 {
@@ -11,6 +12,7 @@ namespace FinanceTracker.API.Models
         public string Address { get; set; }
         public string Branch { get; set; }
         public bool IsActive { get; set; }
+        public virtual ICollection<Account> Accounts { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
 }

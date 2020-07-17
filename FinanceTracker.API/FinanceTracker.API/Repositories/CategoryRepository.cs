@@ -10,7 +10,7 @@ namespace FinanceTracker.API.Repositories
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
-        public CategoryRepository(DataContext context)
+        public CategoryRepository(IDataContext context)
             : base(context)
         {
         }

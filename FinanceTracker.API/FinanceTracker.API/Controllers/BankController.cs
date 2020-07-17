@@ -55,8 +55,8 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpPost]
-        [Route("CreateBank")]
-        public async Task<IActionResult> CreateBank(BankForCreationDto bankForCreationDto)
+        [Route("CreateBankInfo")]
+        public async Task<IActionResult> CreateBankInfo(BankForCreationDto bankForCreationDto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             bankForCreationDto.UserId = userId;
@@ -76,8 +76,8 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteBank/{bankId}")]
-        public async Task<IActionResult> DeleteBank(int userId, int bankId)
+        [Route("DeleteBankInfo/{bankId}")]
+        public async Task<IActionResult> DeleteBankInfo(int userId, int bankId)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {
@@ -105,8 +105,8 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateBank/{bankId}")]
-        public async Task<IActionResult> UpdateBank(int userId, int bankId, BankForUpdateDto bankForUpdateDto)
+        [Route("UpdateBankInfo/{bankId}")]
+        public async Task<IActionResult> UpdateBankInfo(int userId, int bankId, BankForUpdateDto bankForUpdateDto)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {

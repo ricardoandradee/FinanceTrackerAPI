@@ -11,8 +11,8 @@ namespace FinanceTracker.API.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DataContext _context;
-        public Repository(DataContext context)
+        protected readonly IDataContext _context;
+        public Repository(IDataContext context)
         {
             _context = context;
         }
@@ -29,7 +29,7 @@ namespace FinanceTracker.API.Repositories
 
         public async Task<bool> Add(TEntity entity)
         {
-            await _context.AddAsync(entity);
+            await _context.Set<TEntity>().AddAsync(entity);
             return await _context.SaveChangesAsync() > 0;
         }
 
