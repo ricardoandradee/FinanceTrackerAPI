@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { KeyValuePair } from '../models/key-value-pair.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CurrencyList } from '../models/currency.model';
+import { Rates } from '../models/rates.mock.model';
 
 @Injectable()
 export class CurrencyService {
@@ -29,14 +31,21 @@ export class CurrencyService {
     set setUserBaseCurrency(userCurrency: string) {
         this.dataSource$.next(userCurrency);
     }
+
+    private loadDevCurrencies() {
+        const rates = Object.keys(Rates.rates).map((rate: any) =>
+        {
+            return { key: rate, value: Rates.rates[rate] } as KeyValuePair<string, number>;
+        });
+        localStorage.setItem('currencyRates', JSON.stringify(rates));
+    }
     
-    public fetchListOfCurrencies() {
+    private loadProdCurrencies() {
         const url = `${this.baseUrl}currency/GetListOfCurrencies`;
         return this.http.get(url, { observe: 'response' })
         .pipe(map(response => {
             return response.body;
         })).subscribe((data: any) => {
-            
             const rates = Object.keys(data.rates).map((rate: any) =>
             {
                 return { key: rate, value: data.rates[rate] } as KeyValuePair<string, number>;
@@ -44,6 +53,19 @@ export class CurrencyService {
 
             localStorage.setItem('currencyRates', JSON.stringify(rates));
         });
+    }
+    
+    public fetchListOfCurrencies() {
+      const currencyRates: KeyValuePair<string, number>[] = JSON.parse(localStorage.getItem('currencyRates'));
+
+        if (!currencyRates) {
+            if (environment.production) {
+                this.loadProdCurrencies();
+            } else {
+                this.loadDevCurrencies();
+            }
+        }
+
     }
     
     convertCurrency(mapperList: CurrencyConverterMapper): number {
