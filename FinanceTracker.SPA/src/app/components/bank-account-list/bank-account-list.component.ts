@@ -10,15 +10,24 @@ import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
 import { BankAccount } from 'src/app/models/bank-account.model';
 import { BankAccountAddComponent } from '../bank-account-add/bank-account-add.component';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-bank-account-list',
   templateUrl: './bank-account-list.component.html',
-  styleUrls: ['./bank-account-list.component.scss']
+  styleUrls: ['./bank-account-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+      state('*', style({ height: '*', visibility: 'visible' })),
+      transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class BankAccountListComponent implements OnInit {
   displayedColumns = ['CreatedDate', 'Name', 'Branch', 'Status', 'Actions'];
   dataSource = new MatTableDataSource<BankAccount>();
+  isExpansionDetailRow = (index, row) => row.hasOwnProperty('accounts');
   isLoading$: Observable<boolean>;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;

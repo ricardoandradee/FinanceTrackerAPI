@@ -6,5 +6,4 @@ export interface Account {
     isActive: boolean;
     currentBalance: number;
     createdDate?: Date;
-    detailRow: boolean;
 }

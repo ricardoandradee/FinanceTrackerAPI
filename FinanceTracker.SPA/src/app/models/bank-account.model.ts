@@ -6,5 +6,5 @@ export interface BankAccount {
     branch: string;
     isActive: boolean;
     createdDate?: Date;
-    accounts: Account[]
+    accounts: Account[];
 }
