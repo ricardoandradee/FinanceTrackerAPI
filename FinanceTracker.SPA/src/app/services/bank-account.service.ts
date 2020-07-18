@@ -68,7 +68,8 @@ export class BankAccountService {
         const newBankInfo = {
             name: bankAccount.name,
             address: bankAccount.address,
-            branch: bankAccount.branch
+            branch: bankAccount.branch,
+            isActive: bankAccount.isActive
         };
         
         let httpHeaders = new HttpHeaders({
