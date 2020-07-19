@@ -1,8 +1,8 @@
-<form #accountAddEditForm="ngForm">
+<form fxLayout="column" fxLayoutAlign="center center" #accountAddEditForm="ngForm" fxLayoutGap="12px" novalidate>
     <h2 mat-dialog-title>
         {{ actionMode === 'Edit' ? 'Edit Account' : 'Add Account' }}
     </h2>
-    <section class="bank-account-add-section">
+    <section class="account-add-section">
         <div mat-dialog-content>
             <mat-form-field hintLabel="Name should be at least 6 characters long.">
                 <input type="text" matInput placeholder="Name" [(ngModel)]="account.name"
