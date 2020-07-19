@@ -30,6 +30,7 @@ import { reducers } from './reducers/app.reducer';
 import { DatePipe } from '@angular/common';
 import { AuthModule } from './components/auth/auth.module';
 import { BankAccountAddComponent } from './components/bank-account-add/bank-account-add.component';
+import { AccountAddEditComponent } from './components/account-add-edit/account-add-edit.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -44,7 +45,8 @@ export function tokenGetter() {
     YesNoDialogComponent,
     PaymentAddComponent,
     CategoryAddComponent,
-    BankAccountAddComponent
+    BankAccountAddComponent,
+    AccountAddEditComponent
   ],
   imports: [
     SharedModule,
@@ -66,8 +68,22 @@ export function tokenGetter() {
        }
     })
   ],
-  providers: [AuthService, CurrencyService, CategoryService, BankAccountService, PaymentService, UiService, DatePipe],
+  providers: [
+    AuthService,
+    CurrencyService,
+    CategoryService,
+    BankAccountService,
+    PaymentService,
+    UiService,
+    DatePipe
+  ],
   bootstrap: [AppComponent],
-  entryComponents: [YesNoDialogComponent, PaymentAddComponent, CategoryAddComponent, BankAccountAddComponent]
+  entryComponents: [
+    YesNoDialogComponent,
+    PaymentAddComponent,
+    CategoryAddComponent,
+    BankAccountAddComponent,
+    AccountAddEditComponent
+  ]
 })
 export class AppModule { }

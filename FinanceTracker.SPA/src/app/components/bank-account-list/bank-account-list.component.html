@@ -32,8 +32,9 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
         <mat-cell *matCellDef="let element">
             <mat-slide-toggle  *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" [(ngModel)]="element.isActive" name="isActive" id="isActive" color="primary"></mat-slide-toggle>
-            <span *ngIf="(!editBankInfo?.id || element.id!==editBankInfo.id) && element.isActive">Active</span>
-            <span *ngIf="(!editBankInfo?.id || element.id!==editBankInfo.id) && !element.isActive">Inactive</span>
+            <span *ngIf="!editBankInfo?.id || element.id!==editBankInfo.id">
+                {{ element.isActive ? 'Active' : 'Inactive' }}
+            </span>
         </mat-cell>
     </ng-container>
     <ng-container matColumnDef="Actions">
@@ -79,7 +80,7 @@
                 </div>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button>
+                <button mat-button (click)="onEditAccount(account)">
                     <mat-icon>edit</mat-icon>
                     Edit
                 </button>

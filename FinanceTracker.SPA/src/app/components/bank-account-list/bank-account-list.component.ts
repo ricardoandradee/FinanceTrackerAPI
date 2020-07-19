@@ -11,6 +11,8 @@ import * as UI from 'src/app/actions/ui.actions';
 import { BankAccount } from 'src/app/models/bank-account.model';
 import { BankAccountAddComponent } from '../bank-account-add/bank-account-add.component';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Account } from 'src/app/models/account.model';
+import { AccountAddEditComponent } from '../account-add-edit/account-add-edit.component';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -130,6 +132,19 @@ export class BankAccountListComponent implements OnInit {
     this.editBankInfo = bankInfo && bankInfo.id ? bankInfo : {} as BankAccount;
     this.oldBankInfo = {...this.editBankInfo};
     this.rowInEditMode = true;
+  }
+
+  onEditAccount(account: Account) {
+    const dialogRef = this.dialog.open(AccountAddEditComponent,
+    {
+      data: { actionMode: 'Edit', account }
+    });
+
+    dialogRef.afterClosed().subscribe((accountToEdit) => {
+      if (accountToEdit) {
+        console.log(accountToEdit);
+      }
+    });
   }
 
   onSaveChanges() {
