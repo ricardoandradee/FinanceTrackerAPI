@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule,
+import {
+    MatCardModule,
+    MatButtonModule,
     MatIconModule,
     MatInputModule,
     MatDatepickerModule,
@@ -25,6 +27,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 
 @NgModule({
     imports: [
+        MatCardModule,
         MatButtonModule,
         MatIconModule,
         MatDatepickerModule,
@@ -48,6 +51,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         CdkTreeModule
     ],
     exports: [
+        MatCardModule,
         MatButtonModule,
         MatIconModule,
         MatDatepickerModule,
