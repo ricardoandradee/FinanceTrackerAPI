@@ -19,7 +19,9 @@
         </mat-select>
     </mat-form-field>
 </div>
-<a mat-fab class="add-button" color="accent" *ngIf="!(isLoading$ | async)" [disabled]="allCategories.length === 0" title="{{ allCategories.length === 0 ? 'Payments cannot be added. Please, add categories first.' : 'Add Payment'}}" (click)="allCategories.length > 0 && onOpenAddPaymentDialog()"><mat-icon>add</mat-icon></a>
+<a mat-fab class="add-button" color="accent" *ngIf="!(isLoading$ | async)" [disabled]="allCategories.length === 0"
+    [matTooltip]="allCategories.length === 0 ? 'Payments cannot be added. Please, add categories first.' : 'Add Payment'"
+    (click)="allCategories.length > 0 && onOpenAddPaymentDialog()"><mat-icon>add</mat-icon></a>
 <mat-table *ngIf="!(isLoading$ | async)" [ngClass]="{'mat-table-no-items': paymentDates.length === 0 && categoriesFromTable.length === 0, 'mat-table-with-items': paymentDates.length > 0 && categoriesFromTable.length > 0 }" [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="CreatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>

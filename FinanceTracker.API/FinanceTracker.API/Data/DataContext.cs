@@ -13,6 +13,7 @@ namespace FinanceTracker.API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
 
         public async Task<int> SaveChangesAsync()
         {

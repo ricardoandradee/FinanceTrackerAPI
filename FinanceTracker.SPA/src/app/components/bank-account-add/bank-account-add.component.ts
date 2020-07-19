@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { BankAccount } from 'src/app/models/bank-account.model';
+import { Account } from 'src/app/models/account.model';
 import { NgForm } from '@angular/forms';
+import { CurrencyList } from 'src/app/models/currency.model';
 
 @Component({
   selector: 'app-bank-account-add',
@@ -9,15 +11,21 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./bank-account-add.component.scss']
 })
 export class BankAccountAddComponent implements OnInit {
+  currencies = [];
 
   constructor(private dialogRef: MatDialogRef<BankAccountAddComponent>) {
   }
   ngOnInit(): void {
+    this.currencies = CurrencyList;
   }
   
   onSave(form: NgForm) {
+    const account = { name: 'Checking Account', description: `Checking Account linked to ${form.value.name}`,
+      currentBalance: form.value.currentBalance, accountCurrency: form.value.accountCurrency,
+      number: form.value.accountNumber, isActive: true } as Account;
+      
     const bankInfo = { name: form.value.name, branch: form.value.branch,
-      address: form.value.address, isActive: true, createdDate: new Date() } as BankAccount;
+        isActive: true, accountForCreation: account } as BankAccount;
     this.dialogRef.close({ data: bankInfo });
   }
 

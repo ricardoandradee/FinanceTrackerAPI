@@ -16,7 +16,8 @@ import { MatButtonModule,
     MatSortModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSlideToggleModule
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';
@@ -42,6 +43,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         MatPaginatorModule,
         MatSnackBarModule,
         MatNativeDateModule,
+        MatSlideToggleModule,
         CdkTableModule,
         CdkTreeModule
     ],
@@ -64,6 +66,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         MatPaginatorModule,
         MatSnackBarModule,
         MatNativeDateModule,
+        MatSlideToggleModule,
         CdkTableModule,
         CdkTreeModule
     ]

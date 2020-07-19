@@ -7,7 +7,6 @@ namespace FinanceTracker.API.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
         public string Branch { get; set; }
         public bool IsActive { get; set; }
         public ICollection<AccountToReturnDto> Accounts { get; set; }

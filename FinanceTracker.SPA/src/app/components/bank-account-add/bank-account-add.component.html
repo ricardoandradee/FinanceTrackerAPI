@@ -1,6 +1,6 @@
 <form #addBankInfoForm="ngForm" (ngSubmit)="onSave(addBankInfoForm)">
-    <h2 mat-dialog-title>Add Categories</h2>
-    <section class="bank-add-section">
+    <h2 mat-dialog-title>Add Bank Account</h2>
+    <section class="bank-account-add-section">
         <div mat-dialog-content>
             <mat-form-field hintLabel="Name should be at least 6 characters long.">
                 <input type="text" matInput placeholder="Name" #nameInput="ngModel"
@@ -17,8 +17,28 @@
         </div>
         <div mat-dialog-content>
             <mat-form-field>
-                <input type="text" matInput placeholder="Address" #addressInput="ngModel"
-                 name="address" id="address" ngModel>
+                <input type="number" matInput placeholder="Current balance" #branchInput="ngModel"
+                 name="currentBalance" id="currentBalance" ngModel required>
+                <mat-error>Current balance is mandatory.</mat-error>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-content>
+            <mat-form-field>
+                <input type="text" matInput placeholder="Account number" #branchInput="ngModel"
+                 name="accountNumber" id="accountNumber" ngModel required>
+                <mat-error>Account Number is mandatory.</mat-error>
+            </mat-form-field>
+        </div>
+        <div mat-dialog-content>            
+            <mat-form-field [style.width.px]=120>
+                <mat-label> Currency </mat-label>
+                <mat-select #currencyInput="ngModel" name="currency" id="currency" ngModel required>
+                    <mat-option value=""> - Select - </mat-option>
+                    <mat-option *ngFor="let currency of currencies" [value]="currency">
+                        {{currency}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Currency is required.</mat-error>
             </mat-form-field>
         </div>
         <mat-dialog-actions align="end">

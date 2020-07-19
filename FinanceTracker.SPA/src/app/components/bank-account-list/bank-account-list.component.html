@@ -31,9 +31,9 @@
     <ng-container  matColumnDef="Status">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
         <mat-cell *matCellDef="let element">
+            <mat-slide-toggle  *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" [(ngModel)]="element.isActive" name="isActive" id="isActive" color="primary"></mat-slide-toggle>
             <span *ngIf="(!editBankInfo?.id || element.id!==editBankInfo.id) && element.isActive">Active</span>
             <span *ngIf="(!editBankInfo?.id || element.id!==editBankInfo.id) && !element.isActive">Inactive</span>
-            <mat-checkbox *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" [(ngModel)]="element.isActive" name="isActive" id="isActive" color="primary"></mat-checkbox>
         </mat-cell>
     </ng-container>
     <ng-container matColumnDef="Actions">

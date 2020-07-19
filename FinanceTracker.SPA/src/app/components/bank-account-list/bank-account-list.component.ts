@@ -34,7 +34,7 @@ export class BankAccountListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   
   editBankInfo: BankAccount;
-  oldBankInfo: { id: number; userId: string; address: string; branch: string; isActive: boolean, createdDate?: Date; };
+  oldBankInfo: { id?: number; userId?: string; branch: string; isActive: boolean, createdDate?: Date; };
   rowInEditMode: boolean;
   
   constructor(private dialog: MatDialog, private uiService: UiService,
@@ -74,10 +74,6 @@ export class BankAccountListComponent implements OnInit {
     }, (err) => {
         this.uiService.showSnackBar(err.error, 3000);
     }, () => { this.store.dispatch(new UI.StopLoading()); });
-  }
-  
-  onSave(form: NgForm) {
-    this.createBankInfo({ address: form.value.address, branch: form.value.branch, isActive: form.value.isActive, createdDate: new Date() } as BankAccount);
   }
 
   refreshBankInfoDataSource() {

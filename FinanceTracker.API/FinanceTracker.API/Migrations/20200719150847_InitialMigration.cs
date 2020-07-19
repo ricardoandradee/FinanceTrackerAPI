@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinanceTracker.API.Migrations
 {
-    public partial class SqliteFirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,7 +37,6 @@ namespace FinanceTracker.API.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
                     Branch = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: true)
@@ -76,16 +75,42 @@ namespace FinanceTracker.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Wallets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    AccountCurrency = table.Column<string>(maxLength: 3, nullable: true),
+                    CurrentBalance = table.Column<decimal>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wallets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Wallets_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BankId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    Number = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
+                    AccountCurrency = table.Column<string>(maxLength: 3, nullable: true),
                     CurrentBalance = table.Column<decimal>(nullable: false),
+                    BankId = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -143,6 +168,11 @@ namespace FinanceTracker.API.Migrations
                 name: "IX_Payments_CategoryId",
                 table: "Payments",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wallets_UserId",
+                table: "Wallets",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -152,6 +182,9 @@ namespace FinanceTracker.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "Wallets");
 
             migrationBuilder.DropTable(
                 name: "Banks");

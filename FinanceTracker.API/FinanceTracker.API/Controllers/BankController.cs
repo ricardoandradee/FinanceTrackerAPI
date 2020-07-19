@@ -17,16 +17,18 @@ namespace FinanceTracker.API.Controllers
     public class BankController : ControllerBase
     {
         private readonly IBankRepository _bankRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-        public BankController(IBankRepository bankRepository, IMapper mapper)
+        public BankController(IBankRepository bankRepository, IAccountRepository accountRepository, IMapper mapper)
         {
             _mapper = mapper;
+            _accountRepository = accountRepository;
             _bankRepository = bankRepository;
         }
 
         [HttpGet]
-        [Route("GetBank")]
-        public async Task<IActionResult> GetBank(int userId, int bankId) 
+        [Route("GetBankInfo")]
+        public async Task<IActionResult> GetBankInfo(int userId, int bankId) 
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {
@@ -62,13 +64,21 @@ namespace FinanceTracker.API.Controllers
             bankForCreationDto.UserId = userId;
 
             var bank = _mapper.Map<Bank>(bankForCreationDto);
+            var account = _mapper.Map<Account>(bankForCreationDto.AccountForCreation);
 
             if (await _bankRepository.Add(bank))
             {
-                var bankToReturn = _mapper.Map<BankToReturnDto>(bank);
+                account.BankId = bank.Id;
+                await _accountRepository.Add(account);
 
-                return CreatedAtAction(nameof(GetBank),
-                    new { bankId = bank.Id, userId = userId },
+                var bankToReturn = _mapper.Map<BankToReturnDto>(bank);                
+                bankToReturn.Accounts = new List<AccountToReturnDto>
+                {
+                    _mapper.Map<AccountToReturnDto>(account)
+                };
+                
+                return CreatedAtAction(nameof(GetBankInfo),
+                    new { bankId = bank.Id, userId },
                     bankToReturn);
             }
 

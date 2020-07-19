@@ -44,18 +44,19 @@ export class BankAccountService {
     }
 
     createBankInfo(bankAccount: BankAccount) {
-        const user: User = JSON.parse(localStorage.getItem('user')); 
+        const user: User = JSON.parse(localStorage.getItem('user'));
+        const createdDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss');
         const newBankInfo = {
             userId: user.id,
             name: bankAccount.name,
-            address: bankAccount.address,
             branch: bankAccount.branch,
-            createdDate: this.datePipe.transform(bankAccount.createdDate, "yyyy-MM-ddTHH:mm:ss")
+            isActive: bankAccount.isActive,
+            createdDate,
+            accountForCreation: { ...bankAccount.accountForCreation, createdDate }
         };
 
         const url = `${this.baseUrl}user/${user.id}/bank/CreateBankInfo`;
-        
-        let httpHeaders = new HttpHeaders({
+        const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
         });
 
@@ -64,15 +65,14 @@ export class BankAccountService {
 
     updateBankInfo(bankAccount: BankAccount) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
-        const url = `${this.baseUrl}user/${user.id}/bank/updateBankInfo/${bankAccount.id}`; 
+        const url = `${this.baseUrl}user/${user.id}/bank/updateBankInfo/${bankAccount.id}`;
         const newBankInfo = {
             name: bankAccount.name,
-            address: bankAccount.address,
             branch: bankAccount.branch,
             isActive: bankAccount.isActive
         };
         
-        let httpHeaders = new HttpHeaders({
+        const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
         });
 

@@ -35,9 +35,9 @@ export class PaymentService {
         }));
     }
 
-    createPayment(Payment: Payment) {
+    createPayment(payment: Payment) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const newPayment = { ...Payment, createdDate: this.datePipe.transform(Payment.createdDate, 'yyyy-MM-ddTHH:mm:ss') };
+        const newPayment = { ...payment, createdDate: this.datePipe.transform(payment.createdDate, 'yyyy-MM-ddTHH:mm:ss') };
         const url = `${this.baseUrl}${user.id}/Payment/CreatePayment`;
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
@@ -45,18 +45,18 @@ export class PaymentService {
         return this.http.post(url, newPayment, { headers: httpHeaders, observe: 'response' });
     }
 
-    updatePayment(Payment: Payment) {
+    updatePayment(payment: Payment) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
         const newPayment = {
-            categoryId: Payment.categoryId,
-            address: Payment.address,
-            establishment: Payment.establishment,
-            description: Payment.description,
-            currency: Payment.currency,
-            price: Payment.price
+            categoryId: payment.categoryId,
+            address: payment.address,
+            establishment: payment.establishment,
+            description: payment.description,
+            currency: payment.currency,
+            price: payment.price
         };
         
-        const url = `${this.baseUrl}${user.id}/Payment/UpdatePayment/${Payment.id}`;
+        const url = `${this.baseUrl}${user.id}/Payment/UpdatePayment/${payment.id}`;
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
         });

@@ -22,6 +22,10 @@ namespace FinanceTracker.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AccountCurrency")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(3);
+
                     b.Property<int>("BankId")
                         .HasColumnType("INTEGER");
 
@@ -40,6 +44,9 @@ namespace FinanceTracker.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Number")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BankId");
@@ -52,9 +59,6 @@ namespace FinanceTracker.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Branch")
                         .HasColumnType("TEXT");
@@ -179,6 +183,38 @@ namespace FinanceTracker.API.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("FinanceTracker.API.Models.Wallet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AccountCurrency")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(3);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("CurrentBalance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wallets");
+                });
+
             modelBuilder.Entity("FinanceTracker.API.Models.Account", b =>
                 {
                     b.HasOne("FinanceTracker.API.Models.Bank", "Bank")
@@ -211,6 +247,15 @@ namespace FinanceTracker.API.Migrations
                     b.HasOne("FinanceTracker.API.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FinanceTracker.API.Models.Wallet", b =>
+                {
+                    b.HasOne("FinanceTracker.API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

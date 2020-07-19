@@ -1,10 +1,11 @@
+import { Account } from 'src/app/models/account.model';
 export interface BankAccount {
-    id: number;
-    userId: string;
+    id?: number;
+    userId?: string;
     name: string;
-    address: string;
     branch: string;
     isActive: boolean;
     createdDate?: Date;
     accounts: Account[];
+    accountForCreation: Account;
 }

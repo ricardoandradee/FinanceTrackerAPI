@@ -9,7 +9,6 @@ namespace FinanceTracker.API.Models
         public virtual User User { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
         public string Branch { get; set; }
         public bool IsActive { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
