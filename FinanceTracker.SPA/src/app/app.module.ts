@@ -26,6 +26,7 @@ import { CurrencyService } from './services/currency.service';
 import { PaymentService } from './services/payment.service';
 import { CategoryService } from './services/category.service';
 import { BankAccountService } from './services/bank-account.service';
+import { AccountService } from './services/account.service';
 import { reducers } from './reducers/app.reducer';
 import { DatePipe } from '@angular/common';
 import { AuthModule } from './components/auth/auth.module';
@@ -73,6 +74,7 @@ export function tokenGetter() {
     CurrencyService,
     CategoryService,
     BankAccountService,
+    AccountService,
     PaymentService,
     UiService,
     DatePipe

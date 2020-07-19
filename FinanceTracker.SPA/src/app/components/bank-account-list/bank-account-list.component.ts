@@ -13,6 +13,7 @@ import { BankAccountAddComponent } from '../bank-account-add/bank-account-add.co
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Account } from 'src/app/models/account.model';
 import { AccountAddEditComponent } from '../account-add-edit/account-add-edit.component';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -36,11 +37,13 @@ export class BankAccountListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   
   editBankInfo: BankAccount;
-  oldBankInfo: { id?: number; userId?: string; branch: string; isActive: boolean, createdDate?: Date; };
+  oldBankInfo: { id?: number; userId?: string; branch: string;
+                 isActive: boolean, createdDate?: Date; };
   rowInEditMode: boolean;
   
   constructor(private dialog: MatDialog, private uiService: UiService,
               private bankAccountService: BankAccountService,
+              private accountService: AccountService,
               private store: Store<{ui: fromRoot.State}>) { }
 
   ngOnInit() {
@@ -142,7 +145,23 @@ export class BankAccountListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((accountToEdit) => {
       if (accountToEdit) {
-        console.log(accountToEdit);
+        this.accountService.updateAccount(accountToEdit as Account).subscribe(response => {
+          if (response.ok) {
+            const bankInfoFromDataSource = this.dataSource.data;
+            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountToEdit.id);
+
+            bankInfoFromDataSource[bankInfoIndex].accounts.forEach(ac => {
+              ac.name = accountToEdit.name;
+              ac.isActive = accountToEdit.isActive;
+              ac.currentBalance = accountToEdit.currentBalance;
+              ac.accountCurrency = accountToEdit.accountCurrency;
+            });
+            if (bankInfoIndex > -1) {
+              bankInfoFromDataSource.splice(bankInfoIndex, 1);
+              bankInfoFromDataSource.splice(bankInfoIndex, 0, this.editBankInfo);
+              }
+            }
+        });
       }
     });
   }

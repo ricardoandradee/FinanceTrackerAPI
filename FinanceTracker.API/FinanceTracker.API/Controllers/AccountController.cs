@@ -66,7 +66,7 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPost]
         [Route("CreateAccount")]
-        public async Task<IActionResult> CreateAccout(int userId, int bankId, AccountForCreationDto accountForCreationDto)
+        public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {

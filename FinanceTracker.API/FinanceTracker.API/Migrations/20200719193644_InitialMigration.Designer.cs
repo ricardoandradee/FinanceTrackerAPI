@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceTracker.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200719150847_InitialMigration")]
+    [Migration("20200719193644_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,9 +35,6 @@ namespace FinanceTracker.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("CurrentBalance")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")

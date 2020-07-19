@@ -105,7 +105,6 @@ namespace FinanceTracker.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
                     Number = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     AccountCurrency = table.Column<string>(maxLength: 3, nullable: true),

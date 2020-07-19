@@ -35,9 +35,6 @@ namespace FinanceTracker.API.Migrations
                     b.Property<decimal>("CurrentBalance")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
