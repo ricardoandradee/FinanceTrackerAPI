@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Payment } from '../../models/payment.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -53,7 +53,7 @@ export class PaymentHistoryComponent implements OnInit {
     this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.allCategories = categoryList;
     });
-    
+
     this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
       this.userBaseCurrency = userBaseCurrency;
       this.setTotalPrice();
@@ -164,19 +164,19 @@ export class PaymentHistoryComponent implements OnInit {
   }
 
   dateFilterMatches(payment: Payment): boolean {
-    var filter = this.getDateFilter();
+    const filter = this.getDateFilter();
     const value = '[FilterByDate]' + payment.createdDateString;
-    return filter.indexOf('[FilterByDate]') === -1 || (filter == '[FilterByDate]All' || value.indexOf(filter) >= 0);
+    return filter.indexOf('[FilterByDate]') === -1 || (filter === '[FilterByDate]All' || value.indexOf(filter) >= 0);
   }
 
   categoryFilterMatches(payment: Payment): boolean {
-    var filter = '[FilterByCategory]' + this.category;
+    const filter = '[FilterByCategory]' + this.category;
     const value = '[FilterByCategory]' + payment.categoryId;
-    return filter.indexOf('[FilterByCategory]') === -1 || (filter == '[FilterByCategory]All' || value.indexOf(filter) >= 0);
+    return filter.indexOf('[FilterByCategory]') === -1 || (filter === '[FilterByCategory]All' || value.indexOf(filter) >= 0);
   }
 
   getDateFilter(): string {
-    let dateToBeSearched = this.paymentDate === "All" ? "All" : this.paymentDate;
+    const dateToBeSearched = this.paymentDate === 'All' ? 'All' : this.paymentDate;
     return '[FilterByDate]' + dateToBeSearched;
   }
 
@@ -218,14 +218,6 @@ export class PaymentHistoryComponent implements OnInit {
     this.paymentService.updatePayment(this.editPayment).subscribe(response => {
       if (response.ok) {
         const paymentsFromDataSource = this.dataSource.data;
-        const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === this.editPayment.id);
-
-        if (paymentIndex > -1) {
-          paymentsFromDataSource.splice(paymentIndex, 1);
-          const category = this.allCategories.find(x => x.id === this.editPayment.categoryId);
-          this.editPayment.categoryName = category.name;
-          paymentsFromDataSource.splice(paymentIndex, 0, this.editPayment);
-        }
 
         this.paymentService.setPayments = paymentsFromDataSource;
         this.setTotalPrice();

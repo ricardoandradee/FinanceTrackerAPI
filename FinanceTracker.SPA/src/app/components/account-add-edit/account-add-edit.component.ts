@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CurrencyList } from 'src/app/models/currency.model';
 import { Account } from 'src/app/models/account.model';
-import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-account-add-edit',
@@ -18,15 +17,13 @@ export class AccountAddEditComponent implements OnInit {
               private dialogRef: MatDialogRef<AccountAddEditComponent>) {
                 this.currencies = CurrencyList;
                 this.actionMode = passedData.actionMode;
-                if (this.actionMode === 'Edit') {
-                  this.account = { ...passedData.account };
-                }
+                this.account = { ...passedData.account };
               }
   
   ngOnInit(): void {
   }
   
-  onSave(form: NgForm) {
+  onSave() {
     this.dialogRef.close(this.account);
   }
 

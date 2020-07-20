@@ -106,7 +106,7 @@ namespace FinanceTracker.API.Controllers
                 return BadRequest("This account does not belong to the logged in user.");
             }
 
-            var accountFromRepo = await _accountRepository.RetrieveById(bankId);
+            var accountFromRepo = await _accountRepository.RetrieveById(accountId);
             _mapper.Map(accountForUpdateDto, accountFromRepo);
 
             if (await _accountRepository.Update(accountFromRepo))

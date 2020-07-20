@@ -30,3 +30,8 @@ a.toolbar-link:active {
  .mat-icon {
      margin-right: 20px;
  }
+
+ .active {
+    background: lightseagreen;
+    border-bottom: 2px solid darkgrey;      
+}

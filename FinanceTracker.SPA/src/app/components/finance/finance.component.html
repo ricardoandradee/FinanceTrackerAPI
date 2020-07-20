@@ -1,11 +1,9 @@
-<mat-tab-group>
-    <mat-tab label="Payments">
-        <app-payment-history></app-payment-history>
-    </mat-tab>
-    <mat-tab label="Income">
-        <app-bank-account-list></app-bank-account-list>
-    </mat-tab>
-    <mat-tab label="Categories">
-        <app-category-list></app-category-list>
-    </mat-tab>
-  </mat-tab-group>
+<div *ngIf="currentPage === 'paymenthistory'">
+    <app-payment-history></app-payment-history>
+</div>
+<div *ngIf="currentPage === 'income'">
+    <app-bank-account-list></app-bank-account-list>
+</div>
+<div *ngIf="currentPage === 'categorylist'">
+    <app-category-list></app-category-list>
+</div>

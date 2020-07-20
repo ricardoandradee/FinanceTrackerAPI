@@ -65,7 +65,7 @@ export class AuthService {
           this.currencyService.fetchListOfCurrencies();
           this.currencyService.setUserBaseCurrency = this.currentUser.userCurrency;
         }
-        this.router.navigate(['/finance']);
+        this.router.navigate(['/finance/categorylist']);
         this.dataSource$.next(true);
         this.uiService.showSnackBar('Successfully logged in.', 3000);
       }

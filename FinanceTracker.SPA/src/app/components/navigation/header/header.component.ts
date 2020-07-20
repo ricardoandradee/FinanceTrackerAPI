@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CurrencyList } from 'src/app/models/currency.model';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,7 @@ export class HeaderComponent implements OnInit {
   disableBaseCurrency = true;
 
   constructor(private authService: AuthService,
+              private router: Router,
               private currencyService: CurrencyService) {
     this.currencies = CurrencyList;
    }
@@ -25,6 +27,10 @@ export class HeaderComponent implements OnInit {
     if (user) {
       this.userBaseCurrency = user.userCurrency ? user.userCurrency : 'EUR';
     }
+  }
+
+  isActive(url: string): boolean {
+    return this.router.isActive(url, false);
   }
 
   loggedIn() {

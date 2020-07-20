@@ -6,7 +6,7 @@ import { AuthGuard } from './components/auth/auth.guard';
 const routes: Routes = [
     { path: '', component: WelcomeComponent },
     {
-        path: 'finance',
+        path: 'finance/:pageId',
         loadChildren: './components/finance/finance.module#FinanceModule',
         runGuardsAndResolvers: 'always',
         canActivate: [AuthGuard]

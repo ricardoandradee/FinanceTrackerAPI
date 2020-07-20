@@ -20,7 +20,7 @@
         <div mat-dialog-content>
             <mat-form-field floatLabel="always" appearance="none">
                 <mat-label>Status</mat-label>
-                <mat-slide-toggle [(ngModel)]="account.isActive" name="status" id="status">
+                <mat-slide-toggle [(ngModel)]="account.isActive" name="status" id="status" [disabled]="actionMode === 'Add'">
                     <span class="text-invisible">
                         {{ account.isActive ? 'Active' : 'Inactive' }}
                     </span>
@@ -49,7 +49,7 @@
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button type="submit" mat-button [mat-dialog-close]="false" (click)="onSave(accountAddEditForm)"
+            <button type="submit" mat-button [mat-dialog-close]="false" (click)="onSave()"
             [disabled]="accountAddEditForm.invalid" mat-raised-button color="primary">Save</button>
         </mat-dialog-actions>
     </section>

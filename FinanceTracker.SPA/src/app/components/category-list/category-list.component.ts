@@ -135,12 +135,6 @@ export class CategoryListComponent implements OnInit {
     this.categoryService.updateCategory(this.editCategory).subscribe(response => {
       if (response.ok) {
         const categoriesFromDataSource = this.dataSource.data;
-        const categoryIndex = categoriesFromDataSource.findIndex(x => x.id === this.editCategory.id);
-
-        if (categoryIndex > -1) {
-          categoriesFromDataSource.splice(categoryIndex, 1);
-          categoriesFromDataSource.splice(categoryIndex, 0, this.editCategory);
-        }
         this.categoryService.setCategories = categoriesFromDataSource;
         this.editCategory = {} as Category;
         this.onCancelEdit();

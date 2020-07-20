@@ -11,8 +11,6 @@ export class AccountService {
 
     constructor(private http: HttpClient,
         private datePipe: DatePipe) { }
-
-        //api/user/{userId}/bank/{bankId}/account
         
     deleteAccount(bankId: number, accountId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
@@ -26,15 +24,16 @@ export class AccountService {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const createdDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss');
         const newAccount = {
-            bankId: account.bankId,
             name: account.name,
-            branch: account.isActive,
-            accountCurrency: account.accountCurrency,
             number: account.number,
+            accountCurrency: account.accountCurrency,
+            currentBalance: account.currentBalance,
+            bankId: account.bankId,
+            isActive: account.isActive,
             createdDate
         };
 
-        const url = `${this.baseUrl}user/${user.id}/bank/${account.bankId}/account/CreateAccount/${account.id}`;
+        const url = `${this.baseUrl}user/${user.id}/bank/${account.bankId}/account/CreateAccount`;
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
         });
@@ -45,12 +44,11 @@ export class AccountService {
     updateAccount(account: Account) {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const url = `${this.baseUrl}user/${user.id}/bank/${account.bankId}/account/UpdateAccount/${account.id}`;
-        console.log(url);
         const accountToUpdate = {
             name: account.name,
-            branch: account.isActive,
+            number: account.number,
             accountCurrency: account.accountCurrency,
-            number: account.number
+            isActive: account.isActive
         };
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'

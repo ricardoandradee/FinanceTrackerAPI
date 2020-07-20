@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
 import { UiService } from '../../services/ui.service';
@@ -131,6 +130,32 @@ export class BankAccountListComponent implements OnInit {
     });
   }
 
+  
+  onAddAccout(bankInfo: BankAccount) {
+    const dialogRef = this.dialog.open(AccountAddEditComponent,
+    {
+      data: { actionMode: 'Add', account: { bankId: bankInfo.id, name: '', isActive: true } as Account }
+    });
+    dialogRef.afterClosed().subscribe((accountToAdded: Account) => {
+      if (accountToAdded) {
+        this.store.dispatch(new UI.StartLoading());
+        this.accountService.createAccount(accountToAdded).subscribe(response => {
+          if (response.ok) {
+            const bankInfoFromDataSource = this.dataSource.data;
+            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountToAdded.bankId);
+
+            if (bankInfoIndex > -1) {
+              bankInfoFromDataSource[bankInfoIndex].accounts.push(accountToAdded);
+            }
+            this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
+          }
+        }, (err) => {
+          this.uiService.showSnackBar(err.error, 3000);
+      }, () => { this.store.dispatch(new UI.StopLoading()); });
+      }
+    });
+  }
+
   onEdit(bankInfo: BankAccount) {
     this.editBankInfo = bankInfo && bankInfo.id ? bankInfo : {} as BankAccount;
     this.oldBankInfo = {...this.editBankInfo};
@@ -143,25 +168,60 @@ export class BankAccountListComponent implements OnInit {
       data: { actionMode: 'Edit', account }
     });
 
-    dialogRef.afterClosed().subscribe((accountToEdit) => {
-      if (accountToEdit) {
-        this.accountService.updateAccount(accountToEdit as Account).subscribe(response => {
+    dialogRef.afterClosed().subscribe((accountToEdited: Account) => {
+      if (accountToEdited) {
+        this.store.dispatch(new UI.StartLoading());
+        this.accountService.updateAccount(accountToEdited).subscribe(response => {
           if (response.ok) {
             const bankInfoFromDataSource = this.dataSource.data;
-            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountToEdit.id);
+            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountToEdited.bankId);
 
-            bankInfoFromDataSource[bankInfoIndex].accounts.forEach(ac => {
-              ac.name = accountToEdit.name;
-              ac.isActive = accountToEdit.isActive;
-              ac.currentBalance = accountToEdit.currentBalance;
-              ac.accountCurrency = accountToEdit.accountCurrency;
-            });
             if (bankInfoIndex > -1) {
-              bankInfoFromDataSource.splice(bankInfoIndex, 1);
-              bankInfoFromDataSource.splice(bankInfoIndex, 0, this.editBankInfo);
-              }
+              bankInfoFromDataSource[bankInfoIndex].accounts.forEach(a => {
+                if(a.id === accountToEdited.id) {
+                  a.name = accountToEdited.name;
+                  a.number = accountToEdited.number;
+                  a.isActive = accountToEdited.isActive;
+                  a.accountCurrency = accountToEdited.accountCurrency;
+                }
+              });
             }
-        });
+            this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
+          }
+        }, (err) => {
+          this.uiService.showSnackBar(err.error, 3000);
+      }, () => { this.store.dispatch(new UI.StopLoading()); });
+      }
+    });
+  }
+
+  
+  onDeleteAccount(account: Account) {
+    const dialogRef = this.dialog.open(YesNoDialogComponent,
+    {
+      data:
+        {
+          message: `Are you sure you want to delete this ${account.name} account?`,
+          title: 'Are you sure?'
+        }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.store.dispatch(new UI.StartLoading());
+        this.accountService.deleteAccount(account.bankId, account.id).subscribe(response => {
+          const bankInfoFromDataSource = this.dataSource.data;
+          const bankInfoIndex = bankInfoFromDataSource.findIndex(b => b.id === account.bankId);
+          if (bankInfoIndex > -1) {
+            const accountIndex = bankInfoFromDataSource[bankInfoIndex].accounts.findIndex(a => a.id === account.id);
+            if (accountIndex > -1) {
+              bankInfoFromDataSource[bankInfoIndex].accounts.splice(accountIndex, 1);
+            }
+          }
+          this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
+        }, (err) => {
+          this.uiService.showSnackBar(err.error, 3000);
+      }, () => { this.store.dispatch(new UI.StopLoading()); });
       }
     });
   }
@@ -171,12 +231,6 @@ export class BankAccountListComponent implements OnInit {
     this.bankAccountService.updateBankInfo(this.editBankInfo).subscribe(response => {
       if (response.ok) {
         const bankInfoFromDataSource = this.dataSource.data;
-        const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === this.editBankInfo.id);
-
-        if (bankInfoIndex > -1) {
-          bankInfoFromDataSource.splice(bankInfoIndex, 1);
-          bankInfoFromDataSource.splice(bankInfoIndex, 0, this.editBankInfo);
-        }
         this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
         this.editBankInfo = {} as BankAccount;
         this.onCancelEdit();
