@@ -31,7 +31,31 @@ a.toolbar-link:active {
      margin-right: 20px;
  }
 
- .active {
-    background: lightseagreen;
-    border-bottom: 2px solid darkgrey;      
+ .not-last-item {
+    border-right: 1px dotted darkgrey;    
+ }
+ 
+ .menu-spacer {
+    display: inline;
+    margin-right: 40px;
+}
+
+.active {
+    position:relative;
+    font-weight: bold;
+    color: black;  
+}
+
+
+.active:after {
+    content:'\A';
+    position:absolute;
+    background: linear-gradient(0deg, rgba(255,255,255, 0.2) 0%, rgba(185,255,239, 0.2) 80%);
+    border-bottom: 1px solid darkgrey;    
+    top:0; bottom:0;
+    left:5%; 
+    width:90%;
+    -webkit-animation: filler 2s ease-in-out;
+    -moz-animation: filler 2s ease-in-out;
+    animation: filler 2s ease-in-out;
 }

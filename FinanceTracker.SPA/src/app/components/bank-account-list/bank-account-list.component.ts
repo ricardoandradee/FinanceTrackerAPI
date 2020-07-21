@@ -134,18 +134,19 @@ export class BankAccountListComponent implements OnInit {
   onAddAccout(bankInfo: BankAccount) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,
     {
-      data: { actionMode: 'Add', account: { bankId: bankInfo.id, name: '', isActive: true } as Account }
+      data: { actionMode: 'Add', account: { bankId: bankInfo.id, name: '', isActive: true, accountCurrency: '' } as Account }
     });
     dialogRef.afterClosed().subscribe((accountToAdded: Account) => {
       if (accountToAdded) {
         this.store.dispatch(new UI.StartLoading());
         this.accountService.createAccount(accountToAdded).subscribe(response => {
           if (response.ok) {
+            const accountAdded = response.body as Account;
             const bankInfoFromDataSource = this.dataSource.data;
-            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountToAdded.bankId);
+            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountAdded.bankId);
 
             if (bankInfoIndex > -1) {
-              bankInfoFromDataSource[bankInfoIndex].accounts.push(accountToAdded);
+              bankInfoFromDataSource[bankInfoIndex].accounts.push(accountAdded);
             }
             this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
           }

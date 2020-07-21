@@ -34,9 +34,6 @@ export class CategoryListComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.categoryService.getCategoriesForUser().subscribe((categories: Category[]) => {
-      this.categoryService.setCategories = categories;
-    });
   }
   
   openDialog() {

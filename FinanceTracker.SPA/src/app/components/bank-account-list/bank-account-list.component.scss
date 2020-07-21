@@ -10,7 +10,7 @@
 .add-button {
     position: absolute;
     right: 30px;
-    top: 8%;
+    top: 10%;
 }
 
 .header-div {
@@ -45,4 +45,10 @@ p {
 
 .mat-card-content {
   margin-left: 17px;
+}
+
+@media only screen and (max-width: 599px) {
+  .mat-icon-button {
+      width: 25px;
+  }
 }

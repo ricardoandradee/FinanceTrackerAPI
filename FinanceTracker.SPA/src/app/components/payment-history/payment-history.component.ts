@@ -15,6 +15,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
 import { Observable } from 'rxjs';
+import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.model';
 
 @Component({
   selector: 'app-payment-history',
@@ -29,11 +30,11 @@ export class PaymentHistoryComponent implements OnInit {
   editPayment: Payment;
   oldPayment: Payment;
   rowInEditMode = false;
-  private currencies = [];
-  private categoriesFromTable: Category[] = [];
-  private allCategories: Category[] = [];
+  private currencies: string[];
+  private allCategories: Category[];
 
-  private paymentDates = [];
+  private datesKeyValue: KeyValuePair<string, string>[];
+  private categoriesKeyValue: KeyValuePair<number, string>[];
   private paymentDate = 'All';
   private category = 'All';
   private totalPrice = 0;
@@ -58,10 +59,6 @@ export class PaymentHistoryComponent implements OnInit {
       this.userBaseCurrency = userBaseCurrency;
       this.setTotalPrice();
     });
-
-    this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
-      this.paymentService.setPayments = payments;
-    });
     
     this.isLoading$.subscribe(loading => {
       if (loading) {
@@ -72,14 +69,6 @@ export class PaymentHistoryComponent implements OnInit {
         this.refreshPaymentDataSource();
       }
     });
-  }
-
-  updateCategoriesDeletionCondition() {
-    const payments: Payment[] = this.dataSource.data as Payment[];
-    this.allCategories.forEach(c => {
-      c.canBeDeleted = !payments.some(b => b.categoryId === c.id);
-    });
-    this.categoryService.setCategories = this.allCategories;
   }
 
   bindDataSource(payments: Payment[]) {
@@ -93,18 +82,15 @@ export class PaymentHistoryComponent implements OnInit {
   }
 
   populateDropDownLists(payments: Payment[]) {
-    this.categoriesFromTable = [];
-    this.paymentDates = [];
-
-    for (const payment of payments) {
-      if (!this.categoriesFromTable.some(x => x.id === payment.categoryId)) {
-        this.categoriesFromTable.push({ id: payment.categoryId, name: payment.categoryName } as Category);
-      }
-
-      if (!this.paymentDates.some(x => x.key === payment.createdDateString)) {
-        this.paymentDates.push({ key: payment.createdDateString, value: payment.createdDateString });
-      }
-    }
+    this.categoriesKeyValue  = getUniquePairs(payments.map((payment: Payment) =>
+    {
+        return { key: payment.categoryId, value: payment.categoryName } as KeyValuePair<number, string>;
+    }));
+    
+    this.datesKeyValue = getUniquePairs(payments.map((payment: Payment) =>
+    {
+        return { key: payment.createdDateString, value: payment.createdDateString } as KeyValuePair<string, string>;
+    }));
   }
 
   onOpenAddPaymentDialog() {
@@ -146,9 +132,8 @@ export class PaymentHistoryComponent implements OnInit {
 
   refreshPaymentDataSource() {
     this.paymentService.getPayments.subscribe((payments: Payment[]) => {
-      this.populateDropDownLists(payments);
       this.bindDataSource(payments);
-      this.updateCategoriesDeletionCondition();
+      this.populateDropDownLists(payments);
       this.setTotalPrice();
     });
  }

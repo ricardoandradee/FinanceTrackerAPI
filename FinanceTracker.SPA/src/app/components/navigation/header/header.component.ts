@@ -4,6 +4,8 @@ import { CurrencyList } from 'src/app/models/currency.model';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
+import { take, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +17,7 @@ export class HeaderComponent implements OnInit {
   currencies = [];
   userBaseCurrency = '';
   disableBaseCurrency = true;
+  isAuth$: Observable<boolean>;
 
   constructor(private authService: AuthService,
               private router: Router,
@@ -23,18 +26,14 @@ export class HeaderComponent implements OnInit {
    }
 
   ngOnInit() {
-    const user: User = this.getUserBaseCurrencyFromLocalStorage();
-    if (user) {
-      this.userBaseCurrency = user.userCurrency ? user.userCurrency : 'EUR';
-    }
+    this.isAuth$ = this.authService.getIsAuthenticated;
+    this.currencyService.getUserBaseCurrency.subscribe(currency => {
+      this.userBaseCurrency = currency ? currency : 'EUR';
+    });
   }
 
   isActive(url: string): boolean {
     return this.router.isActive(url, false);
-  }
-
-  loggedIn() {
-    return this.authService.loggedIn();
   }
 
   saveUserBaseCurrency() {

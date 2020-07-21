@@ -1,17 +1,25 @@
 <mat-nav-list>
-    <a *ngIf="!loggedIn()" mat-list-item routerLink="/signup" (click)="onClose()">
+    <a *ngIf="!(isAuth$ | async)" mat-list-item routerLink="/signup" (click)="onClose()">
         <mat-icon>person_add_alt_1</mat-icon>
         <span class="nav-caption">Signup</span>
     </a>
-    <a *ngIf="!loggedIn()" mat-list-item routerLink="/login" (click)="onClose()">
+    <a *ngIf="!(isAuth$ | async)" mat-list-item routerLink="/login" (click)="onClose()">
         <mat-icon>login</mat-icon>
         <span class="nav-caption">Login</span>
     </a>
-    <a *ngIf="loggedIn()"  mat-list-item routerLink="/finance" (click)="onClose()">
-        <mat-icon>attach_money</mat-icon>
-        <span class="nav-caption">Finance</span>
+    <a *ngIf="isAuth$ | async"  mat-list-item [routerLink]="'/finance/categorylist'" (click)="onClose()">
+        <mat-icon>wysiwyg</mat-icon>
+        <span class="nav-caption">Categories</span>
     </a>
-    <mat-list-item *ngIf="loggedIn()" >
+    <a *ngIf="isAuth$ | async"  mat-list-item [routerLink]="'/finance/income'" (click)="onClose()">
+        <mat-icon>account_balance</mat-icon>
+        <span class="nav-caption">Income</span>
+    </a>
+    <a *ngIf="isAuth$ | async"  mat-list-item [routerLink]="'/finance/paymenthistory'" (click)="onClose()">
+        <mat-icon>payments</mat-icon>
+        <span class="nav-caption">Payments</span>
+    </a>
+    <mat-list-item *ngIf="isAuth$ | async" >
         <button mat-icon-button (click)="onLogout()">
             <mat-icon>power_settings_new</mat-icon>
             <span class="nav-caption">Logout</span>

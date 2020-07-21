@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 import { KeyValuePair } from '../models/key-value-pair.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CurrencyList } from '../models/currency.model';
 import { Rates } from '../models/rates.mock.model';
 
 @Injectable()

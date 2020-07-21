@@ -16,10 +16,6 @@ export class SidenavListComponent implements OnInit {
   ngOnInit() {
     this.isAuth$ = this.authService.getIsAuthenticated;
   }
-
-  loggedIn() {
-    return this.authService.loggedIn();
-  }
   
   onClose() {
     this.sidenavClose.emit();

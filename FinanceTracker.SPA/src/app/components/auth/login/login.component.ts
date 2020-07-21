@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { Observable } from 'rxjs';
 import { UiService } from 'src/app/services/ui.service';
 import { Router } from '@angular/router';
 
@@ -13,7 +12,6 @@ import { Router } from '@angular/router';
 
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  isLoading$: Observable<boolean>;
 
   constructor(private authService: AuthService, private uiService: UiService, private router: Router) { }
 

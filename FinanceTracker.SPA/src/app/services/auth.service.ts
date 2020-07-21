@@ -13,7 +13,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class AuthService {
   private baseUrl = environment.apiUrl + 'auth/';
   private jwtHelper = new JwtHelperService();
-    private dataSource$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private isAuth$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  
   currentUser: User;
   decodedToken: any;
 
@@ -27,12 +28,11 @@ export class AuthService {
   }
 
   get getIsAuthenticated(): Observable<boolean> {
-    return this.dataSource$.asObservable();
+    return this.isAuth$.asObservable();
   }
 
-  loggedIn() {
-    const token = localStorage.getItem('token');
-    return !this.jwtHelper.isTokenExpired(token);
+  set setIsAuthenticated(isAuth: boolean) {
+    this.isAuth$.next(isAuth);
   }
 
   logout() {
@@ -41,7 +41,7 @@ export class AuthService {
     localStorage.removeItem('currencyRates');
     this.decodedToken = null;
     this.uiService.showSnackBar('Logged out.', 3000);
-    this.dataSource$.next(false);
+    this.setIsAuthenticated = false;
     this.router.navigate(['/login']);
   }
 
@@ -65,9 +65,10 @@ export class AuthService {
           this.currencyService.fetchListOfCurrencies();
           this.currencyService.setUserBaseCurrency = this.currentUser.userCurrency;
         }
-        this.router.navigate(['/finance/categorylist']);
-        this.dataSource$.next(true);
         this.uiService.showSnackBar('Successfully logged in.', 3000);
+        this.setIsAuthenticated = true;
+        console.log('here 1');
+        this.router.navigate(['/finance/income']);
       }
     }, (err) => {
       this.uiService.showSnackBar(err.error, 3000);

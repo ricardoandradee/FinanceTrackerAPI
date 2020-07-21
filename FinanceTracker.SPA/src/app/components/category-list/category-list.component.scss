@@ -10,9 +10,15 @@
 .add-button {
     position: absolute;
     right: 30px;
-    top: 8%;
+    top: 10%;
 }
 
 .header-div {
   margin-top: 30px;
+}
+
+@media only screen and (max-width: 599px) {
+    .mat-icon-button {
+        width: 25px;
+    }
 }

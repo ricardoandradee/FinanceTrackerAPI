@@ -3,15 +3,15 @@
         <button mat-icon-button fxHide.gt-xs>
           <mat-icon (click)="onToggleSidenav()">menu</mat-icon>
         </button>
-        <h1><a class="toolbar-link" [routerLink]="loggedIn() ? ['/finance/paymenthistory'] : ['/']">Spend wise</a></h1>
+        <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/paymenthistory'] : ['/']">Spend wise</a></h1>
         <span class="menu-spacer"></span>
-        <div *ngIf="loggedIn()" fxHide.xs>
-          <a mat-button [class.active]="isActive('finance/categorylist')" [routerLink]="'/finance/categorylist'"> Categories </a>
-          <a mat-button [class.active]="isActive('finance/income')" [routerLink]="'/finance/income'"> Income </a>
+        <div *ngIf="(isAuth$ | async)" fxHide.xs>
+          <a mat-button class="not-last-item" [class.active]="isActive('finance/categorylist')" [routerLink]="'/finance/categorylist'"> Categories </a>
+          <a mat-button class="not-last-item" [class.active]="isActive('finance/income')" [routerLink]="'/finance/income'"> Income </a>
           <a mat-button [class.active]="isActive('finance/paymenthistory')" [routerLink]="'/finance/paymenthistory'"> Payments </a>
         </div>
         <div fxLayoutGap="40px" fxFlex fxLayout fxLayoutAlign="end">
-            <mat-form-field *ngIf="loggedIn()" [style.width.px]=100 [style.height.px]=40 [style.fontSize.px]=12>
+            <mat-form-field *ngIf="(isAuth$ | async)" [style.width.px]=100 [style.height.px]=40 [style.fontSize.px]=12>
                 <mat-label> Currency </mat-label>
                 <mat-select #currencyInput="ngModel" [disabled]="disableBaseCurrency" name="currency" id="currency" [(ngModel)]="userBaseCurrency">
                     <mat-option *ngFor="let currency of currencies" [value]="currency">
@@ -25,7 +25,7 @@
                     <mat-icon>save</mat-icon>
                 </a>
             </mat-form-field>
-            <ul fxLayout class="navigation-items" *ngIf="!loggedIn()">
+            <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)" fxHide.xs>
                 <li>
                     <a class="toolbar-link" routerLink="/signup">
                         <mat-icon title="signup" class="icon-display">person_add_alt_1</mat-icon>
@@ -33,7 +33,7 @@
                 </li>
                 <li><a class="toolbar-link" routerLink="/login"><mat-icon title="login" class="icon-display">login</mat-icon></a></li>
             </ul>
-            <ul fxLayout class="navigation-items" *ngIf="loggedIn()">
+            <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
                 <li><a class="toolbar-link cursor-pointer" (click)="onLogout()"><mat-icon title="logout" class="icon-display">power_settings_new</mat-icon></a></li>
             </ul>
         </div>
