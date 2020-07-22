@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoMapper;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Helpers;
@@ -57,6 +58,13 @@ namespace FinanceTracker.API.Mapping
 
             CreateMap<BankToReturnDto, Bank>().ReverseMap();
             CreateMap<BankForCreationDto, Bank>().ReverseMap();
+
+            CreateMap<BankForCreationDto, Bank>()
+            .ForMember(dest => dest.Accounts, opt =>
+            {
+                opt.MapFrom((s, d) => new List<AccountForCreationDto> { s.AccountForCreation });
+            }).ReverseMap();
+
             CreateMap<BankForUpdateDto, Bank>().ReverseMap();
 
             #endregion

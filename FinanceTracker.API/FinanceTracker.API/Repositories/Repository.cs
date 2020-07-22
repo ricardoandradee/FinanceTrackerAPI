@@ -1,4 +1,3 @@
-using FinanceTracker.API.Data;
 using FinanceTracker.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,55 +10,45 @@ namespace FinanceTracker.API.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly IDataContext _context;
-        public Repository(IDataContext context)
+        protected readonly IUnitOfWorkRepository _unitOfWork;
+        public Repository(IUnitOfWorkRepository unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await _context.Set<TEntity>().ToListAsync();
+            return await _unitOfWork.Context.Set<TEntity>().ToListAsync();
         }
 
         public async Task<TEntity> RetrieveById(int id)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            return await _unitOfWork.Context.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<bool> Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            await _context.Set<TEntity>().AddAsync(entity);
-            return await _context.SaveChangesAsync() > 0;
+            await _unitOfWork.Context.Set<TEntity>().AddAsync(entity);
         }
 
-        public async Task<bool> AddRange(IEnumerable<TEntity> entities)
+        public async Task AddRange(IEnumerable<TEntity> entities)
         {
-            await _context.Set<TEntity>().AddRangeAsync(entities);
-            return await _context.SaveChangesAsync() > 0;
+            await _unitOfWork.Context.Set<TEntity>().AddRangeAsync(entities);
         }
 
-        public async Task<bool> Delete(TEntity entity)
+        public void Delete(TEntity entity)
         {
-            _context.Set<TEntity>().Remove(entity);
-            return await _context.SaveChangesAsync() > 0;
+            _unitOfWork.Context.Set<TEntity>().Remove(entity);
         }
 
-        public async Task<bool> DeleteRange(IEnumerable<TEntity> entities)
+        public void DeleteRange(IEnumerable<TEntity> entities)
         {
-            _context.Set<TEntity>().RemoveRange(entities);
-            return await _context.SaveChangesAsync() > 0;
+            _unitOfWork.Context.Set<TEntity>().RemoveRange(entities);
         }
 
         public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _context.Set<TEntity>().Where(predicate).ToListAsync();
-        }
-
-        public async Task<bool> Update(TEntity entity)
-        {
-            _context.Set<TEntity>().Update(entity);
-            return await _context.SaveChangesAsync() > 0;
+            return await _unitOfWork.Context.Set<TEntity>().Where(predicate).ToListAsync();
         }
     }
 }

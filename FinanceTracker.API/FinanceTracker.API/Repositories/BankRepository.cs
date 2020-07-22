@@ -10,25 +10,25 @@ namespace FinanceTracker.API.Repositories
 {
     public class BankRepository : Repository<Bank>, IBankRepository
     {
-        public BankRepository(IDataContext context)
-            : base(context)
+        public BankRepository(IUnitOfWorkRepository unitOfWork)
+            : base(unitOfWork)
         {
         }
-        
+
         public async Task<IEnumerable<Bank>> GetBanksForUser(int userId)
         {
-            var banks = await _context.Banks.Where(b => b.User.Id == userId).Include(a => a.Accounts).ToListAsync();
+            var banks = await _unitOfWork.Context.Banks.Where(b => b.User.Id == userId).Include(a => a.Accounts).ToListAsync();
             return banks;
         }
 
         public async Task<bool> BelongsToUser(int userId, int bankId)
         {
-            return await _context.Banks.AnyAsync(c => c.Id == bankId && c.User.Id == userId);
+            return await _unitOfWork.Context.Banks.AnyAsync(c => c.Id == bankId && c.User.Id == userId);
         }
 
         public async Task<IEnumerable<Account>> GetAllAccounts(int bankId)
         {
-            return await _context.Accounts.Where(a => a.Bank.Id == bankId).ToListAsync();
+            return await _unitOfWork.Context.Accounts.Where(a => a.Bank.Id == bankId).ToListAsync();
         }
     }
 }

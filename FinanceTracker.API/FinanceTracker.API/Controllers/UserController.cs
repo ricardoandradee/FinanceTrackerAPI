@@ -12,11 +12,15 @@ namespace FinanceTracker.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userUepository;
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userUepository, IMapper mapper)
+
+        public UserController(IUserRepository userUepository,
+                              IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
-            _mapper = mapper;
             _userUepository = userUepository;
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
         [HttpGet(Name = "GetUser")]
@@ -41,7 +45,7 @@ namespace FinanceTracker.API.Controllers
             if (userFromRepo.UserCurrency != userCurrency)
             {
                 userFromRepo.UserCurrency = userCurrency;
-                if (await _userUepository.Update(userFromRepo))
+                if (await _unitOfWorkRepository.SaveChanges() > 0)
                 {
                     var userToReturn = _mapper.Map<UserForDetailedDto>(userFromRepo);
                     return Ok(userToReturn);

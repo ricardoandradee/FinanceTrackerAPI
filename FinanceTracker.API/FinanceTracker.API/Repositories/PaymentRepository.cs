@@ -11,14 +11,14 @@ namespace FinanceTracker.API.Repositories
 {
     public class PaymentRepository : Repository<Payment>, IPaymentRepository
     {
-        public PaymentRepository(IDataContext context)
-            : base(context)
+        public PaymentRepository(IUnitOfWorkRepository unitOfWork)
+            : base(unitOfWork)
         {
         }
 
         public async Task<IList<Payment>> GetPaymentsForUser(int userId)
         {
-            var payments = await _context.Payments.Where(b => b.Category.User.Id == userId)
+            var payments = await _unitOfWork.Context.Payments.Where(b => b.Category.User.Id == userId)
                 .Include(c => c.Category)
                 .ToListAsync();
 
@@ -27,7 +27,7 @@ namespace FinanceTracker.API.Repositories
 
         public async Task<bool> PaymentBelongsToUser(int userId, int paymentId)
         {
-            return await _context.Payments.AnyAsync(b => b.Id == paymentId && b.Category.User.Id == userId);
+            return await _unitOfWork.Context.Payments.AnyAsync(b => b.Id == paymentId && b.Category.User.Id == userId);
         }
     }
 }

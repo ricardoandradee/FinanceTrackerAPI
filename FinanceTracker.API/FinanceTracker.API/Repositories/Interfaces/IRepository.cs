@@ -10,10 +10,9 @@ namespace FinanceTracker.API.Repositories.Interfaces
         Task<TEntity> RetrieveById(int id);
         Task<IEnumerable<TEntity>> GetAll();
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
-        Task<bool> Add(TEntity entity);
-        Task<bool> AddRange(IEnumerable<TEntity> entities);
-        Task<bool> Delete(TEntity entity);
-        Task<bool> Update(TEntity entity);
-        Task<bool> DeleteRange(IEnumerable<TEntity> entities);
+        Task Add(TEntity entity);
+        Task AddRange(IEnumerable<TEntity> entities);
+        void Delete(TEntity entity);
+        void DeleteRange(IEnumerable<TEntity> entities);
     }
 }

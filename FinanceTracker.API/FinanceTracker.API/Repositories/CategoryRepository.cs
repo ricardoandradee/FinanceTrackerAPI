@@ -10,24 +10,24 @@ namespace FinanceTracker.API.Repositories
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
-        public CategoryRepository(IDataContext context)
-            : base(context)
+        public CategoryRepository(IUnitOfWorkRepository unitOfWork)
+            : base(unitOfWork)
         {
         }
 
         public async Task<bool> BelongsToUser(int userId, int categoryId)
         {
-            return await _context.Categories.AnyAsync(c => c.Id == categoryId && c.User.Id == userId);
+            return await _unitOfWork.Context.Categories.AnyAsync(c => c.Id == categoryId && c.User.Id == userId);
         }
 
         public async Task<bool> ExistsAnyPaymentsConnectedToCategory(int categoryId)
         {
-            return await _context.Payments.AnyAsync(u => u.Category.Id == categoryId);
+            return await _unitOfWork.Context.Payments.AnyAsync(u => u.Category.Id == categoryId);
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesForUser(int userId)
         {
-            var categories = await _context.Categories.Where(u => u.User.Id == userId).ToListAsync();
+            var categories = await _unitOfWork.Context.Categories.Where(u => u.User.Id == userId).ToListAsync();
             return categories;
         }
     }

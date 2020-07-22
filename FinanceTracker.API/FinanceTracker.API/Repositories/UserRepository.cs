@@ -8,14 +8,14 @@ namespace FinanceTracker.API.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository(DataContext context)
-            : base(context)
+        public UserRepository(IUnitOfWorkRepository unitOfWork)
+            : base(unitOfWork)
         {
         }
 
         public async Task<bool> UserExists(string userName)
         {
-            if (await _context.Users.AnyAsync(x => x.UserName == userName))
+            if (await _unitOfWork.Context.Users.AnyAsync(x => x.UserName == userName))
                 return true;
 
             return false;
@@ -23,7 +23,7 @@ namespace FinanceTracker.API.Repositories
 
         public async Task<User> Login(string userName, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+            var user = await _unitOfWork.Context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
 
             if (user == null)
                 return null;
@@ -56,8 +56,8 @@ namespace FinanceTracker.API.Repositories
             user.PasswordHash = passowrdHash;
             user.PasswordSalt = passowrdSalt;
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Context.Users.AddAsync(user);
+            await _unitOfWork.SaveChanges();
 
             return user;
         }

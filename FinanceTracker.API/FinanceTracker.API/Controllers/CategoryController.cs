@@ -17,12 +17,15 @@ namespace FinanceTracker.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryController(ICategoryRepository categoryRepository,
+                                  IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
-            _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -76,8 +79,9 @@ namespace FinanceTracker.API.Controllers
             categoryForCreationDto.UserId = userId;
 
             var category = _mapper.Map<Category>(categoryForCreationDto);
+            await _categoryRepository.Add(category);
 
-            if (await _categoryRepository.Add(category))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 var categoryToReturn = _mapper.Map<CategoryToReturnDto>(category);
                 categoryToReturn.CanBeDeleted = true;
@@ -109,8 +113,9 @@ namespace FinanceTracker.API.Controllers
             }
 
             var categoryFromRepo = await _categoryRepository.RetrieveById(id);
+            _categoryRepository.Delete(categoryFromRepo);
 
-            if (await _categoryRepository.Delete(categoryFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }
@@ -135,7 +140,7 @@ namespace FinanceTracker.API.Controllers
             var categoryFromRepo = await _categoryRepository.RetrieveById(id);
             _mapper.Map(categoryForUpdateDto, categoryFromRepo);
 
-            if (await _categoryRepository.Update(categoryFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }

@@ -18,11 +18,14 @@ namespace FinanceTracker.API.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IBankRepository _bankRepository;
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
-        public AccountController(IAccountRepository accountRepository, IBankRepository bankRepository, IMapper mapper)
+        public AccountController(IAccountRepository accountRepository, IBankRepository bankRepository,
+                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
             _mapper = mapper;
             _bankRepository = bankRepository;
+            _unitOfWorkRepository = unitOfWorkRepository;
             _accountRepository = accountRepository;
         }
         
@@ -79,8 +82,9 @@ namespace FinanceTracker.API.Controllers
             }
 
             var account = _mapper.Map<Account>(accountForCreationDto);
+            await _accountRepository.Add(account);
 
-            if(await _accountRepository.Add(account))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 var accountToReturn = _mapper.Map<AccountToReturnDto>(account);
 
@@ -109,7 +113,7 @@ namespace FinanceTracker.API.Controllers
             var accountFromRepo = await _accountRepository.RetrieveById(accountId);
             _mapper.Map(accountForUpdateDto, accountFromRepo);
 
-            if (await _accountRepository.Update(accountFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }
@@ -132,8 +136,9 @@ namespace FinanceTracker.API.Controllers
             }
 
             var accountFromRepo = await _accountRepository.RetrieveById(accountId);
+            _accountRepository.Delete(accountFromRepo);
 
-            if (await _accountRepository.Delete(accountFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }

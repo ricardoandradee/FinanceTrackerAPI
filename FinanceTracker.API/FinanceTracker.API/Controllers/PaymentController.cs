@@ -18,13 +18,16 @@ namespace FinanceTracker.API.Controllers
     {
         private readonly IPaymentRepository _paymentRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
-        public PaymentController(IPaymentRepository paymentRepository,
-            ICategoryRepository categoryRepository, IMapper mapper)
+
+        public PaymentController(IPaymentRepository paymentRepository, ICategoryRepository categoryRepository,
+                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
-            _mapper = mapper;
             _paymentRepository = paymentRepository;
             _categoryRepository = categoryRepository;
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -87,8 +90,9 @@ namespace FinanceTracker.API.Controllers
             }
 
             var payment = _mapper.Map<Payment>(paymentForCreationDto);
-
-            if (await _paymentRepository.Add(payment))
+            await _paymentRepository.Add(payment);
+            
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 var paymentToReturn = _mapper.Map<PaymentToReturnDto>(payment);
                 return CreatedAtAction(nameof(GetPayment),
@@ -103,9 +107,12 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> DeletePayment(int paymentId)
         {
             var paymentFromRepo = await _paymentRepository.RetrieveById(paymentId);
+            _paymentRepository.Delete(paymentFromRepo);
 
-            if (await _paymentRepository.Delete(paymentFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            {
                 return NoContent();
+            }
 
             throw new Exception("Error deleting the payment.");
         }
@@ -117,7 +124,7 @@ namespace FinanceTracker.API.Controllers
             var paymentFromRepo = await _paymentRepository.RetrieveById(paymentId);
             _mapper.Map(paymentForUpdateDto, paymentFromRepo);
 
-            if (await _paymentRepository.Update(paymentFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }

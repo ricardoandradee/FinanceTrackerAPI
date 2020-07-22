@@ -18,12 +18,16 @@ namespace FinanceTracker.API.Controllers
     {
         private readonly IBankRepository _bankRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
-        public BankController(IBankRepository bankRepository, IAccountRepository accountRepository, IMapper mapper)
+
+        public BankController(IBankRepository bankRepository, IAccountRepository accountRepository,
+                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
-            _mapper = mapper;
             _accountRepository = accountRepository;
             _bankRepository = bankRepository;
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -64,19 +68,11 @@ namespace FinanceTracker.API.Controllers
             bankForCreationDto.UserId = userId;
 
             var bank = _mapper.Map<Bank>(bankForCreationDto);
-            var account = _mapper.Map<Account>(bankForCreationDto.AccountForCreation);
+            await _bankRepository.Add(bank);
 
-            if (await _bankRepository.Add(bank))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
-                account.BankId = bank.Id;
-                await _accountRepository.Add(account);
-
-                var bankToReturn = _mapper.Map<BankToReturnDto>(bank);                
-                bankToReturn.Accounts = new List<AccountToReturnDto>
-                {
-                    _mapper.Map<AccountToReturnDto>(account)
-                };
-                
+                var bankToReturn = _mapper.Map<BankToReturnDto>(bank);
                 return CreatedAtAction(nameof(GetBankInfo),
                     new { bankId = bank.Id, userId },
                     bankToReturn);
@@ -105,8 +101,9 @@ namespace FinanceTracker.API.Controllers
             }
 
             var bankFromRepo = await _bankRepository.RetrieveById(bankId);
+            _bankRepository.Delete(bankFromRepo);
 
-            if (await _bankRepository.Delete(bankFromRepo))
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }
@@ -130,8 +127,8 @@ namespace FinanceTracker.API.Controllers
 
             var bankFromRepo = await _bankRepository.RetrieveById(bankId);
             _mapper.Map(bankForUpdateDto, bankFromRepo);
-
-            if (await _bankRepository.Update(bankFromRepo))
+            
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
             {
                 return NoContent();
             }
