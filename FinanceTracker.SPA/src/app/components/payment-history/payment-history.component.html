@@ -21,7 +21,7 @@
 </div>
 <a mat-fab class="add-button" color="accent" *ngIf="!(isLoading$ | async)" [disabled]="allCategories.length === 0"
     [matTooltip]="allCategories.length === 0 ? 'Please, add categories first.' : 'Add Payment'"
-    (click)="onOpenAddPaymentDialog()"><mat-icon>add</mat-icon></a>
+    (click)="allCategories.length > 0 && onOpenAddPaymentDialog()"><mat-icon>add</mat-icon></a>
 <mat-table *ngIf="!(isLoading$ | async)" [ngClass]="{'mat-table-no-items': dataSource.data.length === 0, 'mat-table-with-items': dataSource.data.length > 0 }" [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="CreatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>

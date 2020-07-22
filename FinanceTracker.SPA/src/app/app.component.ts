@@ -4,7 +4,7 @@ import { Category } from './models/category.model';
 import { PaymentService } from './services/payment.service';
 import { Payment } from './models/payment.model';
 import { AuthService } from './services/auth.service';
-import { take, map } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrencyService } from './services/currency.service';
 import { User } from './models/user.model';
@@ -41,30 +41,30 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getIsAuthenticated.pipe(
-      take(1),
-        map(isAuth => {
+    this.authService.getIsAuthenticated.subscribe(isAuth => {
           if (isAuth) {
-            this.paymentService.getPaymentsForUser().subscribe((payments: Payment[]) => {
-              this.payments = payments;
-            }, (err) => {
-              console.log(err);
-            }, () => {
-              this.categoryService.getCategoriesForUser().subscribe((categories: Category[]) => {
-                this.categories = categories;
-              }, (err) => {
-                console.log(err);
-              }, () => {
-                this.updateObjectContainers();
-              });
+            const getPaymentCategoryMap = (id) => {
+              return this.categoryService.getCategoriesForUser().pipe(
+                switchMap(categories => 
+                  this.paymentService.getPaymentsForUser().pipe(
+                    switchMap(payments => [{ categories: categories, payments: payments }])
+                  )
+                )
+              )
+            };
+
+            getPaymentCategoryMap(0).subscribe(result => {
+              this.categories = result.categories;
+              this.payments = result.payments;
+            }).add(() => {
+              this.updatePaymentCategoryContainers();
             });
           }
-      })
-    );
+      });
   }
 
   
-  updateObjectContainers() {
+  updatePaymentCategoryContainers() {
     this.categories.forEach(c => {
       c.canBeDeleted = !this.payments.some(b => b.categoryId === c.id);
     });

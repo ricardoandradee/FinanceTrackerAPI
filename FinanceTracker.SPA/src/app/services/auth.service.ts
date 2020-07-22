@@ -67,7 +67,6 @@ export class AuthService {
         }
         this.uiService.showSnackBar('Successfully logged in.', 3000);
         this.setIsAuthenticated = true;
-        console.log('here 1');
         this.router.navigate(['/finance/income']);
       }
     }, (err) => {
