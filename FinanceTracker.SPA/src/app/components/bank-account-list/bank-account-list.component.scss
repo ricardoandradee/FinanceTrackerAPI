@@ -8,18 +8,18 @@
 }
 
 .add-button {
-    position: absolute;
-    right: 30px;
-    top: 10%;
+  position: absolute;
+  right: 30px;
+  top: 90px;
 }
 
 .header-div {
   margin-top: 30px;
 }
 
-
 .element-row {
   position: relative;
+  overflow: initial;
 }
 
 .element-row:not(.expanded) {
@@ -49,6 +49,17 @@ p {
 
 @media only screen and (max-width: 599px) {
   .mat-icon-button {
-      width: 25px;
+      width: 20px;
   }
+}
+
+@media only screen and (max-width: 499px) {
+  .mat-icon-button {
+      width: 18px;
+  }
+}
+
+.mat-select-options {
+  visibility:hidden;
+  width: 0;
 }

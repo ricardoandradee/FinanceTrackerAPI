@@ -55,21 +55,35 @@
             <button mat-icon-button (click)="onCancelEdit()" style="color:red;" *ngIf="rowInEditMode && element.id===editBankInfo?.id" matTooltip="Cancel edit">
                 <mat-icon>clear</mat-icon>
             </button>
+            <button mat-icon-button color="primary">
+                <mat-icon id="expand_more" (click)="expand(element)" #expand_more *ngIf="!element.close">expand_more</mat-icon>
+                <mat-icon id="expand_less" (click)="expand(element)" #expand_less *ngIf="element.close">expand_less</mat-icon>
+            </button>
         </mat-cell>
     </ng-container>
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl">
+  <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"
+  [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl" (toggleChange)="onToggleChange($event, row)">
   </mat-row>
 </mat-table>
 
 <mat-paginator *ngIf="!(isLoading$ | async)" #paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
 
 <ng-template #tpl let-element>
-	<div fxLayout="column" fxLayoutAlign="center center" class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+	<div fxLayout="column" fxLayoutAlign="center center" class="mat-row " [@detailExpand] style="overflow: hidden">
         <mat-card *ngFor="let account of element.accounts" class="card-detailed">
             <mat-card-header>
                 <mat-card-title>Account name: {{ account.name }}</mat-card-title>
                 <mat-card-subtitle>Account number: {{ account.number }}</mat-card-subtitle>
+                <button mat-button (click)="select.open()"
+                        matTooltip="more">
+                        <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-select class="mat-select-options"
+                        #select [(ngModel)]="accountAction">
+                    <mat-option value="withdraw" (click)="onAccountAction(account)">Withdraw</mat-option>
+                    <mat-option value="deposit" (click)="onAccountAction(account)">Deposit</mat-option>
+                </mat-select>
             </mat-card-header>
             <mat-card-content>
                 <div>

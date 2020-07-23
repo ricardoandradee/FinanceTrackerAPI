@@ -1,5 +1,5 @@
 import { Account } from 'src/app/models/account.model';
-export interface BankAccount {
+export class BankAccount {
     id?: number;
     userId?: string;
     name: string;
@@ -8,4 +8,5 @@ export interface BankAccount {
     createdDate?: Date;
     accounts: Account[];
     accountForCreation: Account;
+    close = true;
 }

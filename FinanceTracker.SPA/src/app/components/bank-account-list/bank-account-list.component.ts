@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ViewChildren, QueryList } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
 import { UiService } from '../../services/ui.service';
@@ -13,6 +13,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Account } from 'src/app/models/account.model';
 import { AccountAddEditComponent } from '../account-add-edit/account-add-edit.component';
 import { AccountService } from 'src/app/services/account.service';
+import { CdkDetailRowDirective } from 'src/app/directives/detail-row.directive';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -29,11 +30,15 @@ import { AccountService } from 'src/app/services/account.service';
 export class BankAccountListComponent implements OnInit {
   displayedColumns = ['CreatedDate', 'Name', 'Branch', 'Status', 'Actions'];
   dataSource = new MatTableDataSource<BankAccount>();
-  isExpansionDetailRow = (index, row) => row.hasOwnProperty('accounts');
   isLoading$: Observable<boolean>;
+  accountAction = 'withdraw';
+
+  isExpansionDetailRow = (index, row) => row.hasOwnProperty('accounts');
+  @Input() singleChildRowDetail: boolean;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChildren(CdkDetailRowDirective) detailRows: QueryList<CdkDetailRowDirective>;
   
   editBankInfo: BankAccount;
   oldBankInfo: { id?: number; userId?: string; branch: string;
@@ -50,6 +55,11 @@ export class BankAccountListComponent implements OnInit {
     this.bankAccountService.getBanksForUser().subscribe((bankInfos: BankAccount[]) => {
       this.bankAccountService.setBankAccountInfos = bankInfos;
     });
+  }
+
+  expand(element) {
+    const detail = this.detailRows.find(x => x.row == element);
+    detail.toggle();
   }
   
   openDialog() {
@@ -100,6 +110,21 @@ export class BankAccountListComponent implements OnInit {
     });
   }
 
+  private openedRow: CdkDetailRowDirective;
+  onToggleChange(cdkDetailRow: CdkDetailRowDirective, row: BankAccount): void {
+    if (this.singleChildRowDetail && this.openedRow && this.openedRow.expended) {
+      this.openedRow.toggle();
+    }
+
+    row.close = !row.close;
+    this.openedRow = cdkDetailRow.expended ? cdkDetailRow : undefined;
+  }
+
+  onAccountAction(account: Account) {
+    console.log({ action: this.accountAction, account});
+    this.accountAction = 'withdraw';
+  }
+
   doFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -129,7 +154,6 @@ export class BankAccountListComponent implements OnInit {
       }
     });
   }
-
   
   onAddAccout(bankInfo: BankAccount) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,

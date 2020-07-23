@@ -1,10 +1,10 @@
-import {Directive, HostBinding, HostListener, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Directive, OnDestroy, EventEmitter, HostBinding, HostListener, Input, Output, TemplateRef, ViewContainerRef} from '@angular/core';
 
 @Directive({
   selector: '[cdkDetailRow]'
 })
-export class CdkDetailRowDirective {
-  private row: any;
+export class CdkDetailRowDirective implements OnDestroy {
+  public row: any;
   private tRef: TemplateRef<any>;
   private opened: boolean;
 
@@ -17,7 +17,6 @@ export class CdkDetailRowDirective {
   set cdkDetailRow(value: any) {
     if (value !== this.row) {
       this.row = value;
-      // this.render();
     }
   }
 
@@ -25,16 +24,12 @@ export class CdkDetailRowDirective {
   set template(value: TemplateRef<any>) {
     if (value !== this.tRef) {
       this.tRef = value;
-      // this.render();
     }
   }
 
-  constructor(public vcRef: ViewContainerRef) { }
+  @Output() toggleChange = new EventEmitter<CdkDetailRowDirective>();
 
-  @HostListener('click')
-  onClick(): void {
-    this.toggle();
-  }
+  constructor(public vcRef: ViewContainerRef) { }
 
   toggle(): void {
     if (this.opened) {
@@ -43,6 +38,7 @@ export class CdkDetailRowDirective {
       this.render();
     }
     this.opened = this.vcRef.length > 0;
+    this.toggleChange.emit(this);
   }
 
   private render(): void {
@@ -50,5 +46,9 @@ export class CdkDetailRowDirective {
     if (this.tRef && this.row) {
       this.vcRef.createEmbeddedView(this.tRef, { $implicit: this.row });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.row.close = false;
   }
 }
