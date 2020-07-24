@@ -81,8 +81,8 @@
                 </button>
                 <mat-select class="mat-select-options"
                         #select [(ngModel)]="accountAction">
-                    <mat-option value="withdraw" (click)="onAccountAction(account)">Withdraw</mat-option>
-                    <mat-option value="deposit" (click)="onAccountAction(account)">Deposit</mat-option>
+                    <mat-option value="depositwithdraw" (click)="onAccountAction(account)">Deposit/Withdraw</mat-option>
+                    <mat-option value="showtransactions" (click)="onShowTransactions(account)">Show transactions</mat-option>
                 </mat-select>
             </mat-card-header>
             <mat-card-content>

@@ -32,6 +32,8 @@ import { DatePipe } from '@angular/common';
 import { AuthModule } from './components/auth/auth.module';
 import { BankAccountAddComponent } from './components/bank-account-add/bank-account-add.component';
 import { AccountAddEditComponent } from './components/account-add-edit/account-add-edit.component';
+import { AccountActionsComponent } from './components/account-actions/account-actions.component';
+import { AccountTransactionsComponent } from './components/account-transactions/account-transactions.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -47,7 +49,9 @@ export function tokenGetter() {
     PaymentAddComponent,
     CategoryAddComponent,
     BankAccountAddComponent,
-    AccountAddEditComponent
+    AccountAddEditComponent,
+    AccountActionsComponent,
+    AccountTransactionsComponent
   ],
   imports: [
     SharedModule,
@@ -85,7 +89,8 @@ export function tokenGetter() {
     PaymentAddComponent,
     CategoryAddComponent,
     BankAccountAddComponent,
-    AccountAddEditComponent
+    AccountAddEditComponent,
+    AccountActionsComponent
   ]
 })
 export class AppModule { }

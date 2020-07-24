@@ -1,0 +1,20 @@
+<form fxLayout="column" fxLayoutAlign="center center" #accountActionsForm="ngForm" fxLayoutGap="12px" novalidate>
+    <h2 mat-dialog-title>
+        Deposit/Withdraw
+    </h2>
+    <section class="account-actions-section">
+        <div mat-dialog-content>
+            <mat-form-field>
+                <mat-radio-group [(ngModel)]="accountAction" name="accountActionsRadio">
+                    <mat-radio-button value="Deposit" name="accountAction">Deposit</mat-radio-button>
+                    <mat-radio-button value="Withdraw" name="accountAction">Withdraw</mat-radio-button>
+                </mat-radio-group>
+            </mat-form-field>
+        </div>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button type="submit" mat-button [mat-dialog-close]="false" (click)="onSave()"
+             [disabled]="accountActionsForm.invalid" mat-raised-button color="primary">Save</button>
+        </mat-dialog-actions>
+    </section>
+</form>

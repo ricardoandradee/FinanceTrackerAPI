@@ -14,6 +14,8 @@ namespace FinanceTracker.API.Models
         public string Currency { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
+        public virtual Transaction Transaction { get; set; }
+        public int TransactionId { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
 }

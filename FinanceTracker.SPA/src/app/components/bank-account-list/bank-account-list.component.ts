@@ -14,6 +14,7 @@ import { Account } from 'src/app/models/account.model';
 import { AccountAddEditComponent } from '../account-add-edit/account-add-edit.component';
 import { AccountService } from 'src/app/services/account.service';
 import { CdkDetailRowDirective } from 'src/app/directives/detail-row.directive';
+import { AccountActionsComponent } from '../account-actions/account-actions.component';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -121,8 +122,17 @@ export class BankAccountListComponent implements OnInit {
   }
 
   onAccountAction(account: Account) {
+      const dialogRef = this.dialog.open(AccountActionsComponent, { });
+
+      dialogRef.afterClosed().subscribe((result) => {
+      });
+
     console.log({ action: this.accountAction, account});
     this.accountAction = 'withdraw';
+  }
+
+  onShowTransactions(account: Account) {
+
   }
 
   doFilter(filterValue: string) {

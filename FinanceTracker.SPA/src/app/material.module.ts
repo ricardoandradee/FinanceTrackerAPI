@@ -20,7 +20,8 @@ import {
     MatSnackBarModule,
     MatNativeDateModule,
     MatSlideToggleModule,
-    MatFormFieldModule 
+    MatFormFieldModule,
+    MatRadioModule 
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';
@@ -48,7 +49,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         MatSnackBarModule,
         MatNativeDateModule,
         MatSlideToggleModule,
-        MatFormFieldModule ,
+        MatFormFieldModule,
+        MatRadioModule,
         CdkTableModule,
         CdkTreeModule
     ],
@@ -74,6 +76,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         MatNativeDateModule,
         MatSlideToggleModule,
         MatFormFieldModule,
+        MatRadioModule,
         CdkTableModule,
         CdkTreeModule
     ]

@@ -13,6 +13,7 @@ namespace FinanceTracker.API.Data
         DbSet<Bank> Banks { get; set; }
         DbSet<Account> Accounts { get; set; }
         DbSet<Wallet> Wallets { get; set; }
+        DbSet<Transaction> Transactions { get; set; }
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
         Task<int> SaveChangesAsync();
     }
