@@ -25,7 +25,7 @@ export class BankAccountAddComponent implements OnInit {
       number: form.value.accountNumber, isActive: true } as Account;
       
     const bankInfo = { name: form.value.name, branch: form.value.branch,
-        isActive: true, accountForCreation: account } as BankAccount;
+        isActive: true, account } as BankAccount;
     this.dialogRef.close({ data: bankInfo });
   }
 

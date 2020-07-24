@@ -129,6 +129,25 @@ export class BankAccountListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  onIsActiveChange(bankInfo: BankAccount) {
+    if (bankInfo.isActive && bankInfo.accounts.some(a => a.isActive)) {
+      const dialogRef = this.dialog.open(YesNoDialogComponent,
+      {
+        data:
+          {
+            message: 'Are you sure you want to inactivate this bank? If you proceed, all its account will be also set to inactive.',
+            title: 'Are you sure?'
+          }
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (!result) {
+          bankInfo.isActive = true;
+        }
+      });
+    }
+  }
+
   onDelete(bankInfo: BankAccount) {
     const dialogRef = this.dialog.open(YesNoDialogComponent,
     {
@@ -187,10 +206,10 @@ export class BankAccountListComponent implements OnInit {
     this.rowInEditMode = true;
   }
 
-  onEditAccount(account: Account) {
+  onEditAccount(account: Account, isBankActive: boolean) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,
     {
-      data: { actionMode: 'Edit', account }
+      data: { actionMode: 'Edit', account, isBankActive }
     });
 
     dialogRef.afterClosed().subscribe((accountToEdited: Account) => {
@@ -253,6 +272,10 @@ export class BankAccountListComponent implements OnInit {
 
   onSaveChanges() {
     this.store.dispatch(new UI.StartLoading());
+    if (!this.editBankInfo.isActive && this.editBankInfo.accounts.some(a => a.isActive)) {
+      this.editBankInfo.accounts.forEach(a => a.isActive = false);
+    }
+
     this.bankAccountService.updateBankInfo(this.editBankInfo).subscribe(response => {
       if (response.ok) {
         const bankInfoFromDataSource = this.dataSource.data;

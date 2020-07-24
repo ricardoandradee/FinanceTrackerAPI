@@ -52,7 +52,7 @@ export class BankAccountService {
             branch: bankAccount.branch,
             isActive: bankAccount.isActive,
             createdDate,
-            accountForCreation: { ...bankAccount.accountForCreation, createdDate }
+            accountForCreation: { ...bankAccount.account, createdDate }
         };
 
         const url = `${this.baseUrl}user/${user.id}/bank/CreateBankInfo`;
@@ -69,7 +69,8 @@ export class BankAccountService {
         const newBankInfo = {
             name: bankAccount.name,
             branch: bankAccount.branch,
-            isActive: bankAccount.isActive
+            isActive: bankAccount.isActive,
+            accountsForCreation: bankAccount.accounts
         };
         
         const httpHeaders = new HttpHeaders({

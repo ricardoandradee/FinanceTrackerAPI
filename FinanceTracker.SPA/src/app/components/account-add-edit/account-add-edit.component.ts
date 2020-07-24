@@ -12,12 +12,14 @@ export class AccountAddEditComponent implements OnInit {
   currencies = [];
   account: Account;
   actionMode = 'Add';
+  isBankActive = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public passedData: any,
               private dialogRef: MatDialogRef<AccountAddEditComponent>) {
                 this.currencies = CurrencyList;
                 this.actionMode = passedData.actionMode;
                 this.account = { ...passedData.account };
+                this.isBankActive = this.actionMode === 'Edit' ? passedData.isBankActive : false;
               }
   
   ngOnInit(): void {

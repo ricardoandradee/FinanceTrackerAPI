@@ -31,7 +31,7 @@
     <ng-container  matColumnDef="Status">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            <mat-slide-toggle  *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" [(ngModel)]="element.isActive" name="isActive" id="isActive" color="primary"></mat-slide-toggle>
+            <mat-slide-toggle  *ngIf="editBankInfo?.id && element.id===editBankInfo?.id" (click)="onIsActiveChange(element)" [(ngModel)]="element.isActive" name="isActive" id="isActive" color="primary"></mat-slide-toggle>
             <span *ngIf="!editBankInfo?.id || element.id!==editBankInfo.id">
                 {{ element.isActive ? 'Active' : 'Inactive' }}
             </span>
@@ -70,13 +70,13 @@
 <mat-paginator *ngIf="!(isLoading$ | async)" #paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
 
 <ng-template #tpl let-element>
-	<div fxLayout="column" fxLayoutAlign="center center" class="mat-row " [@detailExpand] style="overflow: hidden">
+    <div fxLayout="column" [@detailExpand] style="overflow: hidden" class="mat-row" fxLayout.gt-md="row" fxLayoutGap.gt-md="20px" fxLayoutAlign="left center">
         <mat-card *ngFor="let account of element.accounts" class="card-detailed">
             <mat-card-header>
                 <mat-card-title>Account name: {{ account.name }}</mat-card-title>
                 <mat-card-subtitle>Account number: {{ account.number }}</mat-card-subtitle>
                 <button mat-button (click)="select.open()"
-                        matTooltip="more">
+                        *ngIf="account.isActive" matTooltip="more">
                         <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-select class="mat-select-options"
@@ -97,7 +97,7 @@
                 </div>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button (click)="onEditAccount(account)">
+                <button mat-button (click)="onEditAccount(account, element.isActive)">
                     <mat-icon>edit</mat-icon>
                     Edit
                 </button>
