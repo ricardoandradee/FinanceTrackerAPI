@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatRadioModule } from '@angular/material/radio';
 import {
     MatCardModule,
     MatButtonModule,
@@ -20,8 +21,7 @@ import {
     MatSnackBarModule,
     MatNativeDateModule,
     MatSlideToggleModule,
-    MatFormFieldModule,
-    MatRadioModule 
+    MatFormFieldModule
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';

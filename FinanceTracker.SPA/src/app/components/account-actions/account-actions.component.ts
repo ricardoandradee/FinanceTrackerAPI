@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./account-actions.component.scss']
 })
 export class AccountActionsComponent implements OnInit {
-  accountAction = 'Deposit';
+  action: string = 'Deposit';
+  accountActions: string[] = ['Deposit', 'Withdraw'];
   
   constructor() { }
 
