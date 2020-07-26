@@ -27,11 +27,11 @@
             </mat-form-field>
             <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)" fxHide.xs>
                 <li>
-                    <a class="toolbar-link" routerLink="/signup">
-                        <mat-icon title="signup" class="icon-display">person_add_alt_1</mat-icon>
-                    </a>
+                    <button mat-stroked-button [routerLink]="'/login'">Sign in</button>
                 </li>
-                <li><a class="toolbar-link" routerLink="/login"><mat-icon title="login" class="icon-display">login</mat-icon></a></li>
+                <li>
+                    <button mat-button [routerLink]="'/signup'">Sign up</button>
+                </li>
             </ul>
             <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
                 <li><a class="toolbar-link cursor-pointer" (click)="onLogout()"><mat-icon title="logout" class="icon-display">power_settings_new</mat-icon></a></li>
