@@ -34,6 +34,7 @@ import { BankAccountAddComponent } from './components/bank-account-add/bank-acco
 import { AccountAddEditComponent } from './components/account-add-edit/account-add-edit.component';
 import { AccountActionsComponent } from './components/account-actions/account-actions.component';
 import { AccountTransactionsComponent } from './components/account-transactions/account-transactions.component';
+import { TransactionService } from './services/transaction.service';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -78,6 +79,7 @@ export function tokenGetter() {
     CurrencyService,
     CategoryService,
     BankAccountService,
+    TransactionService,
     AccountService,
     PaymentService,
     UiService,

@@ -15,6 +15,8 @@ import { AccountAddEditComponent } from '../account-add-edit/account-add-edit.co
 import { AccountService } from 'src/app/services/account.service';
 import { CdkDetailRowDirective } from 'src/app/directives/detail-row.directive';
 import { AccountActionsComponent } from '../account-actions/account-actions.component';
+import { TransactionService } from 'src/app/services/transaction.service';
+import { Transaction } from 'src/app/models/transaction.model';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -49,6 +51,7 @@ export class BankAccountListComponent implements OnInit {
   constructor(private dialog: MatDialog, private uiService: UiService,
               private bankAccountService: BankAccountService,
               private accountService: AccountService,
+              private transactionService: TransactionService,
               private store: Store<{ui: fromRoot.State}>) { }
 
   ngOnInit() {
@@ -128,10 +131,14 @@ export class BankAccountListComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe((result) => {
+        if (result.data) {
+          this.transactionService.createTransaction(result.data as Transaction).subscribe((response) => {
+            if (response.ok) {
+              console.log(response.body);
+            }
+          })
+        }
       });
-
-    console.log({ action: this.accountAction, account});
-    this.accountAction = 'withdraw';
   }
 
   onShowTransactions(account: Account) {
