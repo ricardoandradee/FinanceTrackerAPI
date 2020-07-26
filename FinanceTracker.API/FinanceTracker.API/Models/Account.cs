@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FinanceTracker.API.Models
@@ -14,6 +15,7 @@ namespace FinanceTracker.API.Models
         public decimal CurrentBalance { get; set; }
         public virtual Bank Bank { get; set; }
         public int BankId { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
 }
