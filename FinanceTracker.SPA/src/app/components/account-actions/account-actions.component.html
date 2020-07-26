@@ -1,16 +1,32 @@
 <form fxLayout="column" fxLayoutAlign="center center" #accountActionsForm="ngForm" fxLayoutGap="12px" novalidate>
     <h2 mat-dialog-title>
-        {{ action }}
+        Deposit/Withdraw actions
     </h2>
     <section class="account-actions-section">
         <div mat-dialog-content>
-            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="action">
-                <mat-radio-button class="example-radio-button" *ngFor="let act of accountActions" [value]="act">
+            <mat-radio-group name="action" id="action"
+                class="actions-radio-group" [(ngModel)]="action">
+                <mat-radio-button class="actions-radio-button" *ngFor="let act of accountActions"
+                    [value]="act" (change)="onSelectionChange('Section')">
                     {{act}}
                 </mat-radio-button>
-        </mat-radio-group>
+            </mat-radio-group>
+        </div>    
+        <div mat-dialog-content>
+            <mat-form-field>
+                <input type="number" pattern="^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$" matInput placeholder="Amount" [(ngModel)]="amount"
+                 name="amount" id="amount" ngModel required>
+            </mat-form-field>
         </div>
+        <div mat-dialog-content>
+            <mat-form-field>
+                <input type="text" matInput
+                placeholder="Description" name="description" id="description" [(ngModel)]="description">
+            </mat-form-field>
+        </div>
+            <div *ngIf="!accountActionsForm.invalid">
+                <mat-label class="warn-label">You are going to {{ action | lowercase }} {{ amount | currency: account.accountCurrency }}   {{ action === 'Deposit' ? ' into ' : ' from '  }} your bank account.</mat-label>
+            </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
             <button type="submit" mat-button [mat-dialog-close]="false" (click)="onSave()"

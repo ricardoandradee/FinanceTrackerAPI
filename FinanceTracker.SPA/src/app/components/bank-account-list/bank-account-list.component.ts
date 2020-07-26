@@ -122,7 +122,10 @@ export class BankAccountListComponent implements OnInit {
   }
 
   onAccountAction(account: Account) {
-      const dialogRef = this.dialog.open(AccountActionsComponent, { });
+      const dialogRef = this.dialog.open(AccountActionsComponent,
+      {
+        data: { account }
+      });
 
       dialogRef.afterClosed().subscribe((result) => {
       });
@@ -153,6 +156,8 @@ export class BankAccountListComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         if (!result) {
           bankInfo.isActive = true;
+        } else {
+          bankInfo.accounts.forEach(a => a.isActive = false);
         }
       });
     }
@@ -282,10 +287,6 @@ export class BankAccountListComponent implements OnInit {
 
   onSaveChanges() {
     this.store.dispatch(new UI.StartLoading());
-    if (!this.editBankInfo.isActive && this.editBankInfo.accounts.some(a => a.isActive)) {
-      this.editBankInfo.accounts.forEach(a => a.isActive = false);
-    }
-
     this.bankAccountService.updateBankInfo(this.editBankInfo).subscribe(response => {
       if (response.ok) {
         const bankInfoFromDataSource = this.dataSource.data;

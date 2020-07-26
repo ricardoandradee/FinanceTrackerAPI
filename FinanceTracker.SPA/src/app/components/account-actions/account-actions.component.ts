@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { Account } from 'src/app/models/account.model';
 
 @Component({
   selector: 'app-account-actions',
@@ -6,10 +8,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./account-actions.component.scss']
 })
 export class AccountActionsComponent implements OnInit {
-  action: string = 'Deposit';
+  action = 'Deposit';
+  amount: number;
+  account: Account;
+  description: string;
   accountActions: string[] = ['Deposit', 'Withdraw'];
-  
-  constructor() { }
+
+  constructor(@Inject(MAT_DIALOG_DATA) public passedData: any) {
+    this.account = { ...passedData.account };
+  }
+
+  onSelectionChange() {
+    console.log(this.action);
+  }
+
+  onSave() {
+
+  }
 
   ngOnInit() {
   }
