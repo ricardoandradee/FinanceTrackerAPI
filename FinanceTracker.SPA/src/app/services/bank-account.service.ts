@@ -30,8 +30,8 @@ export class BankAccountService {
         return this.http.get<BankAccount[]>(url, { observe: 'response' })
         .pipe(
         map(response => {
-            const categories: BankAccount[] = response.body;
-            return categories;
+            const bankAccount: BankAccount[] = response.body;
+            return bankAccount;
         }));
     }
         

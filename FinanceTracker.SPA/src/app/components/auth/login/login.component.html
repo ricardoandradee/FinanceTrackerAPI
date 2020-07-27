@@ -5,7 +5,7 @@
         <form fxLayout="column" fxLayoutAlign="center center" [formGroup]="loginForm" (ngSubmit)="onLogin()" fxLayoutGap="12px" novalidate>
           <p>
             <mat-form-field>
-              <input type="text" matInput formControlName="userName" placeholder="UserName">
+              <input type="text" matInput formControlName="userName" placeholder="User Name">
               <mat-error *ngIf="!loginForm.controls['userName'].errors?.required">At least 8 characters needed</mat-error>
               <mat-error *ngIf="loginForm.controls['userName'].errors?.required">UserName is required</mat-error>
             </mat-form-field>

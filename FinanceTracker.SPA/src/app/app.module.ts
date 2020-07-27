@@ -61,7 +61,6 @@ export function tokenGetter() {
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    AngularFirestoreModule,
     AuthModule,
     StoreModule.forRoot(reducers),
     JwtModule.forRoot({

@@ -17,7 +17,9 @@ namespace FinanceTracker.API.Repositories
 
         public async Task<IEnumerable<Bank>> GetBanksForUser(int userId)
         {
-            var banks = await _unitOfWork.Context.Banks.Where(b => b.User.Id == userId).Include(a => a.Accounts).ToListAsync();
+            var banks = await _unitOfWork.Context.Banks.Where(b => b.User.Id == userId)
+            .Include(a => a.Accounts)
+            .ToListAsync();
             return banks;
         }
 
