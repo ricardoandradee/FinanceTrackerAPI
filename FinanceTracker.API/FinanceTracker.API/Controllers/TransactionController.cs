@@ -14,7 +14,7 @@ namespace FinanceTracker.API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/user/{userId}/bank/{bankId}/account/{accountId}/transaction")]
+    [Route("api/user/{userId}/account/{accountId}/transaction")]
     public class TransactionController : ControllerBase
     {
         private readonly IAccountRepository _accountRepository;
@@ -70,7 +70,7 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPost]
         [Route("CreateTransaction")]
-        public async Task<IActionResult> CreateTransaction(int userId, int accountId,
+        public async Task<IActionResult> PerformAccountTransaction(int userId, int accountId,
         TransactionForCreationDto transactionForCreationDto)
         {
             var transactionOptions = new string[] { "Deposit", "Withdraw" };
@@ -88,29 +88,15 @@ namespace FinanceTracker.API.Controllers
                 throw new InvalidOperationException($"{transactionForCreationDto.Action} is not recognized as a transaction.");
             }
 
-            var account = await _accountRepository.RetrieveById(accountId);
+            var transactionToCreate = _mapper.Map<Transaction>(transactionForCreationDto);
+            var transactionCreated = await _transactionRepository.PerformAccountTransaction(transactionToCreate);
 
-            if (transactionForCreationDto.Action == "Deposit")
+            if (transactionCreated != null)
             {
-                transactionForCreationDto.Account.CurrentBalance += transactionForCreationDto.Amount;
-            } else if (transactionForCreationDto.Action == "Withdraw")
-            {
-                transactionForCreationDto.Account.CurrentBalance -= transactionForCreationDto.Amount;
-            }
-            
-            transactionForCreationDto.BalanceAfterTransaction = transactionForCreationDto.Account.CurrentBalance;
-            _mapper.Map(transactionForCreationDto.Account, account);
-
-            var transaction = _mapper.Map<Transaction>(transactionForCreationDto);
-            transaction.AccountId = accountId;
-            await _transactionRepository.Add(transaction);
-
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
-            {
-                var transactionToReturn = _mapper.Map<TransactionToReturnDto>(transaction);
+                var transactionToReturn = _mapper.Map<TransactionToReturnDto>(transactionCreated);
 
                 return CreatedAtAction(nameof(GetTransaction), 
-                    new { transactionId = transaction.Id, accountId, userId },
+                    new { transactionId = transactionToReturn.Id, accountId, userId },
                     transactionToReturn);
             }
 

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FinanceTracker.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace FinanceTracker.API.Data
 {
@@ -15,6 +16,7 @@ namespace FinanceTracker.API.Data
         DbSet<Wallet> Wallets { get; set; }
         DbSet<Transaction> Transactions { get; set; }
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
+        DatabaseFacade Database { get; }
         Task<int> SaveChangesAsync();
     }
 }

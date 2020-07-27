@@ -136,7 +136,7 @@ export class BankAccountListComponent implements OnInit {
             if (response.ok) {
               console.log(response.body);
             }
-          })
+          });
         }
       });
   }

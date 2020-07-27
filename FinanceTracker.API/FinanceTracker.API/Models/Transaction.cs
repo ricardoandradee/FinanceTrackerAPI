@@ -11,6 +11,6 @@ namespace FinanceTracker.API.Models
         public string Action { get; set; }
         public virtual Account Account { get; set; }
         public int AccountId { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

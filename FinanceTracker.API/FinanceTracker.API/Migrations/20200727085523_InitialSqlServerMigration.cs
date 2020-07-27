@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinanceTracker.API.Migrations
 {
-    public partial class InitialMigrationTransactionsAdd : Migration
+    public partial class InitialSqlServerMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(nullable: true),
                     UserCurrency = table.Column<string>(maxLength: 3, nullable: true),
                     PasswordHash = table.Column<byte[]>(nullable: true),
@@ -34,7 +34,7 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Branch = table.Column<string>(nullable: true),
@@ -57,7 +57,7 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
@@ -79,7 +79,7 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     AccountCurrency = table.Column<string>(maxLength: 3, nullable: true),
                     CurrentBalance = table.Column<decimal>(nullable: false),
@@ -103,7 +103,7 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Number = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
@@ -128,12 +128,13 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(nullable: true),
                     Amount = table.Column<decimal>(nullable: false),
+                    BalanceAfterTransaction = table.Column<decimal>(nullable: false),
                     Action = table.Column<string>(nullable: true),
                     AccountId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -151,14 +152,14 @@ namespace FinanceTracker.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryId = table.Column<int>(nullable: false),
                     Address = table.Column<string>(nullable: true),
                     Establishment = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Currency = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TransactionId = table.Column<int>(nullable: false),
+                    TransactionId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -175,7 +176,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.TransactionId,
                         principalTable: "Transactions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

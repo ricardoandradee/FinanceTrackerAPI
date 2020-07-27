@@ -34,7 +34,7 @@ namespace FinanceTracker.API
             services.AddDbContext<DataContext>(x =>
             {
                 x.UseLazyLoadingProxies();
-                x.UseSqlite(Configuration.GetConnectionString("DefaultConnectionSqlite"));
+                x.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionLocal"));
             });
             services.AddControllers();
             services.AddCors();

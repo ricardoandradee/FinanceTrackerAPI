@@ -19,13 +19,11 @@ export class TransactionService {
             description: transaction.description,
             amount: transaction.amount,
             action: transaction.action,
-            account: { currentBalance: transaction.account.currentBalance },
+            accountId: transaction.account.id,
             createdDate
         };
 
-        const url = `${this.baseUrl}user/${user.id}/bank/${transaction.account.bankId}/account/${transaction.account.id}/transaction/CreateTransaction`;
-
-        console.log(url);
+        const url = `${this.baseUrl}user/${user.id}/account/${transaction.account.id}/transaction/CreateTransaction`;
 
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
