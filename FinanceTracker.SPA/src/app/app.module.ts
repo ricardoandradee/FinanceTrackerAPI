@@ -89,7 +89,8 @@ export function tokenGetter() {
     CategoryAddComponent,
     BankAccountAddComponent,
     AccountAddEditComponent,
-    AccountActionsComponent
+    AccountActionsComponent,
+    AccountTransactionsComponent
   ]
 })
 export class AppModule { }

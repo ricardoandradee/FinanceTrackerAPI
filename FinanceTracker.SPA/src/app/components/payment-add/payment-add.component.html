@@ -2,7 +2,8 @@
         <h2 mat-dialog-title>Add Payment</h2>
         <div mat-dialog-content>
             <mat-form-field>
-                <input type="text" matInput placeholder="Establishment" #nameInput="ngModel" name="establishment" id="establishment" ngModel>
+                <input type="text" matInput placeholder="Establishment" #nameInput="ngModel"
+                maxlength="50" name="establishment" id="establishment" ngModel>
             </mat-form-field>
         </div>
         <div mat-dialog-content fxLayoutGap="10px">
@@ -35,12 +36,14 @@
         </div>
         <div mat-dialog-content>
             <mat-form-field>
-                <input type="text" matInput placeholder="Address" #addressInput="ngModel" name="address" id="address" ngModel>
+                <input type="text" matInput placeholder="Address" #addressInput="ngModel"
+                maxlength="255" name="address" id="address" ngModel>
             </mat-form-field>
         </div>
         <div mat-dialog-content>
             <mat-form-field>
-                <textarea matInput placeholder="Description" #descriptionInput="ngModel" name="description" id="description" ngModel></textarea>
+                <textarea matInput placeholder="Description" #descriptionInput="ngModel"
+                maxlength="255" name="description" id="description" ngModel></textarea>
             </mat-form-field>
         </div>
         <mat-dialog-actions align="end">

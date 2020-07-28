@@ -17,6 +17,7 @@ import { CdkDetailRowDirective } from 'src/app/directives/detail-row.directive';
 import { AccountActionsComponent } from '../account-actions/account-actions.component';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { Transaction } from 'src/app/models/transaction.model';
+import { AccountTransactionsComponent } from '../account-transactions/account-transactions.component';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -70,14 +71,14 @@ export class BankAccountListComponent implements OnInit {
       const dialogRef = this.dialog.open(BankAccountAddComponent);
       dialogRef.afterClosed().subscribe(result => {
         if (result.data) {
-          this.createBankInfo(result.data as BankAccount);
+          this.createBankWithAccount(result.data as BankAccount);
         }
       });
   }
 
-  private createBankInfo(bankInfo: BankAccount) {
+  private createBankWithAccount(bankInfo: BankAccount) {
     this.store.dispatch(new UI.StartLoading());
-    this.bankAccountService.createBankInfo(bankInfo).subscribe(response => {
+    this.bankAccountService.createBankWithAccount(bankInfo).subscribe(response => {
       if (response.ok) {
         const bankInfoCreated = response.body as BankAccount;
 
@@ -132,9 +133,19 @@ export class BankAccountListComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result.data) {
-          this.transactionService.createTransaction(result.data as Transaction).subscribe((response) => {
+          this.transactionService.performAccountTransaction(result.data as Transaction).subscribe((response) => {
             if (response.ok) {
-              console.log(response.body);
+              const transactionCreated = response.body as Transaction;
+      
+              const bankInfosFromDataSource = this.dataSource.data;
+
+              bankInfosFromDataSource.forEach(b => {
+                let ba = b.accounts.find(a => a.id === account.id);
+                ba.currentBalance = transactionCreated.balanceAfterTransaction;
+                ba.transactions.push(transactionCreated);
+              });
+              
+              this.bankAccountService.setBankAccountInfos = bankInfosFromDataSource;
             }
           });
         }
@@ -142,6 +153,10 @@ export class BankAccountListComponent implements OnInit {
   }
 
   onShowTransactions(account: Account) {
+    const dialogRef = this.dialog.open(AccountTransactionsComponent,
+    {
+      data: { account }
+    });
 
   }
 

@@ -12,7 +12,7 @@ export class TransactionService {
     constructor(private http: HttpClient,
                 private datePipe: DatePipe) { }
 
-    createTransaction(transaction: Transaction) {
+    performAccountTransaction(transaction: Transaction) {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const createdDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss');
         const newTransaction = {
@@ -23,7 +23,7 @@ export class TransactionService {
             createdDate
         };
 
-        const url = `${this.baseUrl}user/${user.id}/account/${transaction.account.id}/transaction/CreateTransaction`;
+        const url = `${this.baseUrl}user/${user.id}/account/${transaction.account.id}/transaction/PerformAccountTransaction`;
 
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'

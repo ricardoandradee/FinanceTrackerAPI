@@ -43,7 +43,7 @@ export class BankAccountService {
         });
     }
 
-    createBankInfo(bankAccount: BankAccount) {
+    createBankWithAccount(bankAccount: BankAccount) {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const createdDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss');
         const newBankInfo = {
@@ -55,7 +55,7 @@ export class BankAccountService {
             accountForCreation: { ...bankAccount.account, createdDate }
         };
 
-        const url = `${this.baseUrl}user/${user.id}/bank/CreateBankInfo`;
+        const url = `${this.baseUrl}user/${user.id}/bank/CreateBankWithAccount`;
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
         });

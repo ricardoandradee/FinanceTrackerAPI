@@ -1,0 +1,33 @@
+.account-transactions-section {
+    margin: 10px 5px;
+}
+
+.mat-table {
+    margin: 7px 15px;
+}
+
+.mat-icon-action {
+    transform: scale(0.8);
+ }
+
+.gray {
+    background-color: lightyellow;
+}
+
+.mat-footer-row, .mat-header-row, .mat-row {
+    border-style: dashed;
+}
+
+
+
+@media only screen and (min-width : 600px) {
+    .mat-table {
+        width: 550px;
+    }
+}
+
+@media (min-width: 300px) and (max-width: 599px) {
+    .mat-table {
+        width: 450px;
+    }
+}
