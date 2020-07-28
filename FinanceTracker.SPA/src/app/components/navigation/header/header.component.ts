@@ -42,6 +42,8 @@ export class HeaderComponent implements OnInit {
       this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
       user.userCurrency = this.userBaseCurrency;
       localStorage.setItem('user', JSON.stringify(user));
+    }).add(() => {
+      this.disableBaseCurrency = true;
     });
   }
 

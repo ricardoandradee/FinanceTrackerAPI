@@ -53,6 +53,12 @@ a.toolbar-link:active {
 }
 
 
+@media only screen and (max-width: 599px) {
+    .currency {
+        margin-right: 20px;
+    }
+}
+
 .active:after {
     content:'\A';
     position:absolute;

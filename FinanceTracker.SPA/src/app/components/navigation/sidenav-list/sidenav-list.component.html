@@ -1,11 +1,11 @@
 <mat-nav-list>
-    <a *ngIf="!(isAuth$ | async)" mat-list-item routerLink="/signup" (click)="onClose()">
-        <mat-icon>person_add_alt_1</mat-icon>
-        <span class="nav-caption">Signup</span>
-    </a>
-    <a *ngIf="!(isAuth$ | async)" mat-list-item routerLink="/login" (click)="onClose()">
+    <a *ngIf="!(isAuth$ | async)" fxHide.gt-xs mat-list-item routerLink="/login" (click)="onClose()">
         <mat-icon>login</mat-icon>
         <span class="nav-caption">Login</span>
+    </a>
+    <a *ngIf="!(isAuth$ | async)" fxHide.gt-xs mat-list-item routerLink="/signup" (click)="onClose()">
+        <mat-icon>how_to_reg</mat-icon>
+        <span class="nav-caption">Signup</span>
     </a>
     <a *ngIf="isAuth$ | async"  mat-list-item [routerLink]="'/finance/categorylist'" (click)="onClose()">
         <mat-icon>wysiwyg</mat-icon>
@@ -19,10 +19,10 @@
         <mat-icon>payments</mat-icon>
         <span class="nav-caption">Payments</span>
     </a>
-    <mat-list-item *ngIf="isAuth$ | async" >
-        <button mat-icon-button (click)="onLogout()">
+    <mat-list-item *ngIf="isAuth$ | async" fxHide.gt-xs>
+        <button mat-icon-button (click)="onSignOut()">
             <mat-icon>power_settings_new</mat-icon>
-            <span class="nav-caption">Logout</span>
+            <span class="nav-caption">Sign out</span>
         </button>
     </mat-list-item>
 </mat-nav-list>
