@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace FinanceTracker.API.Dtos
 {
@@ -10,6 +11,7 @@ namespace FinanceTracker.API.Dtos
         public string AccountCurrency { get; set; }
         public decimal CurrentBalance { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<TransactionToReturnDto> Transactions { get; set; }
         public int BankId { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

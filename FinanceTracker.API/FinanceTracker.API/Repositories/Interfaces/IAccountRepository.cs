@@ -10,5 +10,6 @@ namespace FinanceTracker.API.Repositories.Interfaces
     {
         Task<IEnumerable<Account>> GetAccountsForBank(int bankId);
         Task<bool> BelongsToUser(int userId, int accountId);
+        Task<Account> CreateAccount(Account account);
     }
 }

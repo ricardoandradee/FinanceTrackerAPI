@@ -69,7 +69,7 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpPost]
-        [Route("CreateTransaction")]
+        [Route("PerformAccountTransaction")]
         public async Task<IActionResult> PerformAccountTransaction(int userId, int accountId,
         TransactionForCreationDto transactionForCreationDto)
         {

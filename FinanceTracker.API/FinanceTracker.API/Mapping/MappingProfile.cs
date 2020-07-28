@@ -56,7 +56,11 @@ namespace FinanceTracker.API.Mapping
 
             #region Bank related mappings
 
-            CreateMap<BankToReturnDto, Bank>().ReverseMap();
+            CreateMap<BankToReturnDto, Bank>()
+            .ForMember(dest => dest.Accounts, opt =>
+            {
+                opt.MapFrom((s, d) => s.Accounts);
+            }).ReverseMap();
             CreateMap<BankForCreationDto, Bank>().ReverseMap();
 
             CreateMap<BankForCreationDto, Bank>()

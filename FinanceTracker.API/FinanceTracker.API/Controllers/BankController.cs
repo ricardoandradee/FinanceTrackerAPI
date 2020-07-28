@@ -61,21 +61,20 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpPost]
-        [Route("CreateBankInfo")]
-        public async Task<IActionResult> CreateBankInfo(BankForCreationDto bankForCreationDto)
+        [Route("CreateBankWithAccount")]
+        public async Task<IActionResult> CreateBankWithAccount(BankForCreationDto bankForCreationDto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             bankForCreationDto.UserId = userId;
 
-            var bank = _mapper.Map<Bank>(bankForCreationDto);
-            await _bankRepository.Add(bank);
+            var bankToBeCreated = _mapper.Map<Bank>(bankForCreationDto);
+            var createdBank = await _bankRepository.CreateBankWithAccount(bankToBeCreated);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (createdBank != null)
             {
-                var bankToReturn = _mapper.Map<BankToReturnDto>(bank);
+                var bankToReturn = _mapper.Map<BankToReturnDto>(createdBank);
                 return CreatedAtAction(nameof(GetBankInfo),
-                    new { bankId = bank.Id, userId },
-                    bankToReturn);
+                    new { bankId = bankToReturn.Id, userId }, bankToReturn);
             }
 
             throw new Exception("Creating bank failed on save.");

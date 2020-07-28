@@ -81,15 +81,14 @@ namespace FinanceTracker.API.Controllers
                 return BadRequest("This bank does not belong to the logged in user.");
             }
 
-            var account = _mapper.Map<Account>(accountForCreationDto);
-            await _accountRepository.Add(account);
+            var accountToBeCreated = _mapper.Map<Account>(accountForCreationDto);
+            var createdAccount = await _accountRepository.CreateAccount(accountToBeCreated);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (createdAccount != null)
             {
-                var accountToReturn = _mapper.Map<AccountToReturnDto>(account);
-
+                var accountToReturn = _mapper.Map<AccountToReturnDto>(createdAccount);
                 return CreatedAtAction(nameof(GetAccount), 
-                    new { accountId = account.Id, bankId = bankId, userId = userId },
+                    new { accountId = accountToReturn.Id, bankId = bankId, userId = userId },
                     accountToReturn);
             }
 

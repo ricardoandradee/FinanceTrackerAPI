@@ -73,3 +73,179 @@ Begin
 
 	Select @transactionId = SCOPE_IDENTITY();
 End
+
+Go
+
+If Exists (Select 1 From sys.procedures Where Name = 'CreateBankWithAccount')
+Begin
+	Drop Procedure CreateBankWithAccount
+End
+
+Go
+
+Create Procedure CreateBankWithAccount
+(
+	@userId Int,
+	@bankName Varchar(100),
+	@branch Varchar(50),
+	@accountName Varchar(100),
+	@accountNumber Varchar(25),
+	@accountCurrency Varchar(3),
+	@currentBalance Decimal(18, 2),
+	@createdDate DateTime,
+    @bankId Int Output
+)
+As
+Begin
+
+	Begin Try
+        Begin Transaction;
+
+		Insert Into Banks
+					(Branch,
+					[Name],
+					IsActive,
+					UserId,
+					CreatedDate) 
+		Values     (@branch,
+				    @bankName,
+				    1,
+				    @userId,
+				    @createdDate);
+					
+		Select @bankId = SCOPE_IDENTITY();
+
+		Insert Into Accounts
+					(BankId,
+					[Name],
+					[Number],
+					IsActive,
+					AccountCurrency,
+					CurrentBalance,
+					CreatedDate) 
+		Values     (@bankId,
+				    @accountName,
+					@accountNumber,
+				    1,
+					@accountCurrency,
+				    @currentBalance,
+				    @createdDate);
+
+		Insert Into Transactions 
+					([Description], 
+					 Amount, 
+					 Balanceaftertransaction, 
+					 [Action], 
+					 Accountid, 
+					 Createddate) 
+		Values      ('Initial bank account deposit.', 
+					 @currentBalance, 
+					 @currentBalance, 
+					 'Deposit', 
+					 SCOPE_IDENTITY(), 
+					 @createdDate);
+
+        Commit Transaction;  
+    End Try
+    Begin Catch
+        
+        -- Test if the transaction is uncommittable.  
+        If (XACT_STATE()) = -1  
+        Begin
+			Set @bankId = 0;
+            Print  N'The transaction is in an uncommittable state.' +  
+                    'Rolling back transaction.'  
+			Rollback Transaction;  
+        End;  
+        
+        -- Test if the transaction is committable.  
+        If (XACT_STATE()) = 1  
+        Begin  
+            Print N'The transaction is committable.' +  
+                'Committing transaction.'  
+            Commit Transaction;    
+        End;  
+    End Catch
+End
+
+Go
+
+If Exists (Select 1 From sys.procedures Where Name = 'CreateAccount')
+Begin
+	Drop Procedure CreateAccount
+End
+
+Go
+
+Create Procedure CreateAccount
+(
+	@bankId Int,
+	@accountName Varchar(100),
+	@accountNumber Varchar(25),
+	@accountCurrency Varchar(3),
+	@currentBalance Decimal(18, 2),
+	@createdDate DateTime,
+    @accountId Int Output
+)
+As
+Begin
+
+	Begin Try
+        Begin Transaction;
+
+		Insert Into Accounts
+					(BankId,
+					[Name],
+					[Number],
+					IsActive,
+					AccountCurrency,
+					CurrentBalance,
+					CreatedDate) 
+		Values     (@bankId,
+				    @accountName,
+					@accountNumber,
+				    1,
+					@accountCurrency,
+				    @currentBalance,
+				    @createdDate);
+					
+		Select @accountId = SCOPE_IDENTITY();
+
+		Insert Into Transactions 
+					([Description], 
+					 Amount, 
+					 Balanceaftertransaction, 
+					 [Action], 
+					 Accountid, 
+					 Createddate) 
+		Values      ('Initial bank account deposit.', 
+					 @currentBalance, 
+					 @currentBalance, 
+					 'Deposit', 
+					 @accountId, 
+					 @createdDate);
+
+        Commit Transaction;  
+    End Try
+    Begin Catch
+        
+        -- Test if the transaction is uncommittable.  
+        If (XACT_STATE()) = -1  
+        Begin
+			Set @accountId = 0;
+            Print  N'The transaction is in an uncommittable state.' +  
+                    'Rolling back transaction.'  
+			Rollback Transaction;  
+        End;  
+        
+        -- Test if the transaction is committable.  
+        If (XACT_STATE()) = 1  
+        Begin  
+            Print N'The transaction is committable.' +  
+                'Committing transaction.'  
+            Commit Transaction;    
+        End;  
+    End Catch
+End
+
+Go
