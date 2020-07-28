@@ -6,8 +6,8 @@
           <p>
             <mat-form-field>
               <input type="text" matInput formControlName="userName" placeholder="User Name">
-              <mat-error *ngIf="!loginForm.controls['userName'].errors?.required">At least 8 characters needed</mat-error>
-              <mat-error *ngIf="loginForm.controls['userName'].errors?.required">UserName is required</mat-error>
+              <mat-error *ngIf="!loginForm.controls['userName'].errors?.required">At least 6 characters needed</mat-error>
+              <mat-error *ngIf="loginForm.controls['userName'].errors?.required">User Name is required</mat-error>
             </mat-form-field>
           </p>
           <p>
