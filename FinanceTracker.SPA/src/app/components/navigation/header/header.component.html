@@ -1,15 +1,11 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <button mat-icon-button fxHide.gt-xs>
-          <mat-icon (click)="onToggleSidenav()">menu</mat-icon>
+        <button mat-icon-button>
+          <mat-icon (click)="onToggleSidenav()">
+              {{ openSideNav ? 'close' : 'menu' }}
+          </mat-icon>
         </button>
         <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/paymenthistory'] : ['/']">Spend wise</a></h1>
-        <span class="menu-spacer"></span>
-        <div *ngIf="(isAuth$ | async)" fxHide.xs>
-          <a mat-button class="not-last-item" [class.active]="isActive('finance/categorylist')" [routerLink]="'/finance/categorylist'"> Categories </a>
-          <a mat-button class="not-last-item" [class.active]="isActive('finance/income')" [routerLink]="'/finance/income'"> Income </a>
-          <a mat-button [class.active]="isActive('finance/paymenthistory')" [routerLink]="'/finance/paymenthistory'"> Payments </a>
-        </div>
         <div fxLayoutGap="40px" fxFlex fxLayout fxLayoutAlign="end">
             <mat-form-field *ngIf="(isAuth$ | async)" class="currency" [style.width.px]=100 [style.height.px]=35 [style.fontSize.px]=12>
                 <mat-label> Currency </mat-label>

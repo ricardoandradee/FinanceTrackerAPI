@@ -1,13 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AngularFireModule } from '@angular/fire';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { JwtModule } from '@auth0/angular-jwt';
-
-import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';

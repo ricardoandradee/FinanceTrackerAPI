@@ -3,8 +3,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CurrencyList } from 'src/app/models/currency.model';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
-import { Router } from '@angular/router';
-import { take, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,11 +14,11 @@ export class HeaderComponent implements OnInit {
   @Output() sidenavToggle = new EventEmitter<void>();
   currencies = [];
   userBaseCurrency = '';
+  openSideNav = false;
   disableBaseCurrency = true;
   isAuth$: Observable<boolean>;
 
   constructor(private authService: AuthService,
-              private router: Router,
               private currencyService: CurrencyService) {
     this.currencies = CurrencyList;
    }
@@ -30,10 +28,6 @@ export class HeaderComponent implements OnInit {
     this.currencyService.getUserBaseCurrency.subscribe(currency => {
       this.userBaseCurrency = currency ? currency : 'EUR';
     });
-  }
-
-  isActive(url: string): boolean {
-    return this.router.isActive(url, false);
   }
 
   saveUserBaseCurrency() {
@@ -53,6 +47,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onToggleSidenav() {
+    this.openSideNav = !this.openSideNav;
     this.sidenavToggle.emit();
   }
 

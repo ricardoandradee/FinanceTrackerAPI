@@ -8,6 +8,15 @@ a.toolbar-link:active {
     color: lightgray;
 }
 
-.mat-icon {
-    margin-right: 8px;
+.mat-nav-list {
+    position: relative;
+    display: block;
+    transform: inherit;
+}
+
+
+
+.active {
+    position:relative;
+    background-color: #E8E8E8;
 }

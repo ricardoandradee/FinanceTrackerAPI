@@ -27,9 +27,6 @@ a.toolbar-link:active {
     display: inline-block;
     transform: scale(1.5);
  }
- .mat-icon {
-     margin-right: 20px;
- }
 
  .not-last-item {
     border-right: 1px dotted darkgrey;    
@@ -38,12 +35,6 @@ a.toolbar-link:active {
  .menu-spacer {
     display: inline;
     margin-right: 40px;
-}
-
-.active {
-    position:relative;
-    font-weight: bold;
-    color: black;  
 }
 
 .mat-stroked-button,
@@ -59,15 +50,9 @@ a.toolbar-link:active {
     }
 }
 
-.active:after {
-    content:'\A';
-    position:absolute;
-    background: linear-gradient(0deg, rgba(255,255,255, 0.2) 0%, rgba(185,255,239, 0.2) 80%);
-    border-bottom: 1px solid darkgrey;    
-    top:0; bottom:0;
-    left:5%; 
-    width:90%;
-    -webkit-animation: filler 2s ease-in-out;
-    -moz-animation: filler 2s ease-in-out;
-    animation: filler 2s ease-in-out;
+.mat-toolbar {
+    position: sticky;
+    position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 0; 
+    z-index: 10;
 }

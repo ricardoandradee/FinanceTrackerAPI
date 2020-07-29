@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoryService } from './services/category.service';
 import { Category } from './models/category.model';
 import { PaymentService } from './services/payment.service';
@@ -8,6 +8,7 @@ import { switchMap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrencyService } from './services/currency.service';
 import { User } from './models/user.model';
+import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,8 @@ import { User } from './models/user.model';
 export class AppComponent implements OnInit {
   title = 'finance-tracker';
   openSideNav = false;
+  sidenavWidth = 4;
+  @ViewChild(SidenavListComponent, { static: false }) sidNav: SidenavListComponent;
   private jwtHelper = new JwtHelperService();
   private payments: Payment[];
   private categories: Category[];
@@ -36,10 +39,18 @@ export class AppComponent implements OnInit {
                   this.currencyService.setUserBaseCurrency = user.userCurrency ? user.userCurrency : 'EUR';
                 }
               }
-  
-  unToggle() {
+
+
+  increase() {
+    this.sidNav.sidenavWidth = 15;
+    this.sidenavWidth = 15;
   }
 
+  decrease() {
+    this.sidNav.sidenavWidth = 4;
+    this.sidenavWidth = 4;
+  }
+  
   ngOnInit() {
     this.authService.getIsAuthenticated.subscribe(isAuth => {
           if (isAuth) {
