@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <button mat-icon-button fxHide.gt-xs="(isAuth$ | async)">
+        <button mat-icon-button *ngIf="(isAuth$ | async)">
           <mat-icon (click)="onToggleSidenav()">
               {{ openSideNav ? 'close' : 'menu' }}
           </mat-icon>
@@ -21,7 +21,7 @@
                     <mat-icon>save</mat-icon>
                 </a>
             </mat-form-field>
-            <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)" fxHide.xs>
+            <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">
                 <li>
                     <button mat-stroked-button [routerLink]="'/login'">
                         <mat-icon>login</mat-icon>
