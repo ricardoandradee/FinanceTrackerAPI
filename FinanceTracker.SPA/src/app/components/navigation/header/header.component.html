@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <button mat-icon-button>
+        <button mat-icon-button fxHide.gt-xs="(isAuth$ | async)">
           <mat-icon (click)="onToggleSidenav()">
               {{ openSideNav ? 'close' : 'menu' }}
           </mat-icon>
