@@ -14,7 +14,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.API
 {

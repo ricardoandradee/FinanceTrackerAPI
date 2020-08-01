@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using FinanceTracker.API.AuthorizationAttribute;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.API.Controllers
 {
-    [Authorize]
     [ApiController]
+    [UserAuthorization]
     [Route("api/user/{userId}/bank")]
     public class BankController : ControllerBase
     {
@@ -34,11 +34,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetBankInfo")]
         public async Task<IActionResult> GetBankInfo(int userId, int bankId) 
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             var bankFromRepo = await _bankRepository.RetrieveById(userId);
             var bankToReturnDto = _mapper.Map<BankToReturnDto>(bankFromRepo);
 
@@ -49,11 +44,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetBanksForUser")]
         public async Task<IActionResult> GetBanksForUser(int userId) 
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             var banksFromRepo = await _bankRepository.GetBanksForUser(userId);
             var banksToReturnDto = _mapper.Map<IList<BankToReturnDto>>(banksFromRepo);
 
@@ -84,11 +74,6 @@ namespace FinanceTracker.API.Controllers
         [Route("DeleteBankInfo/{bankId}")]
         public async Task<IActionResult> DeleteBankInfo(int userId, int bankId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             // if (await _bankRepository.ExistsAnyTransactionsConnectedToBank(id))
             // {
             //     return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
@@ -114,11 +99,6 @@ namespace FinanceTracker.API.Controllers
         [Route("UpdateBankInfo/{bankId}")]
         public async Task<IActionResult> UpdateBankInfo(int userId, int bankId, BankForUpdateDto bankForUpdateDto)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _bankRepository.BelongsToUser(userId, bankId) == false)
             {
                 return BadRequest("This bank does not belong to the logged in user.");

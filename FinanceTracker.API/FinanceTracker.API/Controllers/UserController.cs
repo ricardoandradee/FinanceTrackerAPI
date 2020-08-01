@@ -1,4 +1,5 @@
 using AutoMapper;
+using FinanceTracker.API.AuthorizationAttribute;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace FinanceTracker.API.Controllers
 {
     [ApiController]
-    [Route("api/user/{id}")]
+    [Route("api/user/{userId}")]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userUepository;
@@ -24,23 +25,19 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpGet(Name = "GetUser")]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUser(int userId)
         {
-            var user = await _userUepository.RetrieveById(id);
+            var user = await _userUepository.RetrieveById(userId);
             var userToReturn = _mapper.Map<UserForDetailedDto>(user);
             return Ok(userToReturn);
         }
 
         [HttpPut]
+        [UserAuthorization]
         [Route("UpdateUserBaseCurrency/{userCurrency}")]
-        public async Task<IActionResult> UpdateUserBaseCurrency(int id, string userCurrency)
+        public async Task<IActionResult> UpdateUserBaseCurrency(int userId, string userCurrency)
         {
-            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
-            var userFromRepo = await _userUepository.RetrieveById(id);
+            var userFromRepo = await _userUepository.RetrieveById(userId);
 
             if (userFromRepo.UserCurrency != userCurrency)
             {

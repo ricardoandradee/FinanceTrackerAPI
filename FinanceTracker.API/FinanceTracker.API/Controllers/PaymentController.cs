@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
+using FinanceTracker.API.AuthorizationAttribute;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
 {
-    [Authorize]
     [ApiController]
+    [UserAuthorization]
     [Route("api/user/{userId}/payment")]
     public class PaymentController : ControllerBase
     {
@@ -34,11 +33,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetPayment/{paymentId}")]
         public async Task<IActionResult> GetPayment(int userId, int paymentId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             var paymentFromRepo = await _paymentRepository.RetrieveById(paymentId);
 
             if (paymentFromRepo == null)
@@ -58,11 +52,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetPaymentsForUser")]
         public async Task<IActionResult> GetPaymentsForUser(int userId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             var paymentsFromRepo = await _paymentRepository.GetPaymentsForUser(userId);
             var paymentsToReturnDto = _mapper.Map<IList<PaymentToReturnDto>>(paymentsFromRepo);
 
@@ -73,11 +62,6 @@ namespace FinanceTracker.API.Controllers
         [Route("CreatePayment")]
         public async Task<IActionResult> CreatePayment(int userId, PaymentForCreationDto paymentForCreationDto)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-            
             var categoryId = paymentForCreationDto.CategoryId;
 
             if (await _categoryRepository.RetrieveById(categoryId) == null)

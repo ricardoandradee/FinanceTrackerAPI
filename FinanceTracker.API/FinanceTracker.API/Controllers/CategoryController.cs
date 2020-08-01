@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using FinanceTracker.API.AuthorizationAttribute;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
 {
-    [Authorize]
     [ApiController]
+    [UserAuthorization]
     [Route("api/user/{userId}/category")]
     public class CategoryController : ControllerBase
     {
@@ -30,13 +30,8 @@ namespace FinanceTracker.API.Controllers
 
         [HttpGet]
         [Route("GetCategory/{categoryId}")]
-        public async Task<IActionResult> GetCategory(int userId, int categoryId)
+        public async Task<IActionResult> GetCategory(int categoryId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             var categoryFromRepo = await _categoryRepository.RetrieveById(categoryId);
 
             if (categoryFromRepo == null)
@@ -50,15 +45,55 @@ namespace FinanceTracker.API.Controllers
             return Ok(categoryToReturnDto);
         }
 
+        [HttpDelete]
+        [Route("DeleteCategory/{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(int userId, int categoryId)
+        {
+            if (await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(categoryId))
+            {
+                return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
+            }
+
+            if (await _categoryRepository.BelongsToUser(userId, categoryId) == false)
+            {
+                return BadRequest("This category does not belong to the logged in user.");
+            }
+
+            var categoryFromRepo = await _categoryRepository.RetrieveById(categoryId);
+            _categoryRepository.Delete(categoryFromRepo);
+
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            {
+                return NoContent();
+            }
+
+            throw new Exception("Error deleting the category.");
+        }
+
+        [HttpPut]
+        [Route("UpdateCategory/{categoryId}")]
+        public async Task<IActionResult> UpdateCategory(int userId, int categoryId, CategoryForUpdateDto categoryForUpdateDto)
+        {
+            if (await _categoryRepository.BelongsToUser(userId, categoryId) == false)
+            {
+                return BadRequest("This category does not belong to the logged in user.");
+            }
+
+            var categoryFromRepo = await _categoryRepository.RetrieveById(categoryId);
+            _mapper.Map(categoryForUpdateDto, categoryFromRepo);
+
+            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            {
+                return NoContent();
+            }
+
+            throw new Exception("Error updating the category.");
+        }
+
         [HttpGet]
         [Route("GetCategoriesForUser")]
         public async Task<IActionResult> GetCategoriesForUser(int userId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             var categoriesFromRepo = await _categoryRepository.GetCategoriesForUser(userId);
 
             var categoriesToReturnDto = _mapper.Map<IEnumerable<CategoryToReturnDto>>(categoriesFromRepo);
@@ -91,61 +126,6 @@ namespace FinanceTracker.API.Controllers
             }
 
             throw new Exception("Creating category failed on save.");
-        }
-
-        [HttpDelete]
-        [Route("DeleteCategory/{id}")]
-        public async Task<IActionResult> DeleteCategory(int userId, int id)
-        {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
-            if (await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(id))
-            {
-                return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
-            }
-
-            if (await _categoryRepository.BelongsToUser(userId, id) == false)
-            {
-                return BadRequest("This category does not belong to the logged in user.");
-            }
-
-            var categoryFromRepo = await _categoryRepository.RetrieveById(id);
-            _categoryRepository.Delete(categoryFromRepo);
-
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
-            {
-                return NoContent();
-            }
-
-            throw new Exception("Error deleting the category.");
-        }
-
-        [HttpPut]
-        [Route("UpdateCategory/{id}")]
-        public async Task<IActionResult> UpdateCategory(int userId, int id, CategoryForUpdateDto categoryForUpdateDto)
-        {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
-            if (await _categoryRepository.BelongsToUser(userId, id) == false)
-            {
-                return BadRequest("This category does not belong to the logged in user.");
-            }
-
-            var categoryFromRepo = await _categoryRepository.RetrieveById(id);
-            _mapper.Map(categoryForUpdateDto, categoryFromRepo);
-
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
-            {
-                return NoContent();
-            }
-
-            throw new Exception("Error updating the category.");
         }
     }
 }

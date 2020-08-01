@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using FinanceTracker.API.AuthorizationAttribute;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.API.Controllers
 {
-    [Authorize]
     [ApiController]
+    [UserAuthorization]
     [Route("api/user/{userId}/bank/{bankId}/account")]
     public class AccountController : ControllerBase
     {
@@ -33,11 +33,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetAccount/{accountId}")]
         public async Task<IActionResult> GetAccount(int userId, int bankId, int accountId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _bankRepository.BelongsToUser(userId, bankId) == false)
             {
                 return BadRequest("This bank does not belong to the logged in user.");
@@ -52,11 +47,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetAccount/{accountId}")]
         public async Task<IActionResult> GetAccountsForBank(int userId, int bankId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _bankRepository.BelongsToUser(userId, bankId) == false)
             {
                 return BadRequest("This bank does not belong to the logged in user.");
@@ -71,11 +61,6 @@ namespace FinanceTracker.API.Controllers
         [Route("CreateAccount")]
         public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _bankRepository.BelongsToUser(userId, bankId) == false)
             {
                 return BadRequest("This bank does not belong to the logged in user.");
@@ -99,11 +84,6 @@ namespace FinanceTracker.API.Controllers
         [Route("UpdateAccount/{accountId}")]
         public async Task<IActionResult> UpdateAccount(int userId, int bankId, int accountId, AccountForUpdateDto accountForUpdateDto)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _bankRepository.BelongsToUser(userId, bankId) == false)
             {
                 return BadRequest("This account does not belong to the logged in user.");
@@ -124,11 +104,6 @@ namespace FinanceTracker.API.Controllers
         [Route("DeleteAccount/{accountId}")]
         public async Task<IActionResult> DeleteAccount(int userId, int accountId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _accountRepository.BelongsToUser(userId, accountId) == false)
             {
                 return BadRequest("This bank does not belong to the logged in user.");

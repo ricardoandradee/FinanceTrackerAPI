@@ -9,11 +9,12 @@ using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using FinanceTracker.API.AuthorizationAttribute;
 
 namespace FinanceTracker.API.Controllers
 {
-    [Authorize]
     [ApiController]
+    [UserAuthorization]
     [Route("api/user/{userId}/account/{accountId}/transaction")]
     public class TransactionController : ControllerBase
     {
@@ -34,11 +35,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetTransaction/{transactionId}")]
         public async Task<IActionResult> GetTransaction(int userId, int accountId, int transactionId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _accountRepository.BelongsToUser(userId, accountId) == false)
             {
                 return BadRequest("This account does not belong to the logged in user.");
@@ -53,11 +49,6 @@ namespace FinanceTracker.API.Controllers
         [Route("GetTransactions")]
         public async Task<IActionResult> GetTransactions(int userId, int accountId)
         {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            }
-
             if (await _accountRepository.BelongsToUser(userId, accountId) == false)
             {
                 return BadRequest("This account does not belong to the logged in user.");
@@ -74,10 +65,7 @@ namespace FinanceTracker.API.Controllers
         TransactionForCreationDto transactionForCreationDto)
         {
             var transactionOptions = new string[] { "Deposit", "Withdraw" };
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
-                return Unauthorized();
-            } else if (await _accountRepository.BelongsToUser(userId, accountId) == false)
+            if (await _accountRepository.BelongsToUser(userId, accountId) == false)
             {
                 return BadRequest("This account does not belong to the logged in user.");
             } else if (transactionForCreationDto.Amount <= 0)
