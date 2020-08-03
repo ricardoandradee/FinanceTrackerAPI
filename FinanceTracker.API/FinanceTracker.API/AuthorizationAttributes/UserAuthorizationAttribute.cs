@@ -5,10 +5,10 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 
-namespace FinanceTracker.API.AuthorizationAttribute
+namespace FinanceTracker.API.AuthorizationAttributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class UserAuthorizationAttribute : AuthorizeAttribute, IAuthorizationFilter
+    public sealed class UserAuthorizationAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {

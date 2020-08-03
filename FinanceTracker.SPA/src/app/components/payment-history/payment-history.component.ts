@@ -108,10 +108,10 @@ export class PaymentHistoryComponent implements OnInit {
 
             this.uiService.showSnackBar('Payment was sucessfully created.', 3000);
           } else {
-            this.uiService.showSnackBar('There was an error while creating payment, please, try again later.', 3000);
+            this.uiService.showSnackBar('An error occured while adding payment details, please, try again later.', 3000);
           }
       }, (err) => {
-          this.uiService.showSnackBar(err.error, 3000);
+        this.uiService.showSnackBar(`An error occured while adding payment details. Error code: ${err.status} - ${err.statusText}`, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
       }
     });
@@ -186,7 +186,7 @@ export class PaymentHistoryComponent implements OnInit {
           this.paymentService.setPayments = paymentsFromDataSource;
           this.setTotalPrice();
       }, (err) => {
-          this.uiService.showSnackBar(err.error, 3000);
+        this.uiService.showSnackBar(`An error occured while deleting payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
       }
     });
@@ -213,7 +213,7 @@ export class PaymentHistoryComponent implements OnInit {
           this.uiService.showSnackBar('There was an error while trying to update your Payment. Please, try again later!', 3000);
         }
     }, (err) => {
-        this.uiService.showSnackBar(err.error, 3000);
+      this.uiService.showSnackBar(`An error occured while updating payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
         this.onCancelEdit();
     }, () => { this.store.dispatch(new UI.StopLoading()); });
   }

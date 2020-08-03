@@ -1,5 +1,5 @@
 using AutoMapper;
-using FinanceTracker.API.AuthorizationAttribute;
+using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;

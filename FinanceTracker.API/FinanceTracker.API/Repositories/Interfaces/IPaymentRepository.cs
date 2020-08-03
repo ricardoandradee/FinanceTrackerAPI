@@ -7,6 +7,6 @@ namespace FinanceTracker.API.Repositories.Interfaces
     public interface IPaymentRepository : IRepository<Payment>
     {
         Task<IList<Payment>> GetPaymentsForUser(int userId);
-        Task<bool> PaymentBelongsToUser(int userId, int paymentId);
+        Task<bool> BelongsToUser(int userId, int paymentId);
     }
 }

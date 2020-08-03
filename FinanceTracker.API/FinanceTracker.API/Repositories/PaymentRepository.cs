@@ -25,7 +25,7 @@ namespace FinanceTracker.API.Repositories
             return payments;
         }
 
-        public async Task<bool> PaymentBelongsToUser(int userId, int paymentId)
+        public async Task<bool> BelongsToUser(int userId, int paymentId)
         {
             return await _unitOfWork.Context.Payments.AnyAsync(b => b.Id == paymentId && b.Category.User.Id == userId);
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using FinanceTracker.API.AuthorizationAttribute;
+using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
@@ -17,14 +17,12 @@ namespace FinanceTracker.API.Controllers
     public class BankController : ControllerBase
     {
         private readonly IBankRepository _bankRepository;
-        private readonly IAccountRepository _accountRepository;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
 
-        public BankController(IBankRepository bankRepository, IAccountRepository accountRepository,
+        public BankController(IBankRepository bankRepository,
                                  IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
-            _accountRepository = accountRepository;
             _bankRepository = bankRepository;
             _unitOfWorkRepository = unitOfWorkRepository;
             _mapper = mapper;
@@ -72,18 +70,9 @@ namespace FinanceTracker.API.Controllers
 
         [HttpDelete]
         [Route("DeleteBankInfo/{bankId}")]
+        [TypeFilter(typeof(BankAuthorizationAttribute))]
         public async Task<IActionResult> DeleteBankInfo(int userId, int bankId)
         {
-            // if (await _bankRepository.ExistsAnyTransactionsConnectedToBank(id))
-            // {
-            //     return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
-            // }
-
-            if (await _bankRepository.BelongsToUser(userId, bankId) == false)
-            {
-                return BadRequest("This bank does not belong to the logged in user.");
-            }
-
             var bankFromRepo = await _bankRepository.RetrieveById(bankId);
             _bankRepository.Delete(bankFromRepo);
 
@@ -97,13 +86,10 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPut]
         [Route("UpdateBankInfo/{bankId}")]
+        [TypeFilter(typeof(BankAuthorizationAttribute))]
+
         public async Task<IActionResult> UpdateBankInfo(int userId, int bankId, BankForUpdateDto bankForUpdateDto)
         {
-            if (await _bankRepository.BelongsToUser(userId, bankId) == false)
-            {
-                return BadRequest("This bank does not belong to the logged in user.");
-            }
-
             var bankFromRepo = await _bankRepository.RetrieveById(bankId);
             _mapper.Map(bankForUpdateDto, bankFromRepo);
             

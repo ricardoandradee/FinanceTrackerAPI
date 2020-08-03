@@ -70,7 +70,7 @@ export class AuthService {
         this.router.navigate(['/finance/income']);
       }
     }, (err) => {
-      this.uiService.showSnackBar(err.error, 3000);
+      this.uiService.showSnackBar(`An error occured while processing login. Error code: ${err.status} - ${err.statusText}`, 3000);
     });
   }
 }

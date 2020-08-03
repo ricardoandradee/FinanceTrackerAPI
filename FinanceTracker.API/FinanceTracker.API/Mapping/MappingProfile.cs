@@ -41,7 +41,7 @@ namespace FinanceTracker.API.Mapping
             CreateMap<Payment, PaymentToReturnDto>()
             .ForMember(dest => dest.CategoryName, opt =>
             {
-                opt.MapFrom((s, d) => s.Category.Name);
+                opt.MapFrom((s, d) => s.Category?.Name);
             })
             .ForMember(dest => dest.CreatedDateString, opt =>
             {

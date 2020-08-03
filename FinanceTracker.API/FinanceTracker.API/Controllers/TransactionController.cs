@@ -9,13 +9,14 @@ using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FinanceTracker.API.AuthorizationAttribute;
+using FinanceTracker.API.AuthorizationAttributes;
 
 namespace FinanceTracker.API.Controllers
 {
     [ApiController]
     [UserAuthorization]
     [Route("api/user/{userId}/account/{accountId}/transaction")]
+        [TypeFilter(typeof(AccountAuthorizationAttribute))]
     public class TransactionController : ControllerBase
     {
         private readonly IAccountRepository _accountRepository;
@@ -35,12 +36,7 @@ namespace FinanceTracker.API.Controllers
         [Route("GetTransaction/{transactionId}")]
         public async Task<IActionResult> GetTransaction(int userId, int accountId, int transactionId)
         {
-            if (await _accountRepository.BelongsToUser(userId, accountId) == false)
-            {
-                return BadRequest("This account does not belong to the logged in user.");
-            }
-
-            var transactionFromRepo = _transactionRepository.RetrieveById(transactionId);
+            var transactionFromRepo = await _transactionRepository.RetrieveById(transactionId);
             var transactionToReturnDto = _mapper.Map<TransactionToReturnDto>(transactionFromRepo);
             return Ok(transactionToReturnDto);
         }
@@ -49,12 +45,7 @@ namespace FinanceTracker.API.Controllers
         [Route("GetTransactions")]
         public async Task<IActionResult> GetTransactions(int userId, int accountId)
         {
-            if (await _accountRepository.BelongsToUser(userId, accountId) == false)
-            {
-                return BadRequest("This account does not belong to the logged in user.");
-            }
-
-            var transactionsFromRepo = _transactionRepository.GetAccountsTransactions(accountId);
+            var transactionsFromRepo = await _transactionRepository.GetAccountsTransactions(accountId);
             var transactionsToReturnDto = _mapper.Map<IEnumerable<TransactionToReturnDto>>(transactionsFromRepo);
             return Ok(transactionsToReturnDto);
         }
@@ -65,10 +56,7 @@ namespace FinanceTracker.API.Controllers
         TransactionForCreationDto transactionForCreationDto)
         {
             var transactionOptions = new string[] { "Deposit", "Withdraw" };
-            if (await _accountRepository.BelongsToUser(userId, accountId) == false)
-            {
-                return BadRequest("This account does not belong to the logged in user.");
-            } else if (transactionForCreationDto.Amount <= 0)
+            if (transactionForCreationDto.Amount <= 0)
             {
                 throw new InvalidOperationException("Transaction amount cannot be less or equals to zero.");
             } else if (!transactionOptions.Contains(transactionForCreationDto.Action))

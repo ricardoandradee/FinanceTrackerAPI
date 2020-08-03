@@ -60,7 +60,7 @@ export class CategoryListComponent implements OnInit {
         this.uiService.showSnackBar('There was an error while creating a category, please, try again later.', 3000);
       }
     }, (err) => {
-        this.uiService.showSnackBar(err.error, 3000);
+      this.uiService.showSnackBar(`An error occured while creating category. Error code: ${err.status} - ${err.statusText}`, 3000);
     }, () => { this.store.dispatch(new UI.StopLoading()); });
   }
   
@@ -114,7 +114,7 @@ export class CategoryListComponent implements OnInit {
             }
             this.categoryService.setCategories = categoriesFromDataSource;
         }, (err) => {
-            this.uiService.showSnackBar(err.error, 3000);
+          this.uiService.showSnackBar(`An error occured while deleting category. Error code: ${err.status} - ${err.statusText}`, 3000);
         }, () => { this.store.dispatch(new UI.StopLoading()); });
         }
       });
@@ -140,8 +140,8 @@ export class CategoryListComponent implements OnInit {
           this.uiService.showSnackBar('There was an error while trying to update category. Please, try again later!', 3000);
         }
     }, (err) => {
-        this.uiService.showSnackBar(err.error, 3000);
-        this.onCancelEdit();
+      this.uiService.showSnackBar(`An error occured while updating category. Error code: ${err.status} - ${err.statusText}`, 3000);
+      this.onCancelEdit();
     }, () => { this.store.dispatch(new UI.StopLoading()); });
   }
 

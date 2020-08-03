@@ -91,7 +91,7 @@ export class BankAccountListComponent implements OnInit {
         this.uiService.showSnackBar('There was an error while creating a Bank Info, please, try again later.', 3000);
       }
     }, (err) => {
-        this.uiService.showSnackBar(err.error, 3000);
+      this.uiService.showSnackBar(`An error occured while creating bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
     }, () => { this.store.dispatch(new UI.StopLoading()); });
   }
 
@@ -205,7 +205,7 @@ export class BankAccountListComponent implements OnInit {
           }
           this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
       }, (err) => {
-          this.uiService.showSnackBar(err.error, 3000);
+        this.uiService.showSnackBar(`An error occured while deleting bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
       }
     });
@@ -270,7 +270,7 @@ export class BankAccountListComponent implements OnInit {
             this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
           }
         }, (err) => {
-          this.uiService.showSnackBar(err.error, 3000);
+          this.uiService.showSnackBar(`An error occured while updating account. Error code: ${err.status} - ${err.statusText}`, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
       }
     });
@@ -301,7 +301,7 @@ export class BankAccountListComponent implements OnInit {
           }
           this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
         }, (err) => {
-          this.uiService.showSnackBar(err.error, 3000);
+          this.uiService.showSnackBar(`An error occured while deleting account. Error code: ${err.status} - ${err.statusText}`, 3000);
       }, () => { this.store.dispatch(new UI.StopLoading()); });
       }
     });
@@ -320,7 +320,7 @@ export class BankAccountListComponent implements OnInit {
           this.uiService.showSnackBar('There was an error while trying to update Bank info. Please, try again later!', 3000);
         }
     }, (err) => {
-        this.uiService.showSnackBar(err.error, 3000);
+      this.uiService.showSnackBar(`An error occured while updating bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
         this.onCancelEdit();
     }, () => { this.store.dispatch(new UI.StopLoading()); });
   }

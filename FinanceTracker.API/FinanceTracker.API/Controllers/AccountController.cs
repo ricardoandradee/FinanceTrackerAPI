@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using FinanceTracker.API.AuthorizationAttribute;
+using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.API.Dtos;
 using FinanceTracker.API.Models;
 using FinanceTracker.API.Repositories.Interfaces;
@@ -13,6 +13,7 @@ namespace FinanceTracker.API.Controllers
 {
     [ApiController]
     [UserAuthorization]
+    [TypeFilter(typeof(BankAuthorizationAttribute))]
     [Route("api/user/{userId}/bank/{bankId}/account")]
     public class AccountController : ControllerBase
     {
@@ -31,64 +32,19 @@ namespace FinanceTracker.API.Controllers
         
         [HttpGet]
         [Route("GetAccount/{accountId}")]
-        public async Task<IActionResult> GetAccount(int userId, int bankId, int accountId)
+        [TypeFilter(typeof(AccountAuthorizationAttribute))]
+        public async Task<IActionResult> GetAccount(int userId, int accountId)
         {
-            if (await _bankRepository.BelongsToUser(userId, bankId) == false)
-            {
-                return BadRequest("This bank does not belong to the logged in user.");
-            }
-
-            var accountFromRepo = _accountRepository.RetrieveById(accountId);
+            var accountFromRepo = await _accountRepository.RetrieveById(accountId);
             var accountToReturnDto = _mapper.Map<AccountToReturnDto>(accountFromRepo);
             return Ok(accountToReturnDto);
         }
 
-        [HttpGet]
-        [Route("GetAccount/{accountId}")]
-        public async Task<IActionResult> GetAccountsForBank(int userId, int bankId)
-        {
-            if (await _bankRepository.BelongsToUser(userId, bankId) == false)
-            {
-                return BadRequest("This bank does not belong to the logged in user.");
-            }
-
-            var accountsFromRepo = _bankRepository.GetAllAccounts(bankId);
-            var accountsToReturnDto = _mapper.Map<IEnumerable<AccountToReturnDto>>(accountsFromRepo);
-            return Ok(accountsToReturnDto);
-        }
-
-        [HttpPost]
-        [Route("CreateAccount")]
-        public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
-        {
-            if (await _bankRepository.BelongsToUser(userId, bankId) == false)
-            {
-                return BadRequest("This bank does not belong to the logged in user.");
-            }
-
-            var accountToBeCreated = _mapper.Map<Account>(accountForCreationDto);
-            var createdAccount = await _accountRepository.CreateAccount(accountToBeCreated);
-
-            if (createdAccount != null)
-            {
-                var accountToReturn = _mapper.Map<AccountToReturnDto>(createdAccount);
-                return CreatedAtAction(nameof(GetAccount), 
-                    new { accountId = accountToReturn.Id, bankId = bankId, userId = userId },
-                    accountToReturn);
-            }
-
-            throw new Exception("Creating account failed on save.");
-        }
-
         [HttpPut]
         [Route("UpdateAccount/{accountId}")]
-        public async Task<IActionResult> UpdateAccount(int userId, int bankId, int accountId, AccountForUpdateDto accountForUpdateDto)
+        [TypeFilter(typeof(AccountAuthorizationAttribute))]
+        public async Task<IActionResult> UpdateAccount(int userId, int accountId, AccountForUpdateDto accountForUpdateDto)
         {
-            if (await _bankRepository.BelongsToUser(userId, bankId) == false)
-            {
-                return BadRequest("This account does not belong to the logged in user.");
-            }
-
             var accountFromRepo = await _accountRepository.RetrieveById(accountId);
             _mapper.Map(accountForUpdateDto, accountFromRepo);
 
@@ -102,13 +58,9 @@ namespace FinanceTracker.API.Controllers
 
         [HttpDelete]
         [Route("DeleteAccount/{accountId}")]
+        [TypeFilter(typeof(AccountAuthorizationAttribute))]
         public async Task<IActionResult> DeleteAccount(int userId, int accountId)
         {
-            if (await _accountRepository.BelongsToUser(userId, accountId) == false)
-            {
-                return BadRequest("This bank does not belong to the logged in user.");
-            }
-
             var accountFromRepo = await _accountRepository.RetrieveById(accountId);
             _accountRepository.Delete(accountFromRepo);
 
@@ -118,6 +70,33 @@ namespace FinanceTracker.API.Controllers
             }
 
             throw new Exception("Error deleting the account.");
+        }
+
+        [HttpGet]
+        [Route("GetAccountsForBank")]
+        public async Task<IActionResult> GetAccountsForBank(int userId, int bankId)
+        {
+            var accountsFromRepo = await _bankRepository.GetAllAccounts(bankId);
+            var accountsToReturnDto = _mapper.Map<IEnumerable<AccountToReturnDto>>(accountsFromRepo);
+            return Ok(accountsToReturnDto);
+        }
+
+        [HttpPost]
+        [Route("CreateAccount")]
+        public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
+        {
+            var accountToBeCreated = _mapper.Map<Account>(accountForCreationDto);
+            var createdAccount = await _accountRepository.CreateAccount(accountToBeCreated);
+
+            if (createdAccount != null)
+            {
+                var accountToReturn = _mapper.Map<AccountToReturnDto>(createdAccount);
+                return CreatedAtAction(nameof(GetAccount), 
+                    new { accountId = accountToReturn.Id, bankId, userId },
+                    accountToReturn);
+            }
+
+            throw new Exception("Creating account failed on save.");
         }
     }
 }
