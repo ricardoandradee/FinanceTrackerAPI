@@ -1,17 +1,18 @@
-import { Component, OnInit,  EventEmitter, Output } from '@angular/core';
+import { Component, OnInit,  EventEmitter, Output, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { CurrencyList } from 'src/app/models/currency.model';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Output() sidenavToggle = new EventEmitter<void>();
+  private allSubscriptions: Subscription[] = [];
   currencies = [];
   userBaseCurrency = '';
   openSideNav = false;
@@ -25,20 +26,21 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.isAuth$ = this.authService.getIsAuthenticated;
-    this.currencyService.getUserBaseCurrency.subscribe(currency => {
+    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe(currency => {
       this.userBaseCurrency = currency ? currency : 'EUR';
-    });
+    }));
   }
 
   saveUserBaseCurrency() {
-    this.currencyService.updateUserBaseCurrency(this.userBaseCurrency).subscribe(response => {
+    this.allSubscriptions.push(this.currencyService.updateUserBaseCurrency(this.userBaseCurrency)
+    .subscribe(response => {
       const user = this.getUserBaseCurrencyFromLocalStorage();
       this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
       user.userCurrency = this.userBaseCurrency;
       localStorage.setItem('user', JSON.stringify(user));
     }).add(() => {
       this.disableBaseCurrency = true;
-    });
+    }));
   }
 
   private getUserBaseCurrencyFromLocalStorage(): User {
@@ -53,5 +55,9 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.authService.logout();
+  }
+
+  ngOnDestroy(): void {
+    this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }
 }

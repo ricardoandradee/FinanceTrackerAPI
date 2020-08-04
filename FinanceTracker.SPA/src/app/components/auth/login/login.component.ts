@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UiService } from 'src/app/services/ui.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +11,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
+  private subscription: Subscription;
 
   constructor(private authService: AuthService, private uiService: UiService, private router: Router) { }
 
@@ -36,6 +38,12 @@ export class LoginComponent implements OnInit {
   onLogin() {
     // Make sure to create a deep copy of the form-model
     const result: any = Object.assign({}, this.loginForm.value);
-    this.authService.login({ Username: result.userName, Password: result.password});
+    this.subscription = this.authService.login({ Username: result.userName, Password: result.password});
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

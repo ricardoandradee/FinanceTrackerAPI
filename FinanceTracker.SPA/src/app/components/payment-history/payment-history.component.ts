@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Payment } from '../../models/payment.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -14,7 +14,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.model';
 
 @Component({
@@ -23,9 +23,10 @@ import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.mode
   styleUrls: ['./payment-history.component.scss']
 })
 
-export class PaymentHistoryComponent implements OnInit {
+export class PaymentHistoryComponent implements OnInit, OnDestroy {
   displayedColumns = ['CreatedDate', 'Category', 'Description', 'Establishment', 'Price', 'Actions'];
   dataSource = new MatTableDataSource<Payment>();
+  private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
   editPayment: Payment;
   oldPayment: Payment;
@@ -51,16 +52,16 @@ export class PaymentHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
+    this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.allCategories = categoryList;
-    });
+    }));
 
-    this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
+    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
       this.userBaseCurrency = userBaseCurrency;
       this.setTotalPrice();
-    });
+    }));
     
-    this.isLoading$.subscribe(loading => {
+    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
       if (loading) {
         setTimeout(() => {
           this.refreshPaymentDataSource();
@@ -68,7 +69,7 @@ export class PaymentHistoryComponent implements OnInit {
       } else {
         this.refreshPaymentDataSource();
       }
-    });
+    }));
   }
 
   bindDataSource(payments: Payment[]) {
@@ -95,11 +96,11 @@ export class PaymentHistoryComponent implements OnInit {
 
   onOpenAddPaymentDialog() {
     const dialogRef = this.dialog.open(PaymentAddComponent);
-    dialogRef.afterClosed().subscribe(result => {
+    this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
       if (result.data) {
         this.store.dispatch(new UI.StartLoading());
         const paymentToBeCreated = result.data as Payment;
-        this.paymentService.createPayment(paymentToBeCreated).subscribe(response => {
+        this.allSubscriptions.push(this.paymentService.createPayment(paymentToBeCreated).subscribe(response => {
           if (response.ok) {
             const paymentCreated = response.body as Payment;
             const paymentsFromDataSource = this.dataSource.data;
@@ -112,9 +113,9 @@ export class PaymentHistoryComponent implements OnInit {
           }
       }, (err) => {
         this.uiService.showSnackBar(`An error occured while adding payment details. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); });
+      }, () => { this.store.dispatch(new UI.StopLoading()); }));
       }
-    });
+    }));
   }
 
   setTotalPrice() {
@@ -131,11 +132,11 @@ export class PaymentHistoryComponent implements OnInit {
   }
 
   refreshPaymentDataSource() {
-    this.paymentService.getPayments.subscribe((payments: Payment[]) => {
+    this.allSubscriptions.push(this.paymentService.getPayments.subscribe((payments: Payment[]) => {
       this.bindDataSource(payments);
       this.populateDropDownLists(payments);
       this.setTotalPrice();
-    });
+    }));
  }
  
  doFilterByDate() {
@@ -174,10 +175,10 @@ export class PaymentHistoryComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.store.dispatch(new UI.StartLoading());
-        this.paymentService.deletePayment(payment.id).subscribe(response => {
+        this.allSubscriptions.push(this.paymentService.deletePayment(payment.id).subscribe(response => {
           const paymentsFromDataSource = this.dataSource.data;
           const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === payment.id);
           if (paymentIndex > -1) {
@@ -187,9 +188,9 @@ export class PaymentHistoryComponent implements OnInit {
           this.setTotalPrice();
       }, (err) => {
         this.uiService.showSnackBar(`An error occured while deleting payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); });
+      }, () => { this.store.dispatch(new UI.StopLoading()); }));
       }
-    });
+    }));
   }
 
   onEdit(payment: Payment) {
@@ -200,7 +201,7 @@ export class PaymentHistoryComponent implements OnInit {
 
   onSaveChanges() {
     this.store.dispatch(new UI.StartLoading());
-    this.paymentService.updatePayment(this.editPayment).subscribe(response => {
+    this.allSubscriptions.push(this.paymentService.updatePayment(this.editPayment).subscribe(response => {
       if (response.ok) {
         const paymentsFromDataSource = this.dataSource.data;
 
@@ -215,12 +216,16 @@ export class PaymentHistoryComponent implements OnInit {
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while updating payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
         this.onCancelEdit();
-    }, () => { this.store.dispatch(new UI.StopLoading()); });
+    }, () => { this.store.dispatch(new UI.StopLoading()); }));
   }
 
   onCancelEdit() {
     this.rowInEditMode = false;
     this.editPayment = {} as Payment;
     this.oldPayment = {} as Payment;
+  }
+
+  ngOnDestroy(): void {
+    this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }
 }

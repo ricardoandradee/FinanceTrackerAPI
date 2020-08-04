@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -6,7 +6,7 @@ import { Category } from '../../models/category.model';
 import { CategoryAddComponent } from '../category-add/category-add.component';
 import { UiService } from '../../services/ui.service';
 import { CategoryService } from 'src/app/services/category.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
@@ -16,13 +16,14 @@ import * as UI from 'src/app/actions/ui.actions';
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']
 })
-export class CategoryListComponent implements OnInit {
+export class CategoryListComponent implements OnInit, OnDestroy {
   displayedColumns = ['CreatedDate', 'Description', 'Name', 'Actions'];
   dataSource = new MatTableDataSource<Category>();
   isLoading$: Observable<boolean>;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  private allSubscriptions: Subscription[] = [];
   
   editCategory: Category;
   oldCategory: { id: number; userId: string; name: string; description: string; createdDate?: Date; };
@@ -38,16 +39,16 @@ export class CategoryListComponent implements OnInit {
   
   openDialog() {
       const dialogRef = this.dialog.open(CategoryAddComponent);
-      dialogRef.afterClosed().subscribe(result => {
+      this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
         if (result.data) {
           this.createCategory(result.data as Category);
         }
-      });
+      }));
   }
 
   private createCategory(category: Category) {
     this.store.dispatch(new UI.StartLoading());
-    this.categoryService.createCategory(category).subscribe(response => {
+    this.allSubscriptions.push(this.categoryService.createCategory(category).subscribe(response => {
       if (response.ok) {
         const categoryCreated = response.body as Category;
 
@@ -61,22 +62,22 @@ export class CategoryListComponent implements OnInit {
       }
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while creating category. Error code: ${err.status} - ${err.statusText}`, 3000);
-    }, () => { this.store.dispatch(new UI.StopLoading()); });
+    }, () => { this.store.dispatch(new UI.StopLoading()); }));
   }
   
   onSave(form: NgForm) {
     this.createCategory({ name: form.value.name, description: form.value.description, createdDate: new Date() } as Category);
   }
   refreshCategoryDataSource() {
-    this.categoryService.getCategories.subscribe((categories: Category[]) => {
+    this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categories: Category[]) => {
       this.dataSource = new MatTableDataSource(categories);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-    });
+    }));
  }
 
   ngAfterViewInit() {
-    this.isLoading$.subscribe(loading => {
+    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
       if (loading) {
         setTimeout(() => {
           this.refreshCategoryDataSource();
@@ -84,7 +85,7 @@ export class CategoryListComponent implements OnInit {
       } else {
         this.refreshCategoryDataSource();
       }
-    });
+    }));
   }
 
   doFilter(filterValue: string) {
@@ -103,10 +104,10 @@ export class CategoryListComponent implements OnInit {
             title: 'Are you sure?'
           }
       });
-      dialogRef.afterClosed().subscribe((result) => {
+      this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           this.store.dispatch(new UI.StartLoading());
-          this.categoryService.deleteCategory(category.id).subscribe(response => {
+          this.allSubscriptions.push(this.categoryService.deleteCategory(category.id).subscribe(response => {
             const categoriesFromDataSource = this.dataSource.data;
             const categoryIndex = categoriesFromDataSource.findIndex(x => x.id === category.id);
             if (categoryIndex > -1) {
@@ -115,9 +116,9 @@ export class CategoryListComponent implements OnInit {
             this.categoryService.setCategories = categoriesFromDataSource;
         }, (err) => {
           this.uiService.showSnackBar(`An error occured while deleting category. Error code: ${err.status} - ${err.statusText}`, 3000);
-        }, () => { this.store.dispatch(new UI.StopLoading()); });
+        }, () => { this.store.dispatch(new UI.StopLoading()); }));
         }
-      });
+      }));
     }
   }
 
@@ -129,7 +130,7 @@ export class CategoryListComponent implements OnInit {
 
   onSaveChanges() {
     this.store.dispatch(new UI.StartLoading());
-    this.categoryService.updateCategory(this.editCategory).subscribe(response => {
+    this.allSubscriptions.push(this.categoryService.updateCategory(this.editCategory).subscribe(response => {
       if (response.ok) {
         const categoriesFromDataSource = this.dataSource.data;
         this.categoryService.setCategories = categoriesFromDataSource;
@@ -142,12 +143,16 @@ export class CategoryListComponent implements OnInit {
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while updating category. Error code: ${err.status} - ${err.statusText}`, 3000);
       this.onCancelEdit();
-    }, () => { this.store.dispatch(new UI.StopLoading()); });
+    }, () => { this.store.dispatch(new UI.StopLoading()); }));
   }
 
   onCancelEdit(){
     this.rowInEditMode = false;
     this.editCategory = {} as Category;
     this.oldCategory = {} as Category;
+  }
+
+  ngOnDestroy(): void {
+    this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }
 }

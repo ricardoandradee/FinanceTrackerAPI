@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
@@ -6,20 +6,22 @@ import { Router } from '@angular/router';
 import { UiService } from 'src/app/services/ui.service';
 import { CountryCityList } from 'src/app/models/country-city.model';
 import { CurrencyList } from 'src/app/models/currency.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
+  private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
   countries = [];
   cities = [];
   currencies = [];
 
-  constructor(private authService: AuthService, private uiService: UiService, private router: Router) {
-  }
+  constructor(private authService: AuthService,
+              private uiService: UiService) { }
 
   ngOnInit() {
     this.countries = Object.keys(CountryCityList);
@@ -34,13 +36,17 @@ export class SignupComponent implements OnInit {
 
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
-      this.authService.registerUser({ userName: user.userName, password: user.password, created: new Date(),
+      this.allSubscriptions.push(this.authService.registerUser({ userName: user.userName, password: user.password, created: new Date(),
             lastActive: new Date(), city: user.city, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
             this.uiService.showSnackBar(error, 3000);
       }, () => {
-        this.authService.login({userName: form.value.userName, password: form.value.password});
-      });
+        this.allSubscriptions.push(this.authService.login({userName: form.value.userName, password: form.value.password}));
+      }));
+  }
+
+  ngOnDestroy(): void {
+    this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }
 }

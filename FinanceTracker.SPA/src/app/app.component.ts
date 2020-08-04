@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CategoryService } from './services/category.service';
 import { Category } from './models/category.model';
 import { PaymentService } from './services/payment.service';
@@ -9,20 +9,24 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrencyService } from './services/currency.service';
 import { User } from './models/user.model';
 import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  title = 'finance-tracker';
-  openSideNav = false;
-  sidenavWidth = 4;
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(SidenavListComponent, { static: false }) sidNav: SidenavListComponent;
+
   private jwtHelper = new JwtHelperService();
   private payments: Payment[];
   private categories: Category[];
+  private allSubscriptions: Subscription[] = [];
+
+  title = 'Spend wise';
+  openSideNav = false;
+  sidenavWidth = 4;
 
   constructor(private categoryService: CategoryService,
               private paymentService: PaymentService,
@@ -40,7 +44,6 @@ export class AppComponent implements OnInit {
                 }
               }
 
-
   increase() {
     this.sidNav.sidenavWidth = 15;
     this.sidenavWidth = 15;
@@ -52,7 +55,7 @@ export class AppComponent implements OnInit {
   }
   
   ngOnInit() {
-    this.authService.getIsAuthenticated.subscribe(isAuth => {
+    this.allSubscriptions.push(this.authService.getIsAuthenticated.subscribe(isAuth => {
           if (isAuth) {
             const getPaymentCategoryMap = (id) => {
               return this.categoryService.getCategoriesForUser().pipe(
@@ -64,22 +67,28 @@ export class AppComponent implements OnInit {
               )
             };
 
-            getPaymentCategoryMap(0).subscribe(result => {
+            this.allSubscriptions.push(getPaymentCategoryMap(0).subscribe(result => {
               this.categories = result.categories;
               this.payments = result.payments;
             }).add(() => {
-              this.updatePaymentCategoryContainers();
-            });
+              this.updatePaymentListToContainer();
+              this.updateCategoryListToContainers();
+            }));
           }
-      });
+      }));
   }
 
-  
-  updatePaymentCategoryContainers() {
-    this.categories.forEach(c => {
-      c.canBeDeleted = !this.payments.some(b => b.categoryId === c.id);
-    });
+  updatePaymentListToContainer() {
     this.categoryService.setCategories = this.categories;
     this.paymentService.setPayments = this.payments;
+  }
+
+  updateCategoryListToContainers() {
+    this.categoryService.setCategories = this.categories;
+    this.paymentService.setPayments = this.payments;
+  }
+  
+  ngOnDestroy(): void {
+    this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }
 }

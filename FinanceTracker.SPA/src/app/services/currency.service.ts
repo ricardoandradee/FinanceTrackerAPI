@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CurrencyConverterMapper } from '../models/currency.converter.mapper.model';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { KeyValuePair } from '../models/key-value-pair.model';
 import { User } from '../models/user.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Rates } from '../models/rates.mock.model';
 
 @Injectable()
-export class CurrencyService {
+export class CurrencyService implements OnDestroy {
+    private subscription: Subscription;
     private baseUrl = environment.apiUrl;
     private dataSource$: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -59,7 +60,7 @@ export class CurrencyService {
 
         if (!currencyRates) {
             if (environment.production) {
-                this.loadProdCurrencies();
+                this.subscription = this.loadProdCurrencies();
             } else {
                 this.loadDevCurrencies();
             }
@@ -91,5 +92,11 @@ export class CurrencyService {
         });
 
         return this.http.put(url, { headers: httpHeaders, observe: 'response' });
+    }
+
+    ngOnDestroy(): void {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     }
 }
