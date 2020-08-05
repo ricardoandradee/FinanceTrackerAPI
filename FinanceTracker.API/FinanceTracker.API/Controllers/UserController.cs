@@ -1,7 +1,10 @@
 using AutoMapper;
 using FinanceTracker.API.AuthorizationAttributes;
+using FinanceTracker.Business.Commands;
 using FinanceTracker.Business.Dtos;
+using FinanceTracker.Business.Queries;
 using FinanceTracker.Business.Repositories.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,24 +15,19 @@ namespace FinanceTracker.API.Controllers
     [Route("api/user/{userId}")]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userUepository;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public UserController(IUserRepository userUepository,
-                              IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+        public UserController(IMediator mediator)
         {
-            _userUepository = userUepository;
-            _unitOfWorkRepository = unitOfWorkRepository;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
-        [HttpGet(Name = "GetUser")]
-        public async Task<IActionResult> GetUser(int userId)
+        [HttpGet(Name = "GetUserById")]
+        public async Task<IActionResult> GetUserById(int userId)
         {
-            var user = await _userUepository.RetrieveById(userId);
-            var userToReturn = _mapper.Map<UserForDetailedDto>(user);
-            return Ok(userToReturn);
+            var query = new GetUserByIdQuery(userId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
         [HttpPut]
@@ -37,23 +35,17 @@ namespace FinanceTracker.API.Controllers
         [Route("UpdateUserBaseCurrency/{userCurrency}")]
         public async Task<IActionResult> UpdateUserBaseCurrency(int userId, string userCurrency)
         {
-            var userFromRepo = await _userUepository.RetrieveById(userId);
+            var command = new UpdateUserBaseCurrencyCommand(userId, userCurrency);
+            var result = await _mediator.Send(command);
 
-            if (userFromRepo.UserCurrency != userCurrency)
+            if (result != null)
             {
-                userFromRepo.UserCurrency = userCurrency;
-                if (await _unitOfWorkRepository.SaveChanges() > 0)
-                {
-                    var userToReturn = _mapper.Map<UserForDetailedDto>(userFromRepo);
-                    return Ok(userToReturn);
-                }
+                return Ok(result);
             }
             else
             {
-                return BadRequest("User currency was not modified. In order to save your changes, please chose another currecy.");
+                return BadRequest();
             }
-
-            throw new System.Exception($"Unable to save user currency, please, try again later.");
         }
     }
 }

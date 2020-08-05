@@ -29,7 +29,7 @@ namespace FinanceTracker.API.Controllers
         {
             var query = new GetAccountByIdQuery(accountId);
             var result = await _mediator.Send(query);
-            return Ok(result);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
         [HttpGet]
