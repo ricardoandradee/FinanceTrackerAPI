@@ -17,7 +17,7 @@ namespace FinanceTracker.Business.Repositories
         {
         }
 
-        public async Task<IEnumerable<Transaction>> GetAccountsTransactions(int accountId)
+        public async Task<IEnumerable<Transaction>> GetTransactionsByAccountId(int accountId)
         {
             var transactions = await _unitOfWork.Context.Transactions.Where(t => t.Account.Id == accountId).ToListAsync();
             return transactions;

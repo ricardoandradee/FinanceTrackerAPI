@@ -1,8 +1,4 @@
-﻿using FinanceTracker.Business.Dtos;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
 
 namespace FinanceTracker.Business.Commands
 {

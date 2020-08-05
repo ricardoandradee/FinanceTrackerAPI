@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using FinanceTracker.Business.Commands;
-using FinanceTracker.Business.Dtos;
-using FinanceTracker.Business.Models;
-using FinanceTracker.Business.Queries;
 using FinanceTracker.Business.Repositories.Interfaces;
 using MediatR;
 using System.Threading;

@@ -1,6 +1,5 @@
 ﻿using FinanceTracker.Business.Dtos;
 using MediatR;
-using System.Collections.Generic;
 
 namespace FinanceTracker.Business.Queries
 {

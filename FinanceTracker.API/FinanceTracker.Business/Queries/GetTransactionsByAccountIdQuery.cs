@@ -1,12 +1,13 @@
 ﻿using FinanceTracker.Business.Dtos;
 using MediatR;
+using System.Collections.Generic;
 
 namespace FinanceTracker.Business.Queries
 {
-    public class GetAccountByIdQuery : IRequest<AccountToReturnDto>
+    public class GetTransactionsByAccountIdQuery : IRequest<List<TransactionToReturnDto>>
     {
         public int AccountId { get; }
-        public GetAccountByIdQuery(int accountId)
+        public GetTransactionsByAccountIdQuery(int accountId)
         {
             AccountId = accountId;
         }

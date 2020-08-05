@@ -8,7 +8,7 @@ namespace FinanceTracker.Business.Repositories.Interfaces
 {
     public interface ITransactionRepository : IRepository<Transaction>
     {
-        Task<IEnumerable<Transaction>> GetAccountsTransactions(int accountId);
+        Task<IEnumerable<Transaction>> GetTransactionsByAccountId(int accountId);
         Task<Transaction> PerformAccountTransaction(Transaction transaction);
     }
 }
