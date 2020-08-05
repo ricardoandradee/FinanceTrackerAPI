@@ -37,7 +37,7 @@
             <button mat-icon-button (click)="onEdit(element)" style="color:blue;" *ngIf="!rowInEditMode || element.id!==editCategory?.id"  matTooltip="Edit">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="onSaveChanges()" style="color:green;" *ngIf="rowInEditMode && element.id===editCategory?.id" matTooltip="Save">
+            <button mat-icon-button (click)="onUpdate()" style="color:green;" *ngIf="rowInEditMode && element.id===editCategory?.id" matTooltip="Save">
                 <mat-icon>save</mat-icon>
             </button>
             <button mat-icon-button (click)="onCancelEdit()" style="color:red;" *ngIf="rowInEditMode && element.id===editCategory?.id" matTooltip="Cancel edit">

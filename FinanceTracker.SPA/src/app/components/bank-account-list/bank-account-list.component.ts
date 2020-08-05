@@ -18,6 +18,7 @@ import { AccountActionsComponent } from '../account-actions/account-actions.comp
 import { TransactionService } from 'src/app/services/transaction.service';
 import { Transaction } from 'src/app/models/transaction.model';
 import { AccountTransactionsComponent } from '../account-transactions/account-transactions.component';
+import { CurrencyService } from 'src/app/services/currency.service';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -32,7 +33,7 @@ import { AccountTransactionsComponent } from '../account-transactions/account-tr
   ],
 })
 export class BankAccountListComponent implements OnInit, OnDestroy {
-  displayedColumns = ['CreatedDate', 'Name', 'Branch', 'Status', 'Actions'];
+  displayedColumns = ['CreatedDate', 'Name', 'Branch', 'Status', 'Balance', 'Actions'];
   dataSource = new MatTableDataSource<BankAccount>();
   private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
@@ -49,14 +50,21 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   oldBankInfo: { id?: number; userId?: string; branch: string;
                  isActive: boolean, createdDate?: Date; };
   rowInEditMode: boolean;
+  userBaseCurrency: string;
   
   constructor(private dialog: MatDialog, private uiService: UiService,
+              private currencyService: CurrencyService,
               private bankAccountService: BankAccountService,
               private accountService: AccountService,
               private transactionService: TransactionService,
               private store: Store<{ui: fromRoot.State}>) { }
 
   ngOnInit() {
+
+    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
+      this.userBaseCurrency = userBaseCurrency;
+    }));
+
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.allSubscriptions.push(this.bankAccountService.getBanksForUser().subscribe((bankInfos: BankAccount[]) => {
       this.bankAccountService.setBankAccountInfos = bankInfos;
@@ -79,41 +87,70 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
 
   private createBankWithAccount(bankInfo: BankAccount) {
     this.store.dispatch(new UI.StartLoading());
-    this.allSubscriptions.push(this.bankAccountService.createBankWithAccount(bankInfo).subscribe(response => {
+    const subscription = this.bankAccountService.createBankWithAccount(bankInfo).subscribe(response => {
       if (response.ok) {
         const bankInfoCreated = response.body as BankAccount;
-
-        const bankInfosFromDataSource = this.dataSource.data;
-        bankInfosFromDataSource.push(bankInfoCreated);
-        this.bankAccountService.setBankAccountInfos = bankInfosFromDataSource;
-
+        this.pushBankToDataSource(bankInfoCreated);
         this.uiService.showSnackBar('Bank Info was sucessfully created.', 3000);
       } else {
         this.uiService.showSnackBar('There was an error while creating a Bank Info, please, try again later.', 3000);
       }
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while creating bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
-    }, () => { this.store.dispatch(new UI.StopLoading()); }));
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+  
+  private deleteBankInfo(bankInfo: BankAccount) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.bankAccountService.deleteBankInfo(bankInfo.id).subscribe(response => {
+      this.removeBankFromDataSource(bankInfo);
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while deleting bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
   }
 
-  refreshBankInfoDataSource() {
-    this.allSubscriptions.push(this.bankAccountService.getBankAccountInfos.subscribe((bankInfos: BankAccount[]) => {
-      this.dataSource = new MatTableDataSource(bankInfos);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }));
- }
+  private deleteAccount(account: Account) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.accountService.deleteAccount(account.bankId, account.id).subscribe(response => {
+      this.removeBankAccountFromDataSource(account.bankId, account.id);
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while deleting account. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
 
-  ngAfterViewInit() {
-    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
-      if (loading) {
-        setTimeout(() => {
-          this.refreshBankInfoDataSource();
-        }, 500);
-      } else {
-        this.refreshBankInfoDataSource();
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+  
+  private updateAccount(accountToEdited: Account) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.accountService.updateAccount(accountToEdited).subscribe(response => {
+      if (response.ok) {
+        this.updateAccountDataSource(accountToEdited);
       }
-    }));
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while updating account. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
   }
 
   private openedRow: CdkDetailRowDirective;
@@ -137,18 +174,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
           this.transactionService.performAccountTransaction(result.data as Transaction).subscribe((response) => {
             if (response.ok) {
               const transactionCreated = response.body as Transaction;
-      
-              const bankInfosFromDataSource = this.dataSource.data;
-
-              bankInfosFromDataSource.forEach(b => {
-                if (b.accounts.some(a => a.id === transactionCreated.account.id)) {
-                  let ba = b.accounts.find(a => a.id === transactionCreated.account.id);
-                  ba.currentBalance = transactionCreated.balanceAfterTransaction;
-                  ba.transactions.push(transactionCreated);
-                }
-              });
-              
-              this.bankAccountService.setBankAccountInfos = bankInfosFromDataSource;
+              this.pushTransactionIntoDataSource(transactionCreated);
             }
           });
         }
@@ -160,7 +186,6 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     {
       data: { account }
     });
-
   }
 
   doFilter(filterValue: string) {
@@ -199,21 +224,73 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     });
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.store.dispatch(new UI.StartLoading());
-        this.allSubscriptions.push(this.bankAccountService.deleteBankInfo(bankInfo.id).subscribe(response => {
-          const bankInfoFromDataSource = this.dataSource.data;
-          const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === bankInfo.id);
-          if (bankInfoIndex > -1) {
-            bankInfoFromDataSource.splice(bankInfoIndex, 1);
-          }
-          this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
-      }, (err) => {
-        this.uiService.showSnackBar(`An error occured while deleting bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); }));
+        this.deleteBankInfo(bankInfo);
       }
     }));
   }
-  
+
+  private removeBankFromDataSource(bankInfo: BankAccount) {
+    const index = this.dataSource.data.findIndex(x => x.id === bankInfo.id);
+    if (index > -1) {
+      this.dataSource.data.splice(index, 1);
+    }
+    this.bankAccountService.setBankAccountInfos = this.dataSource.data;
+  }
+
+  private pushTransactionIntoDataSource(transactionCreated: Transaction) {
+    var bank = this.dataSource.data.find(b => b.accounts.some(a => a.id === transactionCreated.account.id));
+    var account = bank.accounts.find(a => a.id === transactionCreated.account.id);
+    account.currentBalance = transactionCreated.balanceAfterTransaction;
+    account.transactions.push(transactionCreated);
+
+    this.bankAccountService.setBankAccountInfos = this.dataSource.data;
+  }
+
+  private pushAccountToDataSource(accountAdded: Account) {
+    const index = this.dataSource.data.findIndex(x => x.id === accountAdded.bankId);
+
+    if (index > -1) {
+      this.dataSource.data[index].accounts.push(accountAdded);
+    }
+    this.bankAccountService.setBankAccountInfos = this.dataSource.data;
+  }
+
+  private updateAccountDataSource(accountToEdited: Account) {
+    const index = this.dataSource.data.findIndex(x => x.id === accountToEdited.bankId);
+    if (index > -1) {
+      var account = this.dataSource.data[index].accounts.find(a => a.id === accountToEdited.id);
+      if (account) {
+        account = accountToEdited;
+      }
+    }
+    this.bankAccountService.setBankAccountInfos = this.dataSource.data;
+  }
+
+  private removeBankAccountFromDataSource(bankId: number, accountId: number) {
+    const bankInfoFromDataSource = this.dataSource.data;
+    const index = bankInfoFromDataSource.findIndex(b => b.id === bankId);
+    if (index > -1) {
+      const accountIndex = bankInfoFromDataSource[index].accounts.findIndex(a => a.id === accountId);
+      if (accountIndex > -1) {
+        bankInfoFromDataSource[index].accounts.splice(accountIndex, 1);
+      }
+    }
+    this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
+  }
+
+  private pushBankToDataSource(bankInfoCreated: BankAccount) {
+    this.dataSource.data.push(bankInfoCreated);
+    this.bankAccountService.setBankAccountInfos = this.dataSource.data;
+  }
+
+  private refreshBankInfoDataSource() {
+    this.allSubscriptions.push(this.bankAccountService.getBankAccountInfos.subscribe((bankInfos: BankAccount[]) => {
+      this.dataSource = new MatTableDataSource(bankInfos);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }));
+ }
+
   onAddAccout(bankInfo: BankAccount) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,
     {
@@ -221,29 +298,26 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     });
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe((accountToAdded: Account) => {
       if (accountToAdded) {
-        this.store.dispatch(new UI.StartLoading());
-        this.allSubscriptions.push(this.accountService.createAccount(accountToAdded).subscribe(response => {
-          if (response.ok) {
-            const accountAdded = response.body as Account;
-            const bankInfoFromDataSource = this.dataSource.data;
-            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountAdded.bankId);
-
-            if (bankInfoIndex > -1) {
-              bankInfoFromDataSource[bankInfoIndex].accounts.push(accountAdded);
-            }
-            this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
-          }
-        }, (err) => {
-          this.uiService.showSnackBar(err.error, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); }));
+        this.createAccount(accountToAdded);
       }
     }));
   }
 
-  onEdit(bankInfo: BankAccount) {
-    this.editBankInfo = bankInfo && bankInfo.id ? bankInfo : {} as BankAccount;
-    this.oldBankInfo = {...this.editBankInfo};
-    this.rowInEditMode = true;
+  private createAccount(accountToAdded: Account) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.accountService.createAccount(accountToAdded).subscribe(response => {
+      if (response.ok) {        
+        this.pushAccountToDataSource(response.body as Account);
+      }
+    }, (err) => {
+      this.uiService.showSnackBar(err.error, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
   }
 
   onEditAccount(account: Account, isBankActive: boolean) {
@@ -254,32 +328,11 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe((accountToEdited: Account) => {
       if (accountToEdited) {
-        this.store.dispatch(new UI.StartLoading());
-        this.allSubscriptions.push(this.accountService.updateAccount(accountToEdited).subscribe(response => {
-          if (response.ok) {
-            const bankInfoFromDataSource = this.dataSource.data;
-            const bankInfoIndex = bankInfoFromDataSource.findIndex(x => x.id === accountToEdited.bankId);
-
-            if (bankInfoIndex > -1) {
-              bankInfoFromDataSource[bankInfoIndex].accounts.forEach(a => {
-                if(a.id === accountToEdited.id) {
-                  a.name = accountToEdited.name;
-                  a.number = accountToEdited.number;
-                  a.isActive = accountToEdited.isActive;
-                  a.accountCurrency = accountToEdited.accountCurrency;
-                }
-              });
-            }
-            this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
-          }
-        }, (err) => {
-          this.uiService.showSnackBar(`An error occured while updating account. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); }));
+        this.updateAccount(accountToEdited);
       }
     }));
   }
 
-  
   onDeleteAccount(account: Account) {
     const dialogRef = this.dialog.open(YesNoDialogComponent,
     {
@@ -292,46 +345,54 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.store.dispatch(new UI.StartLoading());
-        this.allSubscriptions.push(this.accountService.deleteAccount(account.bankId, account.id).subscribe(response => {
-          const bankInfoFromDataSource = this.dataSource.data;
-          const bankInfoIndex = bankInfoFromDataSource.findIndex(b => b.id === account.bankId);
-          if (bankInfoIndex > -1) {
-            const accountIndex = bankInfoFromDataSource[bankInfoIndex].accounts.findIndex(a => a.id === account.id);
-            if (accountIndex > -1) {
-              bankInfoFromDataSource[bankInfoIndex].accounts.splice(accountIndex, 1);
-            }
-          }
-          this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
-        }, (err) => {
-          this.uiService.showSnackBar(`An error occured while deleting account. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); }));
+        this.deleteAccount(account);
       }
     }));
   }
 
-  onSaveChanges() {
+  onUpdate() {
     this.store.dispatch(new UI.StartLoading());
-    this.allSubscriptions.push(this.bankAccountService.updateBankInfo(this.editBankInfo).subscribe(response => {
+    const subscription = this.bankAccountService.updateBankInfo(this.editBankInfo).subscribe(response => {
       if (response.ok) {
-        const bankInfoFromDataSource = this.dataSource.data;
-        this.bankAccountService.setBankAccountInfos = bankInfoFromDataSource;
-        this.editBankInfo = {} as BankAccount;
-        this.onCancelEdit();
+        this.bankAccountService.setBankAccountInfos = this.dataSource.data;
         this.uiService.showSnackBar('Bank info successfully updated.', 3000);
         } else {
           this.uiService.showSnackBar('There was an error while trying to update Bank info. Please, try again later!', 3000);
         }
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while updating bank account. Error code: ${err.status} - ${err.statusText}`, 3000);
-        this.onCancelEdit();
-    }, () => { this.store.dispatch(new UI.StopLoading()); }));
+    });
+
+    subscription.add(() => {
+      this.onCancelEdit();
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+
+  onEdit(bankInfo: BankAccount) {
+    this.editBankInfo = bankInfo && bankInfo.id ? bankInfo : {} as BankAccount;
+    this.oldBankInfo = {...this.editBankInfo};
+    this.rowInEditMode = true;
   }
 
   onCancelEdit(){
     this.rowInEditMode = false;
     this.editBankInfo = {} as BankAccount;
     this.oldBankInfo = {} as BankAccount;
+  }
+
+  ngAfterViewInit() {
+    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
+      if (loading) {
+        setTimeout(() => {
+          this.refreshBankInfoDataSource();
+        }, 500);
+      } else {
+        this.refreshBankInfoDataSource();
+      }
+    }));
   }
 
   ngOnDestroy(): void {

@@ -38,7 +38,6 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   private categoriesKeyValue: KeyValuePair<number, string>[];
   private paymentDate = 'All';
   private category = 'All';
-  private totalPrice = 0;
   userBaseCurrency: string;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -58,7 +57,6 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
       this.userBaseCurrency = userBaseCurrency;
-      this.setTotalPrice();
     }));
     
     this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
@@ -98,55 +96,118 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(PaymentAddComponent);
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
       if (result.data) {
-        this.store.dispatch(new UI.StartLoading());
-        const paymentToBeCreated = result.data as Payment;
-        this.allSubscriptions.push(this.paymentService.createPayment(paymentToBeCreated).subscribe(response => {
-          if (response.ok) {
-            const paymentCreated = response.body as Payment;
-            const paymentsFromDataSource = this.dataSource.data;
-            paymentsFromDataSource.push(paymentCreated);
-            this.paymentService.setPayments = paymentsFromDataSource;
-
-            this.uiService.showSnackBar('Payment was sucessfully created.', 3000);
-          } else {
-            this.uiService.showSnackBar('An error occured while adding payment details, please, try again later.', 3000);
-          }
-      }, (err) => {
-        this.uiService.showSnackBar(`An error occured while adding payment details. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); }));
+        this.createPayment(result.data as Payment);
       }
     }));
   }
 
-  setTotalPrice() {
-    const allCurrenciesToConvert = this.dataSource.filteredData.map(x => x.currency);
+  onDelete(payment: Payment) {
+    const dialogRef = this.dialog.open(YesNoDialogComponent,
+    { data:
+      {
+        message: 'Are you sure you want to delete this item from your history?',
+        title: 'Are you sure?'
+      }
+    });
 
-    if (this.currencyService.checkIfCurrenciesAreLoaded(allCurrenciesToConvert)) {
-      const currencyMapperList = this.dataSource.filteredData.map((payment: Payment) => {
-        return { currencyFrom: payment.currency, currencyTo: this.userBaseCurrency, price: payment.price } as CurrencyConverterMapper;
-      });
-      this.totalPrice = this.currencyService.convertCurrencyList(currencyMapperList);
-    } else {
-      setTimeout(() => { this.setTotalPrice(); }, 500);
-    }
+    this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deletePayment(payment);
+      }
+    }));
+  }
+  
+  onUpdate() {
+    this.store.dispatch(new UI.StartLoading());
+    this.updatePayment();
   }
 
-  refreshPaymentDataSource() {
+  private createPayment(paymentToBeCreated: Payment) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.paymentService.createPayment(paymentToBeCreated).subscribe(response => {
+      if (response.ok) {
+        const paymentCreated = response.body as Payment;
+        this.pushPaymentToDataSource(paymentCreated);
+        this.uiService.showSnackBar('Payment was sucessfully created.', 3000);
+      }
+      else {
+        this.uiService.showSnackBar('An error occured while adding payment details, please, try again later.', 3000);
+      }
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while adding payment details. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+  
+  private updatePayment() {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.paymentService.updatePayment(this.editPayment).subscribe(response => {
+      if (response.ok) {
+        this.paymentService.setPayments = this.dataSource.data;
+        this.uiService.showSnackBar('Payment successfully updated.', 3000);
+        } else {
+          this.uiService.showSnackBar('There was an error while trying to update your Payment. Please, try again later!', 3000);
+        }
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while updating payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());      
+      this.onCancelEdit();
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+
+  private deletePayment(payment: Payment) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.paymentService.deletePayment(payment.id).subscribe(response => {
+      this.removePaymentFromDataSource(payment.id);
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while deleting payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+
+  private refreshPaymentDataSource() {
     this.allSubscriptions.push(this.paymentService.getPayments.subscribe((payments: Payment[]) => {
       this.bindDataSource(payments);
       this.populateDropDownLists(payments);
-      this.setTotalPrice();
     }));
  }
- 
- doFilterByDate() {
-   this.dataSource.filter = this.getDateFilter();
-   setTimeout(() => { this.setTotalPrice(); }, 500);
+
+  private pushPaymentToDataSource(paymentCreated: Payment) {
+    const paymentsFromDataSource = this.dataSource.data;
+    paymentsFromDataSource.push(paymentCreated);
+    this.paymentService.setPayments = paymentsFromDataSource;
+  }
+
+  private removePaymentFromDataSource(paymentId: number) {
+    const paymentsFromDataSource = this.dataSource.data;
+    const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === paymentId);
+    if (paymentIndex > -1) {
+      paymentsFromDataSource.splice(paymentIndex, 1);
+    }
+    this.paymentService.setPayments = paymentsFromDataSource;
   }
   
-  doFilterByCategory() {
+  applyFilterByDate() {
+    this.dataSource.filter = this.getDateFilter();
+  }
+  
+  applyFilterByCategory() {
     this.dataSource.filter = '[FilterByCategory]' + this.category;
-    setTimeout(() => { this.setTotalPrice(); }, 500);
   }
 
   dateFilterMatches(payment: Payment): boolean {
@@ -166,57 +227,10 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     return '[FilterByDate]' + dateToBeSearched;
   }
 
-  onDelete(payment: Payment) {
-    const dialogRef = this.dialog.open(YesNoDialogComponent,
-    { data:
-      {
-        message: 'Are you sure you want to delete this item from your history?',
-        title: 'Are you sure?'
-      }
-    });
-
-    this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.store.dispatch(new UI.StartLoading());
-        this.allSubscriptions.push(this.paymentService.deletePayment(payment.id).subscribe(response => {
-          const paymentsFromDataSource = this.dataSource.data;
-          const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === payment.id);
-          if (paymentIndex > -1) {
-            paymentsFromDataSource.splice(paymentIndex, 1);
-          }
-          this.paymentService.setPayments = paymentsFromDataSource;
-          this.setTotalPrice();
-      }, (err) => {
-        this.uiService.showSnackBar(`An error occured while deleting payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
-      }, () => { this.store.dispatch(new UI.StopLoading()); }));
-      }
-    }));
-  }
-
   onEdit(payment: Payment) {
     this.editPayment = payment && payment.id ? payment : {} as Payment;
     this.oldPayment = {...this.editPayment};
     this.rowInEditMode = true;
-  }
-
-  onSaveChanges() {
-    this.store.dispatch(new UI.StartLoading());
-    this.allSubscriptions.push(this.paymentService.updatePayment(this.editPayment).subscribe(response => {
-      if (response.ok) {
-        const paymentsFromDataSource = this.dataSource.data;
-
-        this.paymentService.setPayments = paymentsFromDataSource;
-        this.setTotalPrice();
-        this.editPayment = {} as Payment;
-        this.onCancelEdit();
-        this.uiService.showSnackBar('Payment successfully updated.', 3000);
-        } else {
-          this.uiService.showSnackBar('There was an error while trying to update your Payment. Please, try again later!', 3000);
-        }
-    }, (err) => {
-      this.uiService.showSnackBar(`An error occured while updating payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
-        this.onCancelEdit();
-    }, () => { this.store.dispatch(new UI.StopLoading()); }));
   }
 
   onCancelEdit() {

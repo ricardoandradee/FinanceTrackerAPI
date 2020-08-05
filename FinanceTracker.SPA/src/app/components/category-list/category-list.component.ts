@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -36,6 +36,47 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
+
+  private createCategory(category: Category) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.categoryService.createCategory(category).subscribe(response => {
+      if (response.ok) {
+        const categoryCreated = response.body as Category;
+        this.pushCategoryToDataSource(categoryCreated);
+
+        this.uiService.showSnackBar('Category was sucessfully created.', 3000);
+      } else {
+        this.uiService.showSnackBar('There was an error while creating a category, please, try again later.', 3000);
+      }
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while creating category. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+
+  private deleteCategory(category: Category) {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.categoryService.deleteCategory(category.id).subscribe(response => {
+      this.removeCategoryFromDataSource(category.id);
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while deleting category. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+
+  doFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   
   openDialog() {
       const dialogRef = this.dialog.open(CategoryAddComponent);
@@ -46,50 +87,8 @@ export class CategoryListComponent implements OnInit, OnDestroy {
       }));
   }
 
-  private createCategory(category: Category) {
-    this.store.dispatch(new UI.StartLoading());
-    this.allSubscriptions.push(this.categoryService.createCategory(category).subscribe(response => {
-      if (response.ok) {
-        const categoryCreated = response.body as Category;
-
-        const categoriesFromDataSource = this.dataSource.data;
-        categoriesFromDataSource.push(categoryCreated);
-        this.categoryService.setCategories = categoriesFromDataSource;
-
-        this.uiService.showSnackBar('Category was sucessfully created.', 3000);
-      } else {
-        this.uiService.showSnackBar('There was an error while creating a category, please, try again later.', 3000);
-      }
-    }, (err) => {
-      this.uiService.showSnackBar(`An error occured while creating category. Error code: ${err.status} - ${err.statusText}`, 3000);
-    }, () => { this.store.dispatch(new UI.StopLoading()); }));
-  }
-  
   onSave(form: NgForm) {
     this.createCategory({ name: form.value.name, description: form.value.description, createdDate: new Date() } as Category);
-  }
-  refreshCategoryDataSource() {
-    this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categories: Category[]) => {
-      this.dataSource = new MatTableDataSource(categories);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }));
- }
-
-  ngAfterViewInit() {
-    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
-      if (loading) {
-        setTimeout(() => {
-          this.refreshCategoryDataSource();
-        }, 500);
-      } else {
-        this.refreshCategoryDataSource();
-      }
-    }));
-  }
-
-  doFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   onDelete(category: Category) {
@@ -106,20 +105,53 @@ export class CategoryListComponent implements OnInit, OnDestroy {
       });
       this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          this.store.dispatch(new UI.StartLoading());
-          this.allSubscriptions.push(this.categoryService.deleteCategory(category.id).subscribe(response => {
-            const categoriesFromDataSource = this.dataSource.data;
-            const categoryIndex = categoriesFromDataSource.findIndex(x => x.id === category.id);
-            if (categoryIndex > -1) {
-              categoriesFromDataSource.splice(categoryIndex, 1);
-            }
-            this.categoryService.setCategories = categoriesFromDataSource;
-        }, (err) => {
-          this.uiService.showSnackBar(`An error occured while deleting category. Error code: ${err.status} - ${err.statusText}`, 3000);
-        }, () => { this.store.dispatch(new UI.StopLoading()); }));
+          this.deleteCategory(category);
         }
       }));
     }
+  }
+
+  onUpdate() {
+    this.store.dispatch(new UI.StartLoading());
+    const subscription = this.categoryService.updateCategory(this.editCategory).subscribe(response => {
+      if (response.ok) {
+        this.categoryService.setCategories = this.dataSource.data;
+        this.uiService.showSnackBar('Category successfully updated.', 3000);
+        } else {
+          this.uiService.showSnackBar('There was an error while trying to update category. Please, try again later!', 3000);
+        }
+    }, (err) => {
+      this.uiService.showSnackBar(`An error occured while updating category. Error code: ${err.status} - ${err.statusText}`, 3000);
+    });
+
+    subscription.add(() => {
+      this.onCancelEdit();
+      this.store.dispatch(new UI.StopLoading());
+    });
+
+    this.allSubscriptions.push(subscription);
+  }
+
+  private refreshCategoryDataSource() {
+    this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categories: Category[]) => {
+      this.dataSource = new MatTableDataSource(categories);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }));
+ }
+
+  private removeCategoryFromDataSource(categoryId: number) {
+    const categoriesFromDataSource = this.dataSource.data;
+    const categoryIndex = categoriesFromDataSource.findIndex(x => x.id === categoryId);
+    if (categoryIndex > -1) {
+      categoriesFromDataSource.splice(categoryIndex, 1);
+    }
+    this.categoryService.setCategories = categoriesFromDataSource;
+  }
+  
+  private pushCategoryToDataSource(categoryCreated: Category) {
+    this.dataSource.data.push(categoryCreated);
+    this.categoryService.setCategories = this.dataSource.data;
   }
 
   onEdit(category: Category) {
@@ -128,28 +160,22 @@ export class CategoryListComponent implements OnInit, OnDestroy {
     this.rowInEditMode = true;
   }
 
-  onSaveChanges() {
-    this.store.dispatch(new UI.StartLoading());
-    this.allSubscriptions.push(this.categoryService.updateCategory(this.editCategory).subscribe(response => {
-      if (response.ok) {
-        const categoriesFromDataSource = this.dataSource.data;
-        this.categoryService.setCategories = categoriesFromDataSource;
-        this.editCategory = {} as Category;
-        this.onCancelEdit();
-        this.uiService.showSnackBar('Category successfully updated.', 3000);
-        } else {
-          this.uiService.showSnackBar('There was an error while trying to update category. Please, try again later!', 3000);
-        }
-    }, (err) => {
-      this.uiService.showSnackBar(`An error occured while updating category. Error code: ${err.status} - ${err.statusText}`, 3000);
-      this.onCancelEdit();
-    }, () => { this.store.dispatch(new UI.StopLoading()); }));
-  }
-
   onCancelEdit(){
     this.rowInEditMode = false;
     this.editCategory = {} as Category;
     this.oldCategory = {} as Category;
+  }
+
+  ngAfterViewInit() {
+    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
+      if (loading) {
+        setTimeout(() => {
+          this.refreshCategoryDataSource();
+        }, 500);
+      } else {
+        this.refreshCategoryDataSource();
+      }
+    }));
   }
 
   ngOnDestroy(): void {
