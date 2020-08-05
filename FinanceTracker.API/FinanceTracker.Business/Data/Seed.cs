@@ -1,7 +1,9 @@
 ﻿using FinanceTracker.Business.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace FinanceTracker.Business.Data
 {
@@ -11,7 +13,9 @@ namespace FinanceTracker.Business.Data
         {
             if (!context.Users.Any())
             {
-                var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
+                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                              @"Data\UserSeedData.json");
+                var userData = System.IO.File.ReadAllText(path);
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
 
                 foreach (var user in users)
