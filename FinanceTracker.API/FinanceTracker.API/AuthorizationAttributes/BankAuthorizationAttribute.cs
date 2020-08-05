@@ -1,4 +1,4 @@
-﻿using FinanceTracker.API.Repositories.Interfaces;
+﻿using FinanceTracker.Business.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

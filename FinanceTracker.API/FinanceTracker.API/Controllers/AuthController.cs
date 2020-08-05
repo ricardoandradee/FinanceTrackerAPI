@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using FinanceTracker.API.Dtos;
-using FinanceTracker.API.Models;
-using FinanceTracker.API.Repositories.Interfaces;
+using FinanceTracker.Business.Dtos;
+using FinanceTracker.Business.Models;
+using FinanceTracker.Business.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -97,7 +97,6 @@ namespace FinanceTracker.API.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-
         }
     }
 }

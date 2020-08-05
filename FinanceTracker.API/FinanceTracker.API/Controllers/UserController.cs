@@ -1,7 +1,7 @@
 using AutoMapper;
 using FinanceTracker.API.AuthorizationAttributes;
-using FinanceTracker.API.Dtos;
-using FinanceTracker.API.Repositories.Interfaces;
+using FinanceTracker.Business.Dtos;
+using FinanceTracker.Business.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;

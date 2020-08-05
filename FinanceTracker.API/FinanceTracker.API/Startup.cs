@@ -1,5 +1,5 @@
 using AutoMapper;
-using FinanceTracker.API.Data;
+using FinanceTracker.Business.Data;
 using FinanceTracker.API.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
 using System.Text;
+using FinanceTracker.Business.Repositories;
 
 namespace FinanceTracker.API
 {
@@ -50,7 +51,7 @@ namespace FinanceTracker.API
             services.AddTransient<Seed>();
             services.AddScoped<IDataContext, DataContext>();
 
-            var assembly = System.Reflection.Assembly.GetEntryAssembly(); 
+            var assembly = typeof(UnitOfWorkRepository).Assembly;
             var types = assembly.ExportedTypes.Where(x => x.IsClass && !x.IsGenericType && x.IsPublic && x.Name.Contains("Repository"));
 
             foreach (var type in types)

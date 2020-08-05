@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using AutoMapper;
-using FinanceTracker.API.Dtos;
+using FinanceTracker.Business.Dtos;
 using FinanceTracker.API.Helpers;
-using FinanceTracker.API.Models;
+using FinanceTracker.Business.Models;
 
 namespace FinanceTracker.API.Mapping
 {

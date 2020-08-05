@@ -1,5 +1,5 @@
 using System;
-using FinanceTracker.API.Data;
+using FinanceTracker.Business.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

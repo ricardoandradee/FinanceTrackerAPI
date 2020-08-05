@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FinanceTracker.API.AuthorizationAttributes;
-using FinanceTracker.API.Dtos;
-using FinanceTracker.API.Models;
-using FinanceTracker.API.Repositories.Interfaces;
+using FinanceTracker.Business.Dtos;
+using FinanceTracker.Business.Models;
+using FinanceTracker.Business.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
