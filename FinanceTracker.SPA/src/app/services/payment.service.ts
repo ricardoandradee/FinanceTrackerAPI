@@ -24,9 +24,9 @@ export class PaymentService {
         this.dataSource$.next(payments);
     }
 
-    getPaymentsForUser(): Observable<Payment[]> {
+    getPaymentsByUserId(): Observable<Payment[]> {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}${user.id}/Payment/GetPaymentsForUser`;
+        const url = `${this.baseUrl}${user.id}/Payment/GetPaymentsByUserId`;
         return this.http.get<Payment[]>(url, { observe: 'response' })
         .pipe(
         map(response => {

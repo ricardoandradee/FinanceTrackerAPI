@@ -16,7 +16,7 @@ namespace FinanceTracker.Business.Repositories
         {
         }
 
-        public async Task<IList<Payment>> GetPaymentsForUser(int userId)
+        public async Task<IList<Payment>> GetPaymentsByUserId(int userId)
         {
             var payments = await _unitOfWork.Context.Payments.Where(b => b.Category.User.Id == userId)
                 .Include(c => c.Category)

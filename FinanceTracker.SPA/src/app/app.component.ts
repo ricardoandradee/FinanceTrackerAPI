@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
             const getPaymentCategoryMap = (id) => {
               return this.categoryService.getCategoriesForUser().pipe(
                 switchMap(categories => 
-                  this.paymentService.getPaymentsForUser().pipe(
+                  this.paymentService.getPaymentsByUserId().pipe(
                     switchMap(payments => [{ categories: categories, payments: payments }])
                   )
                 )

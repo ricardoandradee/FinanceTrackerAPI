@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using FinanceTracker.API.AuthorizationAttributes;
+using FinanceTracker.Business.Commands;
 using FinanceTracker.Business.Dtos;
 using FinanceTracker.Business.Models;
+using FinanceTracker.Business.Queries;
 using FinanceTracker.Business.Repositories.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,28 +18,30 @@ namespace FinanceTracker.API.Controllers
     [Route("api/user/{userId}/payment")]
     public class PaymentController : ControllerBase
     {
-        private readonly IPaymentRepository _paymentRepository;
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public PaymentController(IPaymentRepository paymentRepository, ICategoryRepository categoryRepository,
-                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+        public PaymentController(IMediator mediator)
         {
-            _paymentRepository = paymentRepository;
-            _categoryRepository = categoryRepository;
-            _unitOfWorkRepository = unitOfWorkRepository;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        [Route("GetPayment/{paymentId}")]
+        [Route("GetPaymentById/{paymentId}")]
         [TypeFilter(typeof(PaymentAuthorizationAttribute))]
-        public async Task<IActionResult> GetPayment(int userId, int paymentId)
+        public async Task<IActionResult> GetPaymentById(int paymentId)
         {
-            var paymentFromRepo = await _paymentRepository.RetrieveById(paymentId);
-            var paymentToReturnDto = _mapper.Map<PaymentToReturnDto>(paymentFromRepo);
-            return Ok(paymentToReturnDto);
+            var query = new GetPaymentByIdQuery(paymentId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
+
+        [HttpGet]
+        [Route("GetPaymentsByUserId")]
+        public async Task<IActionResult> GetPaymentsByUserId(int userId)
+        {
+            var query = new GetPaymentsByUserIdQuery(userId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
         [HttpDelete]
@@ -44,10 +49,10 @@ namespace FinanceTracker.API.Controllers
         [TypeFilter(typeof(PaymentAuthorizationAttribute))]
         public async Task<IActionResult> DeletePayment(int paymentId)
         {
-            var paymentFromRepo = await _paymentRepository.RetrieveById(paymentId);
-            _paymentRepository.Delete(paymentFromRepo);
+            var command = new DeletePaymentCommand(paymentId);
+            var result = await _mediator.Send(command);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result)
             {
                 return NoContent();
             }
@@ -60,10 +65,10 @@ namespace FinanceTracker.API.Controllers
         [TypeFilter(typeof(PaymentAuthorizationAttribute))]
         public async Task<IActionResult> UpdatePayment(int paymentId, PaymentForUpdateDto paymentForUpdateDto)
         {
-            var paymentFromRepo = await _paymentRepository.RetrieveById(paymentId);
-            _mapper.Map(paymentForUpdateDto, paymentFromRepo);
+            var command = new UpdatePaymentCommand(paymentId, paymentForUpdateDto);
+            var result = await _mediator.Send(command);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result)
             {
                 return NoContent();
             }
@@ -71,29 +76,17 @@ namespace FinanceTracker.API.Controllers
             throw new Exception($"Update Payment {paymentId} failed on save.");
         }
 
-        [HttpGet]
-        [Route("GetPaymentsForUser")]
-        public async Task<IActionResult> GetPaymentsForUser(int userId)
-        {
-            var paymentsFromRepo = await _paymentRepository.GetPaymentsForUser(userId);
-            var paymentsToReturnDto = _mapper.Map<IList<PaymentToReturnDto>>(paymentsFromRepo);
-
-            return Ok(paymentsToReturnDto);
-        }
-
         [HttpPost]
         [Route("CreatePayment")]
         public async Task<IActionResult> CreatePayment(int userId, PaymentForCreationDto paymentForCreationDto)
         {
-            var payment = _mapper.Map<Payment>(paymentForCreationDto);
-            await _paymentRepository.Add(payment);
+            var command = new CreatePaymentCommand(paymentForCreationDto);
+            var result = await _mediator.Send(command);
             
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result != null)
             {
-                payment.Category = await _categoryRepository.RetrieveById(payment.CategoryId);
-                var paymentToReturn = _mapper.Map<PaymentToReturnDto>(payment);
-                return CreatedAtAction(nameof(GetPayment),
-                    new { paymentId = payment.Id, userId }, paymentToReturn);
+                return CreatedAtAction(nameof(GetPaymentById),
+                    new { paymentId = result.Id, userId }, result);
             }
 
             throw new Exception("Creating payment failed on save.");
