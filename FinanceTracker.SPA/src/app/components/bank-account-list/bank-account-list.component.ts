@@ -258,10 +258,13 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   private updateAccountDataSource(accountToEdited: Account) {
     const index = this.dataSource.data.findIndex(x => x.id === accountToEdited.bankId);
     if (index > -1) {
-      var account = this.dataSource.data[index].accounts.find(a => a.id === accountToEdited.id);
-      if (account) {
-        account = accountToEdited;
-      }
+      this.dataSource.data[index].accounts.forEach(account => {
+        if (account.id === accountToEdited.id) {
+          account.name = accountToEdited.name;
+          account.number = accountToEdited.number;
+          account.isActive = accountToEdited.isActive;
+        }
+      });
     }
     this.bankAccountService.setBankAccountInfos = this.dataSource.data;
   }
@@ -306,7 +309,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   private createAccount(accountToAdded: Account) {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.accountService.createAccount(accountToAdded).subscribe(response => {
-      if (response.ok) {        
+      if (response.ok) {
         this.pushAccountToDataSource(response.body as Account);
       }
     }, (err) => {
