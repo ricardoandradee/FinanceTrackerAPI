@@ -4,9 +4,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinanceTracker.API.AuthorizationAttributes;
+using FinanceTracker.Business.Commands;
 using FinanceTracker.Business.Dtos;
 using FinanceTracker.Business.Models;
+using FinanceTracker.Business.Queries;
 using FinanceTracker.Business.Repositories.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.API.Controllers
@@ -17,38 +20,41 @@ namespace FinanceTracker.API.Controllers
     [Route("api/user/{userId}/bank/{bankId}/account")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;
-        private readonly IBankRepository _bankRepository;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper;
-        public AccountController(IAccountRepository accountRepository, IBankRepository bankRepository,
-                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+        private readonly IMediator _mediator;
+
+        public AccountController(IMediator mediator)
         {
-            _mapper = mapper;
-            _bankRepository = bankRepository;
-            _unitOfWorkRepository = unitOfWorkRepository;
-            _accountRepository = accountRepository;
+            _mediator = mediator;
         }
         
         [HttpGet]
-        [Route("GetAccount/{accountId}")]
+        [Route("GetAccountById/{accountId}")]
         [TypeFilter(typeof(AccountAuthorizationAttribute))]
-        public async Task<IActionResult> GetAccount(int userId, int accountId)
+        public async Task<IActionResult> GetAccountById(int accountId)
         {
-            var accountFromRepo = await _accountRepository.RetrieveById(accountId);
-            var accountToReturnDto = _mapper.Map<AccountToReturnDto>(accountFromRepo);
-            return Ok(accountToReturnDto);
+            var query = new GetAccountByIdQuery(accountId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetAccountByBankId")]
+        public async Task<IActionResult> GetAccountByBankId(int bankId)
+        {
+            var query = new GetAccountByBankIdQuery(bankId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
         [HttpPut]
         [Route("UpdateAccount/{accountId}")]
         [TypeFilter(typeof(AccountAuthorizationAttribute))]
-        public async Task<IActionResult> UpdateAccount(int userId, int accountId, AccountForUpdateDto accountForUpdateDto)
+        public async Task<IActionResult> UpdateAccount(int accountId, AccountForUpdateDto accountForUpdateDto)
         {
-            var accountFromRepo = await _accountRepository.RetrieveById(accountId);
-            _mapper.Map(accountForUpdateDto, accountFromRepo);
+            var command = new UpdateAccountCommand(accountForUpdateDto, accountId);
+            var result = await _mediator.Send(command);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result)
             {
                 return NoContent();
             }
@@ -59,12 +65,12 @@ namespace FinanceTracker.API.Controllers
         [HttpDelete]
         [Route("DeleteAccount/{accountId}")]
         [TypeFilter(typeof(AccountAuthorizationAttribute))]
-        public async Task<IActionResult> DeleteAccount(int userId, int accountId)
+        public async Task<IActionResult> DeleteAccount(int accountId)
         {
-            var accountFromRepo = await _accountRepository.RetrieveById(accountId);
-            _accountRepository.Delete(accountFromRepo);
+            var command = new DeleteAccountCommand(accountId);
+            var result = await _mediator.Send(command);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result)
             {
                 return NoContent();
             }
@@ -72,31 +78,16 @@ namespace FinanceTracker.API.Controllers
             throw new Exception("Error deleting the account.");
         }
 
-        [HttpGet]
-        [Route("GetAccountsForBank")]
-        public async Task<IActionResult> GetAccountsForBank(int userId, int bankId)
-        {
-            var accountsFromRepo = await _bankRepository.GetAllAccounts(bankId);
-            var accountsToReturnDto = _mapper.Map<IEnumerable<AccountToReturnDto>>(accountsFromRepo);
-            return Ok(accountsToReturnDto);
-        }
-
         [HttpPost]
         [Route("CreateAccount")]
         public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
         {
-            var accountToBeCreated = _mapper.Map<Account>(accountForCreationDto);
-            var createdAccount = await _accountRepository.CreateAccount(accountToBeCreated);
+            var command = new CreateAccountCommand(accountForCreationDto);
+            var result = await _mediator.Send(command);
 
-            if (createdAccount != null)
-            {
-                var accountToReturn = _mapper.Map<AccountToReturnDto>(createdAccount);
-                return CreatedAtAction(nameof(GetAccount), 
-                    new { accountId = accountToReturn.Id, bankId, userId },
-                    accountToReturn);
-            }
-
-            throw new Exception("Creating account failed on save.");
+            return CreatedAtAction(nameof(GetAccountById),
+                new { accountId = result.Id, bankId, userId },
+                result);
         }
     }
 }
