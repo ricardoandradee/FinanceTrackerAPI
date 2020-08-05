@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using FinanceTracker.API.AuthorizationAttributes;
+﻿using FinanceTracker.API.AuthorizationAttributes;
+using FinanceTracker.Business.Commands;
 using FinanceTracker.Business.Dtos;
-using FinanceTracker.Business.Models;
-using FinanceTracker.Business.Repositories.Interfaces;
+using FinanceTracker.Business.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -16,95 +15,65 @@ namespace FinanceTracker.API.Controllers
     [Route("api/user/{userId}/category")]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public CategoryController(ICategoryRepository categoryRepository,
-                                  IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+        public CategoryController(IMediator mediator)
         {
-            _categoryRepository = categoryRepository;
-            _unitOfWorkRepository = unitOfWorkRepository;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        [Route("GetCategory/{categoryId}")]
+        [Route("GetCategoryById/{categoryId}")]
         [TypeFilter(typeof(CategoryAuthorizationAttribute))]
-        public async Task<IActionResult> GetCategory(int categoryId)
+        public async Task<IActionResult> GetCategoryById(int categoryId)
         {
-            var categoryFromRepo = await _categoryRepository.RetrieveById(categoryId);
+            var query = new GetCategoryByIdQuery(categoryId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
 
-            var categoryToReturnDto = _mapper.Map<CategoryToReturnDto>(categoryFromRepo);
-            categoryToReturnDto.CanBeDeleted = !(await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(categoryToReturnDto.Id));
-
-            return Ok(categoryToReturnDto);
+        [HttpGet]
+        [Route("GetCategoriesByUserId")]
+        public async Task<IActionResult> GetCategoriesByUserId(int userId)
+        {
+            var query = new GetCategoriesByUserIdQuery(userId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
         [HttpDelete]
         [Route("DeleteCategory/{categoryId}")]
         [TypeFilter(typeof(CategoryAuthorizationAttribute))]
-        public async Task<IActionResult> DeleteCategory(int userId, int categoryId)
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
-            if (await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(categoryId))
-            {
-                return BadRequest("This category has payments linked to it, therefore, it cannot be removed.");
-            }
-
-            var categoryFromRepo = await _categoryRepository.RetrieveById(categoryId);
-            _categoryRepository.Delete(categoryFromRepo);
-
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
-            {
-                return NoContent();
-            }
-
-            throw new Exception("Error deleting the category.");
+            var command = new DeleteCategoryCommand(categoryId);
+            var result = await _mediator.Send(command);
+            return result ? (IActionResult)NoContent() : BadRequest();
         }
 
         [HttpPut]
         [Route("UpdateCategory/{categoryId}")]
         [TypeFilter(typeof(CategoryAuthorizationAttribute))]
-        public async Task<IActionResult> UpdateCategory(int userId, int categoryId, CategoryForUpdateDto categoryForUpdateDto)
+        public async Task<IActionResult> UpdateCategory(int categoryId, CategoryForUpdateDto categoryForUpdateDto)
         {
-            var categoryFromRepo = await _categoryRepository.RetrieveById(categoryId);
-            _mapper.Map(categoryForUpdateDto, categoryFromRepo);
-
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
-            {
-                return NoContent();
-            }
-
-            throw new Exception("Error updating the category.");
-        }
-
-        [HttpGet]
-        [Route("GetCategoriesForUser")]
-        public async Task<IActionResult> GetCategoriesForUser(int userId)
-        {
-            var categoriesFromRepo = await _categoryRepository.GetCategoriesForUser(userId);
-            var categoriesToReturnDto = _mapper.Map<IEnumerable<CategoryToReturnDto>>(categoriesFromRepo);
-            
-            return Ok(categoriesToReturnDto);
+            var command = new UpdateCategoryCommand(categoryId, categoryForUpdateDto);
+            var result = await _mediator.Send(command);
+            return result ? (IActionResult)NoContent() : BadRequest();
         }
 
         [HttpPost]
         [Route("CreateCategory")]
         public async Task<IActionResult> CreateCategory(CategoryForCreationDto categoryForCreationDto)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            categoryForCreationDto.UserId = userId;
+            categoryForCreationDto.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var category = _mapper.Map<Category>(categoryForCreationDto);
-            await _categoryRepository.Add(category);
+            var command = new CreateCategoryCommand(categoryForCreationDto);
+            var result = await _mediator.Send(command);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result != null)
             {
-                var categoryToReturn = _mapper.Map<CategoryToReturnDto>(category);
-                categoryToReturn.CanBeDeleted = true;
-
-                return CreatedAtAction(nameof(GetCategory),
-                    new { categoryId = category.Id, userId }, categoryToReturn);
+                return CreatedAtAction(nameof(GetCategoryById),
+                    new { categoryId = result.Id, categoryForCreationDto.UserId }, result);
             }
 
             throw new Exception("Creating category failed on save.");

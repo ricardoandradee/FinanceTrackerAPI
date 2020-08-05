@@ -35,9 +35,9 @@ export class CategoryService {
         this.dataSource$.next(categories);
     }
 
-    getCategoriesForUser(): Observable<Category[]> {
+    getCategoriesByUserId(): Observable<Category[]> {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}${user.id}/category/GetCategoriesForUser`;
+        const url = `${this.baseUrl}${user.id}/category/GetCategoriesByUserId`;
 
         return this.http.get<Category[]>(url, { observe: 'response' })
         .pipe(

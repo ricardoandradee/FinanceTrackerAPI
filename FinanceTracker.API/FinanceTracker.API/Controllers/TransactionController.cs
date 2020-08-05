@@ -1,15 +1,13 @@
-using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
+using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.Business.Dtos;
 using FinanceTracker.Business.Models;
 using FinanceTracker.Business.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FinanceTracker.API.AuthorizationAttributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
 {
@@ -19,17 +17,13 @@ namespace FinanceTracker.API.Controllers
         [TypeFilter(typeof(AccountAuthorizationAttribute))]
     public class TransactionController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;
         private readonly ITransactionRepository _transactionRepository;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
-        public TransactionController(ITransactionRepository transactionRepository, IAccountRepository accountRepository,
-                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+        public TransactionController(ITransactionRepository transactionRepository,
+                                     IMapper mapper)
         {
             _mapper = mapper;
-            _accountRepository = accountRepository;
             _transactionRepository = transactionRepository;
-            _unitOfWorkRepository = unitOfWorkRepository;
         }
         
         [HttpGet]

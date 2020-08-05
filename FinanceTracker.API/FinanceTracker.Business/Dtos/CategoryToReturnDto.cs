@@ -8,6 +8,6 @@ namespace FinanceTracker.Business.Dtos
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public bool CanBeDeleted { get; set; }
+        public bool CanBeDeleted { get; set; } = false;
     }
 }

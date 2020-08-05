@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(this.authService.getIsAuthenticated.subscribe(isAuth => {
           if (isAuth) {
             const getPaymentCategoryMap = (id) => {
-              return this.categoryService.getCategoriesForUser().pipe(
+              return this.categoryService.getCategoriesByUserId().pipe(
                 switchMap(categories => 
                   this.paymentService.getPaymentsByUserId().pipe(
                     switchMap(payments => [{ categories: categories, payments: payments }])

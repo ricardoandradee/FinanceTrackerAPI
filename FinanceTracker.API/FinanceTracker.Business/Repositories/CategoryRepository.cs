@@ -25,7 +25,7 @@ namespace FinanceTracker.Business.Repositories
             return await _unitOfWork.Context.Payments.AnyAsync(u => u.Category.Id == categoryId);
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesForUser(int userId)
+        public async Task<IEnumerable<Category>> GetCategoriesByUserId(int userId)
         {
             var categories = await _unitOfWork.Context.Categories.Where(u => u.User.Id == userId).ToListAsync();
             return categories;
