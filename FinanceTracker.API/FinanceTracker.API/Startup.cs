@@ -15,6 +15,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using FinanceTracker.Business.Repositories;
+using MediatR;
+using FinanceTracker.Business.Queries;
 
 namespace FinanceTracker.API
 {
@@ -62,6 +64,8 @@ namespace FinanceTracker.API
                     services.AddScoped(repositoryType, type);
                 }
             }
+
+            services.AddMediatR(typeof(GetBanksByUserIdQuery));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {

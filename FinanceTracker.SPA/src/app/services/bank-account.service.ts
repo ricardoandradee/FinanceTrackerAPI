@@ -23,9 +23,9 @@ export class BankAccountService {
             this.dataSource$.next(bankInfos);
         }
     
-    getBanksForUser(): Observable<BankAccount[]> {
+    getBanksByUserId(): Observable<BankAccount[]> {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}user/${user.id}/bank/GetBanksForUser`;
+        const url = `${this.baseUrl}user/${user.id}/bank/GetBanksByUserId`;
 
         return this.http.get<BankAccount[]>(url, { observe: 'response' })
         .pipe(

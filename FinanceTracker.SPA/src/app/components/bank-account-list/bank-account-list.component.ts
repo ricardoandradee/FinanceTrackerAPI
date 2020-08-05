@@ -66,7 +66,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     }));
 
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    this.allSubscriptions.push(this.bankAccountService.getBanksForUser().subscribe((bankInfos: BankAccount[]) => {
+    this.allSubscriptions.push(this.bankAccountService.getBanksByUserId().subscribe((bankInfos: BankAccount[]) => {
       this.bankAccountService.setBankAccountInfos = bankInfos;
     }));
   }

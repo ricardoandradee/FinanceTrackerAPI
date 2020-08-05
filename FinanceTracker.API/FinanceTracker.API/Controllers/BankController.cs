@@ -4,9 +4,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinanceTracker.API.AuthorizationAttributes;
+using FinanceTracker.Business.Commands;
 using FinanceTracker.Business.Dtos;
 using FinanceTracker.Business.Models;
+using FinanceTracker.Business.Queries;
 using FinanceTracker.Business.Repositories.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.API.Controllers
@@ -16,67 +19,53 @@ namespace FinanceTracker.API.Controllers
     [Route("api/user/{userId}/bank")]
     public class BankController : ControllerBase
     {
-        private readonly IBankRepository _bankRepository;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public BankController(IBankRepository bankRepository,
-                                 IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+        public BankController(IMediator mediator)
         {
-            _bankRepository = bankRepository;
-            _unitOfWorkRepository = unitOfWorkRepository;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        [Route("GetBankInfo")]
-        public async Task<IActionResult> GetBankInfo(int userId, int bankId) 
+        [Route("GetBankById")]
+        public async Task<IActionResult> GetBankById(int bankId)
         {
-            var bankFromRepo = await _bankRepository.RetrieveById(userId);
-            var bankToReturnDto = _mapper.Map<BankToReturnDto>(bankFromRepo);
-
-            return Ok(bankToReturnDto);
+            var query = new GetBankByIdQuery(bankId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("GetBanksForUser")]
-        public async Task<IActionResult> GetBanksForUser(int userId) 
+        [Route("GetBanksByUserId")]
+        public async Task<IActionResult> GetBanksByUserId(int userId) 
         {
-            var banksFromRepo = await _bankRepository.GetBanksForUser(userId);
-            var banksToReturnDto = _mapper.Map<IList<BankToReturnDto>>(banksFromRepo);
-
-            return Ok(banksToReturnDto);            
+            var query = new GetBanksByUserIdQuery(userId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult) Ok(result) : NotFound(); 
         }
 
         [HttpPost]
         [Route("CreateBankWithAccount")]
         public async Task<IActionResult> CreateBankWithAccount(BankForCreationDto bankForCreationDto)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            bankForCreationDto.UserId = userId;
+            bankForCreationDto.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var command = new CreateBankWithAccountCommand(bankForCreationDto);
 
-            var bankToBeCreated = _mapper.Map<Bank>(bankForCreationDto);
-            var createdBank = await _bankRepository.CreateBankWithAccount(bankToBeCreated);
-
-            if (createdBank != null)
-            {
-                var bankToReturn = _mapper.Map<BankToReturnDto>(createdBank);
-                return CreatedAtAction(nameof(GetBankInfo),
-                    new { bankId = bankToReturn.Id, userId }, bankToReturn);
-            }
-
-            throw new Exception("Creating bank failed on save.");
+            var result = await _mediator.Send(command);
+            
+            return CreatedAtAction(nameof(GetBankById),
+                new { bankId = result.Id, userId = bankForCreationDto.UserId }, result);
         }
 
         [HttpDelete]
         [Route("DeleteBankInfo/{bankId}")]
         [TypeFilter(typeof(BankAuthorizationAttribute))]
-        public async Task<IActionResult> DeleteBankInfo(int userId, int bankId)
+        public async Task<IActionResult> DeleteBankInfo(int bankId)
         {
-            var bankFromRepo = await _bankRepository.RetrieveById(bankId);
-            _bankRepository.Delete(bankFromRepo);
+            var command = new DeleteBankInfoCommand(bankId);
+            var result = await _mediator.Send(command);
 
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            if (result)
             {
                 return NoContent();
             }
@@ -87,13 +76,12 @@ namespace FinanceTracker.API.Controllers
         [HttpPut]
         [Route("UpdateBankInfo/{bankId}")]
         [TypeFilter(typeof(BankAuthorizationAttribute))]
-
-        public async Task<IActionResult> UpdateBankInfo(int userId, int bankId, BankForUpdateDto bankForUpdateDto)
+        public async Task<IActionResult> UpdateBankInfo(int bankId, BankForUpdateDto bankForUpdateDto)
         {
-            var bankFromRepo = await _bankRepository.RetrieveById(bankId);
-            _mapper.Map(bankForUpdateDto, bankFromRepo);
-            
-            if (await _unitOfWorkRepository.SaveChanges() > 0)
+            var command = new UpdateBankInfoCommand(bankId, bankForUpdateDto);
+            var result = await _mediator.Send(command);
+
+            if (result)
             {
                 return NoContent();
             }
