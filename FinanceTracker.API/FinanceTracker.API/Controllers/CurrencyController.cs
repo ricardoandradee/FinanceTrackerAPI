@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FinanceTracker.Business.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net.Http;
@@ -11,36 +13,20 @@ namespace FinanceTracker.API.Controllers
     [Route("api/currency")]
     public class CurrencyController : ControllerBase
     {
-        public CurrencyController()
+        private readonly IMediator _mediator;
+
+        public CurrencyController(IMediator mediator)
         {
+            _mediator = mediator;
         }
 
         [HttpGet("GetListOfCurrencies")]
         [ResponseCache(VaryByHeader = "User-Agent", Duration = 1440)]
         public async Task<IActionResult> GetListOfCurrencies()
         {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    HttpResponseMessage response = await client.GetAsync($"http://data.fixer.io/api/{DateTime.UtcNow.ToString("yyyy-MM-dd")}?access_key=64331659be802cac357a58afd15be63e&format=1");
-                    
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var readAsStringAsync = response.Content.ReadAsStringAsync();
-                        return Ok(readAsStringAsync.Result);
-                    }
-                    else
-                    {
-                        return BadRequest("There was an error while trying to fatch currency list.");
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            var query = new GetListOfCurrenciesQuery();
+            var result = await _mediator.Send(query);
+            return string.IsNullOrWhiteSpace(result) ? (IActionResult) NotFound() : Ok(result);
         }
     }
 }
