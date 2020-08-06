@@ -7,18 +7,16 @@
         </button>
         <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/paymenthistory'] : ['/']">Spend wise</a></h1>
         <div fxLayoutGap="40px" fxFlex fxLayout fxLayoutAlign="end">
-            <mat-form-field *ngIf="(isAuth$ | async)" class="currency" [style.width.px]=100 [style.height.px]=35 [style.fontSize.px]=12>
-                <mat-label> Currency </mat-label>
-                <mat-select #currencyInput="ngModel" [disabled]="disableBaseCurrency" name="currency" id="currency" [(ngModel)]="userBaseCurrency">
+            <mat-form-field *ngIf="(isAuth$ | async)" class="currency" [style.width.px]=60 [style.height.px]=30 [style.fontSize.px]=12>
+                <mat-label> Base Currency </mat-label>
+                <mat-select #currencyInput="ngModel" [disabled]="disableBaseCurrency"
+                    name="currency" id="currency" [(ngModel)]="userBaseCurrency">
                     <mat-option *ngFor="let currency of currencies" [value]="currency">
                         {{currency}}
                     </mat-option>
                 </mat-select>
-                <a *ngIf="disableBaseCurrency" style="cursor: pointer;" (click)="disableBaseCurrency = false;">
-                    <mat-icon>edit</mat-icon>
-                </a>
-                <a *ngIf="!disableBaseCurrency" style="cursor: pointer;" (click)="saveUserBaseCurrency()">
-                    <mat-icon>save</mat-icon>
+                <a style="cursor: pointer;" (click)="saveUserBaseCurrency()">
+                    <mat-icon>{{ disableBaseCurrency ? 'edit' : 'save' }} </mat-icon>
                 </a>
             </mat-form-field>
             <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">

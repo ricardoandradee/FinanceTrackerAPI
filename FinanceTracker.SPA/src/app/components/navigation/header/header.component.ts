@@ -32,15 +32,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   saveUserBaseCurrency() {
-    this.allSubscriptions.push(this.currencyService.updateUserBaseCurrency(this.userBaseCurrency)
-    .subscribe(response => {
-      const user = this.getUserBaseCurrencyFromLocalStorage();
-      this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
-      user.userCurrency = this.userBaseCurrency;
-      localStorage.setItem('user', JSON.stringify(user));
-    }).add(() => {
-      this.disableBaseCurrency = true;
-    }));
+    if (!this.disableBaseCurrency) {
+      const subscription = this.currencyService.updateUserBaseCurrency(this.userBaseCurrency)
+      .subscribe(response => {
+        const user = this.getUserBaseCurrencyFromLocalStorage();
+        this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
+        user.userCurrency = this.userBaseCurrency;
+        localStorage.setItem('user', JSON.stringify(user));
+      });
+      this.allSubscriptions.push(subscription);
+    }
+    this.disableBaseCurrency = !this.disableBaseCurrency;
   }
 
   private getUserBaseCurrencyFromLocalStorage(): User {
