@@ -1,6 +1,6 @@
 using FinanceTracker.API.AuthorizationAttributes;
-using FinanceTracker.Business.Commands;
-using FinanceTracker.Business.Queries;
+using FinanceTracker.Application.Commands.Users;
+using FinanceTracker.Application.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

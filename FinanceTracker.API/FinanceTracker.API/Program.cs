@@ -1,10 +1,10 @@
-using System;
-using FinanceTracker.Business.Data;
+using FinanceTracker.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace FinanceTracker.API
 {
@@ -18,9 +18,9 @@ namespace FinanceTracker.API
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<DataContext>();
+                    var context = services.GetRequiredService<ApplicationDbContext>();
                     context.Database.Migrate();
-                    Seed.SeedUsers(context);
+                    ApplicationDbContextSeed.SeedUsers(context);
                 }
                 catch (Exception ex)
                 {

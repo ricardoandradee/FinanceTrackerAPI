@@ -1,22 +1,14 @@
-using AutoMapper;
-using FinanceTracker.Business.Data;
-using FinanceTracker.API.Mapping;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FinanceTracker.Application;
+using FinanceTracker.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using System.Linq;
 using System.Net;
-using System.Text;
-using FinanceTracker.Business.Repositories;
-using MediatR;
-using FinanceTracker.Business.Queries;
 
 namespace FinanceTracker.API
 {
@@ -33,50 +25,19 @@ namespace FinanceTracker.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x =>
+            services.AddApplication();
+            services.AddInfrastructure(Configuration);
+
+            services.AddHttpContextAccessor();
+            
+            // Customise default API behaviour
+            services.Configure<ApiBehaviorOptions>(options =>
             {
-                x.UseLazyLoadingProxies();
-                x.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionLocal"));
+                options.SuppressModelStateInvalidFilter = true;
             });
+
             services.AddControllers();
             services.AddCors();
-
-            // Auto Mapper Configurations
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
-            services.AddTransient<Seed>();
-            services.AddScoped<IDataContext, DataContext>();
-
-            var assembly = typeof(UnitOfWorkRepository).Assembly;
-            var types = assembly.ExportedTypes.Where(x => x.IsClass && !x.IsGenericType && x.IsPublic && x.Name.Contains("Repository"));
-
-            foreach (var type in types)
-            {
-                var repositoryType = type.GetInterface($"I{type.Name}");
-                if (repositoryType != null)
-                {
-                    services.AddScoped(repositoryType, type);
-                }
-            }
-
-            services.AddMediatR(typeof(GetBanksByUserIdQuery));
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("Jwt:Key").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

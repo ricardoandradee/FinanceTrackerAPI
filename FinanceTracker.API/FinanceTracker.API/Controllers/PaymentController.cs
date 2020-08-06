@@ -1,7 +1,7 @@
 ﻿using FinanceTracker.API.AuthorizationAttributes;
-using FinanceTracker.Business.Commands;
-using FinanceTracker.Business.Dtos;
-using FinanceTracker.Business.Queries;
+using FinanceTracker.Application.Commands.Payments;
+using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Queries.Payments;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;

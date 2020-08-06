@@ -1,9 +1,7 @@
-﻿using FinanceTracker.Business.Queries;
+﻿using FinanceTracker.Application.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
