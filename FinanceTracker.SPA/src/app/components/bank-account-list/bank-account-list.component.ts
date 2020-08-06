@@ -72,8 +72,11 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   }
 
   expand(element) {
-    const detail = this.detailRows.find(x => x.row == element);
+    const detail = this.detailRows.find(x => x.row === element);
     detail.toggle();
+
+    const allOtherOpenedDetails = this.detailRows.filter(x => x.row !== element && x.expended);
+    allOtherOpenedDetails.forEach((i) => { i.toggle(); });
   }
   
   openDialog() {
