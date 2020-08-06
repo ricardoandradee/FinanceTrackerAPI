@@ -2,31 +2,22 @@ using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.Application.Commands.Accounts;
 using FinanceTracker.Application.Dtos;
 using FinanceTracker.Application.Queries.Transactions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
 {
-    [ApiController]
     [UserAuthorization]
     [Route("api/user/{userId}/account/{accountId}/transaction")]
     [TypeFilter(typeof(AccountAuthorizationAttribute))]
-    public class TransactionController : ControllerBase
+    public class TransactionController : ApiController
     {
-        private readonly IMediator _mediator;
-
-        public TransactionController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpGet]
         [Route("GetTransactionById/{transactionId}")]
         public async Task<IActionResult> GetTransactionById(int transactionId)
         {
             var query = new GetTransactionByIdQuery(transactionId);
-            var result = await _mediator.Send(query);
+            var result = await Mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
@@ -35,7 +26,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> GetTransactionsByAccountId(int accountId)
         {
             var query = new GetTransactionsByAccountIdQuery(accountId);
-            var result = await _mediator.Send(query);
+            var result = await Mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
@@ -45,7 +36,7 @@ namespace FinanceTracker.API.Controllers
         TransactionForCreationDto transactionForCreationDto)
         {
             var command = new PerformAccountTransactionCommand(transactionForCreationDto);
-            var result = await _mediator.Send(command);
+            var result = await Mediator.Send(command);
 
             if (result != null)
             {

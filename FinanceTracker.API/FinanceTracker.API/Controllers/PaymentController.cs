@@ -2,32 +2,23 @@
 using FinanceTracker.Application.Commands.Payments;
 using FinanceTracker.Application.Dtos;
 using FinanceTracker.Application.Queries.Payments;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
 {
-    [ApiController]
     [UserAuthorization]
     [Route("api/user/{userId}/payment")]
-    public class PaymentController : ControllerBase
+    public class PaymentController : ApiController
     {
-        private readonly IMediator _mediator;
-
-        public PaymentController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpGet]
         [Route("GetPaymentById/{paymentId}")]
         [TypeFilter(typeof(PaymentAuthorizationAttribute))]
         public async Task<IActionResult> GetPaymentById(int paymentId)
         {
             var query = new GetPaymentByIdQuery(paymentId);
-            var result = await _mediator.Send(query);
+            var result = await Mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
@@ -36,7 +27,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> GetPaymentsByUserId(int userId)
         {
             var query = new GetPaymentsByUserIdQuery(userId);
-            var result = await _mediator.Send(query);
+            var result = await Mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
@@ -46,7 +37,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> DeletePayment(int paymentId)
         {
             var command = new DeletePaymentCommand(paymentId);
-            var result = await _mediator.Send(command);
+            var result = await Mediator.Send(command);
 
             if (result)
             {
@@ -62,7 +53,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> UpdatePayment(int paymentId, PaymentForUpdateDto paymentForUpdateDto)
         {
             var command = new UpdatePaymentCommand(paymentId, paymentForUpdateDto);
-            var result = await _mediator.Send(command);
+            var result = await Mediator.Send(command);
 
             if (result)
             {
@@ -77,7 +68,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> CreatePayment(int userId, PaymentForCreationDto paymentForCreationDto)
         {
             var command = new CreatePaymentCommand(paymentForCreationDto);
-            var result = await _mediator.Send(command);
+            var result = await Mediator.Send(command);
             
             if (result != null)
             {

@@ -1,7 +1,6 @@
 ﻿using FinanceTracker.Application.Commands.Users;
 using FinanceTracker.Application.Dtos;
 using FinanceTracker.Application.Queries.Users;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -13,16 +12,13 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
 {
-    [ApiController]
     [Route("api/auth")]
-    public class AuthController : ControllerBase
+    public class AuthController : ApiController
     {
         private readonly IConfiguration _config;
-        private readonly IMediator _mediator;
 
-        public AuthController(IMediator mediator, IConfiguration config)
+        public AuthController(IConfiguration config)
         {
-            _mediator = mediator;
             _config = config;
         }
 
@@ -32,7 +28,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> GetAllUserNames()
         {
             var query = new GetAllUserNamesQuery();
-            var result = await _mediator.Send(query);
+            var result = await Mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
@@ -41,7 +37,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             var command = new RegisterUserCommand(userForRegisterDto);
-            var result = await _mediator.Send(command);
+            var result = await Mediator.Send(command);
 
             if (result != null)
             {
@@ -60,7 +56,7 @@ namespace FinanceTracker.API.Controllers
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
             var command = new LoginUserCommand(userForLoginDto);
-            var result = await _mediator.Send(command);
+            var result = await Mediator.Send(command);
 
             if (result != null)
             {
