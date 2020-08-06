@@ -6,9 +6,9 @@ namespace FinanceTracker.Business.Commands
     public class PerformAccountTransactionCommand : IRequest<TransactionToReturnDto>
     {
         public TransactionForCreationDto TransactionForCreationDto { get; }
-        public PerformAccountTransactionCommand(TransactionForCreationDto transactionForCreationDtoo)
+        public PerformAccountTransactionCommand(TransactionForCreationDto transactionForCreationDto)
         {
-            TransactionForCreationDto = transactionForCreationDtoo;
+            TransactionForCreationDto = transactionForCreationDto;
         }
     }
 }

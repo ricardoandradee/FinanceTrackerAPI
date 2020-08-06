@@ -1,7 +1,8 @@
-﻿using FinanceTracker.Business.Data;
-using FinanceTracker.Business.Models;
+﻿using FinanceTracker.Business.Models;
 using FinanceTracker.Business.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.Business.Repositories
@@ -11,6 +12,11 @@ namespace FinanceTracker.Business.Repositories
         public UserRepository(IUnitOfWorkRepository unitOfWork)
             : base(unitOfWork)
         {
+        }
+
+        public async Task<List<string>> GetAllUserNames()
+        {
+            return await _unitOfWork.Context.Users.Select(x => x.UserName).ToListAsync();
         }
 
         public async Task<bool> UserExists(string userName)

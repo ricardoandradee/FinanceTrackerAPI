@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using FinanceTracker.Business.Commands;
 using FinanceTracker.Business.Dtos;
 using FinanceTracker.Business.Models;
+using FinanceTracker.Business.Queries;
 using FinanceTracker.Business.Repositories.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -17,59 +20,62 @@ namespace FinanceTracker.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
-        private readonly IMapper _mapper;
-        public AuthController(IUserRepository userRepository,
-            IConfiguration config, IMapper mapper)
+        private readonly IMediator _mediator;
+
+        public AuthController(IMediator mediator, IConfiguration config)
         {
-            _mapper = mapper;
-            _userRepository = userRepository;
+            _mediator = mediator;
             _config = config;
+        }
+
+
+        [HttpGet]
+        [Route("GetAllUserNames")]
+        public async Task<IActionResult> GetAllUserNames()
+        {
+            var query = new GetAllUserNamesQuery();
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower();
+            var command = new RegisterUserCommand(userForRegisterDto);
+            var result = await _mediator.Send(command);
 
-            if (await _userRepository.UserExists(userForRegisterDto.UserName))
+            if (result != null)
             {
-                return BadRequest("Username already exists.");
+                return CreatedAtRoute("GetUser", new
+                {
+                    controller = "Users",
+                    id = result.Id
+                }, result);
             }
 
-            var UserToCreate = _mapper.Map<User>(userForRegisterDto);
-
-            var createdUser = await _userRepository.Register(UserToCreate, userForRegisterDto.Password);
-
-            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
-
-            return CreatedAtRoute("GetUser", new
-            {
-                controller = "Users",
-                id = createdUser.Id
-            }, userToReturn);
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await _userRepository.Login(userForLoginDto.UserName.ToLower(), userForLoginDto.Password);
+            var command = new LoginUserCommand(userForLoginDto);
+            var result = await _mediator.Send(command);
 
-            if (userFromRepo == null)
+            if (result != null)
             {
-                return Unauthorized();
+                return Ok(new LoginResponseDto
+                {
+                    Token = GenerateToken(userForLoginDto.UserName, result.Id),
+                    User = result
+                });
             }
 
-            var user = _mapper.Map<UserForListDto>(userFromRepo);
+            return BadRequest();
 
-            return Ok(new
-            {
-                token = GenerateToken(userForLoginDto.UserName, userFromRepo.Id),
-                user
-            });
         }
 
         private string GenerateToken(string userName, int userId)
