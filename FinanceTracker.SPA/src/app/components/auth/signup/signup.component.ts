@@ -6,6 +6,7 @@ import { UiService } from 'src/app/services/ui.service';
 import { CountryCityList } from 'src/app/models/country-city.model';
 import { CurrencyList } from 'src/app/models/currency.model';
 import { Subscription } from 'rxjs';
+import { ErrorUserNameAlreadyTakenMatcher } from 'src/app/errorMatchers/error-username-already-taken.matcher';
 
 @Component({
   selector: 'app-signup',
@@ -13,6 +14,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit, OnDestroy {
+  private userNames = [];
+  isUserNameTaken = false;
+  matcher = new ErrorUserNameAlreadyTakenMatcher(this.userNames);
   private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
   countries = [];
@@ -20,9 +24,14 @@ export class SignupComponent implements OnInit, OnDestroy {
   currencies = [];
 
   constructor(private authService: AuthService,
-              private uiService: UiService) { }
+              private uiService: UiService) {
+              }
 
   ngOnInit() {
+    this.authService.userNames.subscribe((un) => {
+      un.forEach((i) => { this.userNames.push(i); });        
+    });
+
     this.countries = Object.keys(CountryCityList);
     this.currencies = CurrencyList;
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
