@@ -46,16 +46,17 @@ export class SignupComponent implements OnInit, OnDestroy {
     return TimeZoneList.filter((tz) => {
       return ( tz.countryName === countryName );
     }).map((tz) => {
-      return ( `(UTC ${tz.rawFormat.substring(0, 6)}) ${tz.mainCities.join(', ')}` );
+      return ( tz.timeZoneDescription);
     }).sort();
   }
 
   private getCountries(): string[] {
-    return TimeZoneList.map((tz) => {
+    const allCountries = TimeZoneList.map((tz) => {
       return (
         tz.countryName
       );
     }).sort();
+    return Array.from(new Set(allCountries.map(item => item)));
   }
 
   onSubmit(form: NgForm) {

@@ -1,318 +1,1592 @@
-export const TimeZoneList = [{"name":"Pacific/Niue","alternativeName":"Niue Time","group":["Pacific/Niue"],"countryName":"Niue","countryCode":"NU","mainCities":["Alofi"],"rawOffsetInMinutes":-660,"rawFormat":"-11:00 Niue Time - Alofi"},
-{"name":"Pacific/Midway","alternativeName":"Samoa Time","group":["Pacific/Midway"],"countryName":"United States Minor Outlying Islands","countryCode":"UM","mainCities":["Midway"],"rawOffsetInMinutes":-660,"rawFormat":"-11:00 Samoa Time - Midway"},
-{"name":"Pacific/Pago_Pago","alternativeName":"Samoa Time","group":["Pacific/Pago_Pago"],"countryName":"American Samoa","countryCode":"AS","mainCities":["Pago Pago"],"rawOffsetInMinutes":-660,"rawFormat":"-11:00 Samoa Time - Pago Pago"},
-{"name":"Pacific/Rarotonga","alternativeName":"Cook Islands Time","group":["Pacific/Rarotonga"],"countryName":"Cook Islands","countryCode":"CK","mainCities":["Avarua"],"rawOffsetInMinutes":-600,"rawFormat":"-10:00 Cook Islands Time - Avarua"},
-{"name":"America/Adak","alternativeName":"Hawaii-Aleutian Time","group":["America/Adak"],"countryName":"United States","countryCode":"US","mainCities":["Adak"],"rawOffsetInMinutes":-600,"rawFormat":"-10:00 Hawaii-Aleutian Time - Adak"},
-{"name":"Pacific/Honolulu","alternativeName":"Hawaii-Aleutian Time","group":["Pacific/Honolulu"],"countryName":"United States","countryCode":"US","mainCities":["Honolulu","East Honolulu"],"rawOffsetInMinutes":-600,"rawFormat":"-10:00 Hawaii-Aleutian Time - Honolulu, East Honolulu"},
-{"name":"Pacific/Tahiti","alternativeName":"Tahiti Time","group":["Pacific/Tahiti"],"countryName":"French Polynesia","countryCode":"PF","mainCities":["Faaa","Papeete"],"rawOffsetInMinutes":-600,"rawFormat":"-10:00 Tahiti Time - Faaa, Papeete"},
-{"name":"Pacific/Marquesas","alternativeName":"Marquesas Time","group":["Pacific/Marquesas"],"countryName":"French Polynesia","countryCode":"PF","mainCities":["Marquesas"],"rawOffsetInMinutes":-570,"rawFormat":"-09:30 Marquesas Time - Marquesas"},
-{"name":"America/Anchorage","alternativeName":"Alaska Time","group":["America/Anchorage","America/Juneau","America/Metlakatla","America/Nome","America/Sitka","America/Yakutat"],"countryName":"United States","countryCode":"US","mainCities":["Anchorage","Juneau"],"rawOffsetInMinutes":-540,"rawFormat":"-09:00 Alaska Time - Anchorage, Juneau"},
-{"name":"Pacific/Gambier","alternativeName":"Gambier Time","group":["Pacific/Gambier"],"countryName":"French Polynesia","countryCode":"PF","mainCities":["Gambier"],"rawOffsetInMinutes":-540,"rawFormat":"-09:00 Gambier Time - Gambier"},
-{"name":"America/Los_Angeles","alternativeName":"Pacific Time","group":["America/Los_Angeles"],"countryName":"United States","countryCode":"US","mainCities":["Los Angeles","San Diego"],"rawOffsetInMinutes":-480,"rawFormat":"-08:00 Pacific Time - Los Angeles, San Diego"},
-{"name":"America/Tijuana","alternativeName":"Pacific Time","group":["America/Tijuana"],"countryName":"Mexico","countryCode":"MX","mainCities":["Tijuana","Mexicali"],"rawOffsetInMinutes":-480,"rawFormat":"-08:00 Pacific Time - Tijuana, Mexicali"},
-{"name":"America/Vancouver","alternativeName":"Pacific Time","group":["America/Vancouver"],"countryName":"Canada","countryCode":"CA","mainCities":["Vancouver","Surrey"],"rawOffsetInMinutes":-480,"rawFormat":"-08:00 Pacific Time - Vancouver, Surrey"},
-{"name":"Pacific/Pitcairn","alternativeName":"Pitcairn Time","group":["Pacific/Pitcairn"],"countryName":"Pitcairn","countryCode":"PN","mainCities":["Adamstown"],"rawOffsetInMinutes":-480,"rawFormat":"-08:00 Pitcairn Time - Adamstown"},
-{"name":"America/Hermosillo","alternativeName":"Mexican Pacific Time","group":["America/Hermosillo"],"countryName":"Mexico","countryCode":"MX","mainCities":["Hermosillo","Ciudad Obregón"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Mexican Pacific Time - Hermosillo, Ciudad Obregón"},
-{"name":"America/Edmonton","alternativeName":"Mountain Time","group":["America/Cambridge_Bay","America/Edmonton","America/Inuvik","America/Yellowknife"],"countryName":"Canada","countryCode":"CA","mainCities":["Calgary","Edmonton"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Mountain Time - Calgary, Edmonton"},
-{"name":"America/Ojinaga","alternativeName":"Mountain Time","group":["America/Chihuahua","America/Mazatlan","America/Ojinaga"],"countryName":"Mexico","countryCode":"MX","mainCities":["Ciudad Juárez","Chihuahua"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Mountain Time - Ciudad Juárez, Chihuahua"},
-{"name":"America/Denver","alternativeName":"Mountain Time","group":["America/Boise","America/Denver"],"countryName":"United States","countryCode":"US","mainCities":["Denver","El Paso"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Mountain Time - Denver, El Paso"},
-{"name":"America/Dawson_Creek","alternativeName":"Mountain Time","group":["America/Creston","America/Dawson_Creek","America/Fort_Nelson"],"countryName":"Canada","countryCode":"CA","mainCities":["Fort St. John","Creston"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Mountain Time - Fort St. John, Creston"},
-{"name":"America/Phoenix","alternativeName":"Mountain Time","group":["America/Phoenix"],"countryName":"United States","countryCode":"US","mainCities":["Phoenix","Tucson"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Mountain Time - Phoenix, Tucson"},
-{"name":"America/Whitehorse","alternativeName":"Pacific Time","group":["America/Dawson","America/Whitehorse"],"countryName":"Canada","countryCode":"CA","mainCities":["Whitehorse","Dawson"],"rawOffsetInMinutes":-420,"rawFormat":"-07:00 Pacific Time - Whitehorse, Dawson"},
-{"name":"America/Belize","alternativeName":"Central Time","group":["America/Belize"],"countryName":"Belize","countryCode":"BZ","mainCities":["Belize City","San Ignacio"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Belize City, San Ignacio"},
-{"name":"America/Chicago","alternativeName":"Central Time","group":["America/Chicago","America/Indiana/Knox","America/Indiana/Tell_City","America/Menominee","America/North_Dakota/Beulah","America/North_Dakota/Center","America/North_Dakota/New_Salem"],"countryName":"United States","countryCode":"US","mainCities":["Chicago","Houston"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Chicago, Houston"},
-{"name":"America/Guatemala","alternativeName":"Central Time","group":["America/Guatemala"],"countryName":"Guatemala","countryCode":"GT","mainCities":["Guatemala City","Mixco"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Guatemala City, Mixco"},
-{"name":"America/Managua","alternativeName":"Central Time","group":["America/Managua"],"countryName":"Nicaragua","countryCode":"NI","mainCities":["Managua","León"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Managua, León"},
-{"name":"America/Mexico_City","alternativeName":"Central Time","group":["America/Bahia_Banderas","America/Matamoros","America/Merida","America/Mexico_City","America/Monterrey"],"countryName":"Mexico","countryCode":"MX","mainCities":["Mexico City","Iztapalapa"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Mexico City, Iztapalapa"},
-{"name":"America/Costa_Rica","alternativeName":"Central Time","group":["America/Costa_Rica"],"countryName":"Costa Rica","countryCode":"CR","mainCities":["San José","Limón"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - San José, Limón"},
-{"name":"America/El_Salvador","alternativeName":"Central Time","group":["America/El_Salvador"],"countryName":"El Salvador","countryCode":"SV","mainCities":["San Salvador","Soyapango"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - San Salvador, Soyapango"},
-{"name":"America/Regina","alternativeName":"Central Time","group":["America/Regina","America/Swift_Current"],"countryName":"Canada","countryCode":"CA","mainCities":["Saskatoon","Regina"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Saskatoon, Regina"},
-{"name":"America/Tegucigalpa","alternativeName":"Central Time","group":["America/Tegucigalpa"],"countryName":"Honduras","countryCode":"HN","mainCities":["Tegucigalpa","San Pedro Sula"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Tegucigalpa, San Pedro Sula"},
-{"name":"America/Winnipeg","alternativeName":"Central Time","group":["America/Rainy_River","America/Rankin_Inlet","America/Resolute","America/Winnipeg"],"countryName":"Canada","countryCode":"CA","mainCities":["Winnipeg","Brandon"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Central Time - Winnipeg, Brandon"},
-{"name":"Pacific/Easter","alternativeName":"Easter Island Time","group":["Pacific/Easter"],"countryName":"Chile","countryCode":"CL","mainCities":["Easter"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Easter Island Time - Easter"},
-{"name":"Pacific/Galapagos","alternativeName":"Galapagos Time","group":["Pacific/Galapagos"],"countryName":"Ecuador","countryCode":"EC","mainCities":["Galapagos"],"rawOffsetInMinutes":-360,"rawFormat":"-06:00 Galapagos Time - Galapagos"},
-{"name":"America/Rio_Branco","alternativeName":"Acre Time","group":["America/Eirunepe","America/Rio_Branco"],"countryName":"Brazil","countryCode":"BR","mainCities":["Rio Branco","Cruzeiro do Sul"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Acre Time - Rio Branco, Cruzeiro do Sul"},
-{"name":"America/Bogota","alternativeName":"Colombia Time","group":["America/Bogota"],"countryName":"Colombia","countryCode":"CO","mainCities":["Bogotá","Cali"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Colombia Time - Bogotá, Cali"},
-{"name":"America/Havana","alternativeName":"Cuba Time","group":["America/Havana"],"countryName":"Cuba","countryCode":"CU","mainCities":["Havana","Santiago de Cuba"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Cuba Time - Havana, Santiago de Cuba"},
-{"name":"America/Atikokan","alternativeName":"Eastern Time","group":["America/Atikokan"],"countryName":"Canada","countryCode":"CA","mainCities":["Atikokan"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Atikokan"},
-{"name":"America/Cancun","alternativeName":"Eastern Time","group":["America/Cancun"],"countryName":"Mexico","countryCode":"MX","mainCities":["Cancún","Chetumal"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Cancún, Chetumal"},
-{"name":"America/Grand_Turk","alternativeName":"Eastern Time","group":["America/Grand_Turk"],"countryName":"Turks and Caicos Islands","countryCode":"TC","mainCities":["Cockburn Town"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Cockburn Town"},
-{"name":"America/Cayman","alternativeName":"Eastern Time","group":["America/Cayman"],"countryName":"Cayman Islands","countryCode":"KY","mainCities":["George Town"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - George Town"},
-{"name":"America/Jamaica","alternativeName":"Eastern Time","group":["America/Jamaica"],"countryName":"Jamaica","countryCode":"JM","mainCities":["Kingston","New Kingston"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Kingston, New Kingston"},
-{"name":"America/Nassau","alternativeName":"Eastern Time","group":["America/Nassau"],"countryName":"Bahamas","countryCode":"BS","mainCities":["Nassau","Lucaya"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Nassau, Lucaya"},
-{"name":"America/New_York","alternativeName":"Eastern Time","group":["America/Detroit","America/Indiana/Indianapolis","America/Indiana/Marengo","America/Indiana/Petersburg","America/Indiana/Vevay","America/Indiana/Vincennes","America/Indiana/Winamac","America/Kentucky/Louisville","America/Kentucky/Monticello","America/New_York"],"countryName":"United States","countryCode":"US","mainCities":["New York City","Brooklyn"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - New York City, Brooklyn"},
-{"name":"America/Panama","alternativeName":"Eastern Time","group":["America/Panama"],"countryName":"Panama","countryCode":"PA","mainCities":["Panamá","San Miguelito"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Panamá, San Miguelito"},
-{"name":"America/Port-au-Prince","alternativeName":"Eastern Time","group":["America/Port-au-Prince"],"countryName":"Haiti","countryCode":"HT","mainCities":["Port-au-Prince","Carrefour"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Port-au-Prince, Carrefour"},
-{"name":"America/Toronto","alternativeName":"Eastern Time","group":["America/Iqaluit","America/Nipigon","America/Pangnirtung","America/Thunder_Bay","America/Toronto"],"countryName":"Canada","countryCode":"CA","mainCities":["Toronto","Montréal"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Eastern Time - Toronto, Montréal"},
-{"name":"America/Guayaquil","alternativeName":"Ecuador Time","group":["America/Guayaquil"],"countryName":"Ecuador","countryCode":"EC","mainCities":["Guayaquil","Quito"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Ecuador Time - Guayaquil, Quito"},
-{"name":"America/Lima","alternativeName":"Peru Time","group":["America/Lima"],"countryName":"Peru","countryCode":"PE","mainCities":["Lima","Arequipa"],"rawOffsetInMinutes":-300,"rawFormat":"-05:00 Peru Time - Lima, Arequipa"},
-{"name":"America/Manaus","alternativeName":"Amazon Time","group":["America/Boa_Vista","America/Campo_Grande","America/Cuiaba","America/Manaus","America/Porto_Velho"],"countryName":"Brazil","countryCode":"BR","mainCities":["Manaus","Campo Grande"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Amazon Time - Manaus, Campo Grande"},
-{"name":"America/St_Kitts","alternativeName":"Atlantic Time","group":["America/St_Kitts"],"countryName":"Saint Kitts and Nevis","countryCode":"KN","mainCities":["Basseterre"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Basseterre"},
-{"name":"America/Montserrat","alternativeName":"Atlantic Time","group":["America/Montserrat"],"countryName":"Montserrat","countryCode":"MS","mainCities":["Brades","Plymouth"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Brades, Plymouth"},
-{"name":"America/Barbados","alternativeName":"Atlantic Time","group":["America/Barbados"],"countryName":"Barbados","countryCode":"BB","mainCities":["Bridgetown"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Bridgetown"},
-{"name":"America/St_Lucia","alternativeName":"Atlantic Time","group":["America/St_Lucia"],"countryName":"Saint Lucia","countryCode":"LC","mainCities":["Castries"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Castries"},
-{"name":"America/Port_of_Spain","alternativeName":"Atlantic Time","group":["America/Port_of_Spain"],"countryName":"Trinidad and Tobago","countryCode":"TT","mainCities":["Chaguanas","Mon Repos"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Chaguanas, Mon Repos"},
-{"name":"America/Martinique","alternativeName":"Atlantic Time","group":["America/Martinique"],"countryName":"Martinique","countryCode":"MQ","mainCities":["Fort-de-France","Le Lamentin"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Fort-de-France, Le Lamentin"},
-{"name":"America/St_Barthelemy","alternativeName":"Atlantic Time","group":["America/St_Barthelemy"],"countryName":"Saint Barthelemy","countryCode":"BL","mainCities":["Gustavia"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Gustavia"},
-{"name":"America/Halifax","alternativeName":"Atlantic Time","group":["America/Glace_Bay","America/Goose_Bay","America/Halifax","America/Moncton"],"countryName":"Canada","countryCode":"CA","mainCities":["Halifax","Moncton"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Halifax, Moncton"},
-{"name":"Atlantic/Bermuda","alternativeName":"Atlantic Time","group":["Atlantic/Bermuda"],"countryName":"Bermuda","countryCode":"BM","mainCities":["Hamilton"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Hamilton"},
-{"name":"America/St_Vincent","alternativeName":"Atlantic Time","group":["America/St_Vincent"],"countryName":"Saint Vincent and the Grenadines","countryCode":"VC","mainCities":["Kingstown","Kingstown Park"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Kingstown, Kingstown Park"},
-{"name":"America/Kralendijk","alternativeName":"Atlantic Time","group":["America/Kralendijk"],"countryName":"Bonaire, Saint Eustatius and Saba ","countryCode":"BQ","mainCities":["Kralendijk"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Kralendijk"},
-{"name":"America/Guadeloupe","alternativeName":"Atlantic Time","group":["America/Guadeloupe"],"countryName":"Guadeloupe","countryCode":"GP","mainCities":["Les Abymes","Baie-Mahault"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Les Abymes, Baie-Mahault"},
-{"name":"America/Blanc-Sablon","alternativeName":"Atlantic Time","group":["America/Blanc-Sablon"],"countryName":"Canada","countryCode":"CA","mainCities":["Lévis"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Lévis"},
-{"name":"America/Marigot","alternativeName":"Atlantic Time","group":["America/Marigot"],"countryName":"Saint Martin","countryCode":"MF","mainCities":["Marigot"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Marigot"},
-{"name":"America/Aruba","alternativeName":"Atlantic Time","group":["America/Aruba"],"countryName":"Aruba","countryCode":"AW","mainCities":["Oranjestad","Tanki Leendert"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Oranjestad, Tanki Leendert"},
-{"name":"America/Lower_Princes","alternativeName":"Atlantic Time","group":["America/Lower_Princes"],"countryName":"Sint Maarten","countryCode":"SX","mainCities":["Philipsburg"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Philipsburg"},
-{"name":"America/Tortola","alternativeName":"Atlantic Time","group":["America/Tortola"],"countryName":"British Virgin Islands","countryCode":"VG","mainCities":["Road Town"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Road Town"},
-{"name":"America/Dominica","alternativeName":"Atlantic Time","group":["America/Dominica"],"countryName":"Dominica","countryCode":"DM","mainCities":["Roseau"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Roseau"},
-{"name":"America/St_Thomas","alternativeName":"Atlantic Time","group":["America/St_Thomas"],"countryName":"U.S. Virgin Islands","countryCode":"VI","mainCities":["Saint Croix","Charlotte Amalie"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Saint Croix, Charlotte Amalie"},
-{"name":"America/Grenada","alternativeName":"Atlantic Time","group":["America/Grenada"],"countryName":"Grenada","countryCode":"GD","mainCities":["Saint George's"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Saint George's"},
-{"name":"America/Antigua","alternativeName":"Atlantic Time","group":["America/Antigua"],"countryName":"Antigua and Barbuda","countryCode":"AG","mainCities":["Saint John’s"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Saint John’s"},
-{"name":"America/Puerto_Rico","alternativeName":"Atlantic Time","group":["America/Puerto_Rico"],"countryName":"Puerto Rico","countryCode":"PR","mainCities":["San Juan","Bayamón"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - San Juan, Bayamón"},
-{"name":"America/Santo_Domingo","alternativeName":"Atlantic Time","group":["America/Santo_Domingo"],"countryName":"Dominican Republic","countryCode":"DO","mainCities":["Santo Domingo","Santiago de los Caballeros"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Santo Domingo, Santiago de los Caballeros"},
-{"name":"America/Anguilla","alternativeName":"Atlantic Time","group":["America/Anguilla"],"countryName":"Anguilla","countryCode":"AI","mainCities":["The Valley"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - The Valley"},
-{"name":"America/Thule","alternativeName":"Atlantic Time","group":["America/Thule"],"countryName":"Greenland","countryCode":"GL","mainCities":["Thule"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Thule"},
-{"name":"America/Curacao","alternativeName":"Atlantic Time","group":["America/Curacao"],"countryName":"Curacao","countryCode":"CW","mainCities":["Willemstad"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Atlantic Time - Willemstad"},
-{"name":"America/La_Paz","alternativeName":"Bolivia Time","group":["America/La_Paz"],"countryName":"Bolivia","countryCode":"BO","mainCities":["Santa Cruz de la Sierra","Cochabamba"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Bolivia Time - Santa Cruz de la Sierra, Cochabamba"},
-{"name":"America/Santiago","alternativeName":"Chile Time","group":["America/Santiago"],"countryName":"Chile","countryCode":"CL","mainCities":["Santiago","Puente Alto"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Chile Time - Santiago, Puente Alto"},
-{"name":"America/Guyana","alternativeName":"Guyana Time","group":["America/Guyana"],"countryName":"Guyana","countryCode":"GY","mainCities":["Georgetown","Linden"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Guyana Time - Georgetown, Linden"},
-{"name":"America/Asuncion","alternativeName":"Paraguay Time","group":["America/Asuncion"],"countryName":"Paraguay","countryCode":"PY","mainCities":["Asunción","Ciudad del Este"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Paraguay Time - Asunción, Ciudad del Este"},
-{"name":"America/Caracas","alternativeName":"Venezuela Time","group":["America/Caracas"],"countryName":"Venezuela","countryCode":"VE","mainCities":["Caracas","Maracaibo"],"rawOffsetInMinutes":-240,"rawFormat":"-04:00 Venezuela Time - Caracas, Maracaibo"},
-{"name":"America/St_Johns","alternativeName":"Newfoundland Time","group":["America/St_Johns"],"countryName":"Canada","countryCode":"CA","mainCities":["St. John's","Mount Pearl"],"rawOffsetInMinutes":-210,"rawFormat":"-03:30 Newfoundland Time - St. John's, Mount Pearl"},
-{"name":"America/Argentina/Buenos_Aires","alternativeName":"Argentina Time","group":["America/Argentina/Buenos_Aires","America/Argentina/Catamarca","America/Argentina/Cordoba","America/Argentina/Jujuy","America/Argentina/La_Rioja","America/Argentina/Mendoza","America/Argentina/Rio_Gallegos","America/Argentina/Salta","America/Argentina/San_Juan","America/Argentina/San_Luis","America/Argentina/Tucuman","America/Argentina/Ushuaia"],"countryName":"Argentina","countryCode":"AR","mainCities":["Buenos Aires","Córdoba"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Argentina Time - Buenos Aires, Córdoba"},
-{"name":"America/Sao_Paulo","alternativeName":"Brasilia Time","group":["America/Araguaina","America/Bahia","America/Belem","America/Fortaleza","America/Maceio","America/Recife","America/Santarem","America/Sao_Paulo"],"countryName":"Brazil","countryCode":"BR","mainCities":["São Paulo","Rio de Janeiro"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Brasilia Time - São Paulo, Rio de Janeiro"},
-{"name":"Antarctica/Palmer","alternativeName":"Chile Time","group":["Antarctica/Palmer","Antarctica/Rothera"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Palmer","Rothera"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Chile Time - Palmer, Rothera"},
-{"name":"America/Punta_Arenas","alternativeName":"Chile Time","group":["America/Punta_Arenas"],"countryName":"Chile","countryCode":"CL","mainCities":["Punta Arenas","Puerto Natales"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Chile Time - Punta Arenas, Puerto Natales"},
-{"name":"Atlantic/Stanley","alternativeName":"Falkland Islands Time","group":["Atlantic/Stanley"],"countryName":"Falkland Islands","countryCode":"FK","mainCities":["Stanley"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Falkland Islands Time - Stanley"},
-{"name":"America/Cayenne","alternativeName":"French Guiana Time","group":["America/Cayenne"],"countryName":"French Guiana","countryCode":"GF","mainCities":["Cayenne","Matoury"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 French Guiana Time - Cayenne, Matoury"},
-{"name":"America/Miquelon","alternativeName":"St. Pierre & Miquelon Time","group":["America/Miquelon"],"countryName":"Saint Pierre and Miquelon","countryCode":"PM","mainCities":["Saint-Pierre"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 St. Pierre & Miquelon Time - Saint-Pierre"},
-{"name":"America/Paramaribo","alternativeName":"Suriname Time","group":["America/Paramaribo"],"countryName":"Suriname","countryCode":"SR","mainCities":["Paramaribo","Lelydorp"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Suriname Time - Paramaribo, Lelydorp"},
-{"name":"America/Montevideo","alternativeName":"Uruguay Time","group":["America/Montevideo"],"countryName":"Uruguay","countryCode":"UY","mainCities":["Montevideo","Salto"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 Uruguay Time - Montevideo, Salto"},
-{"name":"America/Godthab","alternativeName":"West Greenland Time","group":["America/Godthab"],"countryName":"Greenland","countryCode":"GL","mainCities":["Nuuk"],"rawOffsetInMinutes":-180,"rawFormat":"-03:00 West Greenland Time - Nuuk"},
-{"name":"America/Noronha","alternativeName":"Fernando de Noronha Time","group":["America/Noronha"],"countryName":"Brazil","countryCode":"BR","mainCities":["Noronha"],"rawOffsetInMinutes":-120,"rawFormat":"-02:00 Fernando de Noronha Time - Noronha"},
-{"name":"Atlantic/South_Georgia","alternativeName":"South Georgia Time","group":["Atlantic/South_Georgia"],"countryName":"South Georgia and the South Sandwich Islands","countryCode":"GS","mainCities":["Grytviken"],"rawOffsetInMinutes":-120,"rawFormat":"-02:00 South Georgia Time - Grytviken"},
-{"name":"Atlantic/Azores","alternativeName":"Azores Time","group":["Atlantic/Azores"],"countryName":"Portugal","countryCode":"PT","mainCities":["Ponta Delgada"],"rawOffsetInMinutes":-60,"rawFormat":"-01:00 Azores Time - Ponta Delgada"},
-{"name":"Atlantic/Cape_Verde","alternativeName":"Cape Verde Time","group":["Atlantic/Cape_Verde"],"countryName":"Cabo Verde","countryCode":"CV","mainCities":["Praia","Mindelo"],"rawOffsetInMinutes":-60,"rawFormat":"-01:00 Cape Verde Time - Praia, Mindelo"},
-{"name":"America/Scoresbysund","alternativeName":"East Greenland Time","group":["America/Scoresbysund"],"countryName":"Greenland","countryCode":"GL","mainCities":["Scoresbysund"],"rawOffsetInMinutes":-60,"rawFormat":"-01:00 East Greenland Time - Scoresbysund"},
-{"name":"Africa/Abidjan","alternativeName":"Greenwich Mean Time","group":["Africa/Abidjan"],"countryName":"Ivory Coast","countryCode":"CI","mainCities":["Abidjan","Abobo"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Abidjan, Abobo"},
-{"name":"Africa/Accra","alternativeName":"Greenwich Mean Time","group":["Africa/Accra"],"countryName":"Ghana","countryCode":"GH","mainCities":["Accra","Kumasi"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Accra, Kumasi"},
-{"name":"Africa/Bamako","alternativeName":"Greenwich Mean Time","group":["Africa/Bamako"],"countryName":"Mali","countryCode":"ML","mainCities":["Bamako","Sikasso"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Bamako, Sikasso"},
-{"name":"Africa/Bissau","alternativeName":"Greenwich Mean Time","group":["Africa/Bissau"],"countryName":"Guinea-Bissau","countryCode":"GW","mainCities":["Bissau","Bafatá"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Bissau, Bafatá"},
-{"name":"Africa/Conakry","alternativeName":"Greenwich Mean Time","group":["Africa/Conakry"],"countryName":"Guinea","countryCode":"GN","mainCities":["Camayenne","Conakry"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Camayenne, Conakry"},
-{"name":"Africa/Dakar","alternativeName":"Greenwich Mean Time","group":["Africa/Dakar"],"countryName":"Senegal","countryCode":"SN","mainCities":["Dakar","Pikine"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Dakar, Pikine"},
-{"name":"America/Danmarkshavn","alternativeName":"Greenwich Mean Time","group":["America/Danmarkshavn"],"countryName":"Greenland","countryCode":"GL","mainCities":["Danmarkshavn"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Danmarkshavn"},
-{"name":"Europe/Isle_of_Man","alternativeName":"Greenwich Mean Time","group":["Europe/Isle_of_Man"],"countryName":"Isle of Man","countryCode":"IM","mainCities":["Douglas"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Douglas"},
-{"name":"Africa/Freetown","alternativeName":"Greenwich Mean Time","group":["Africa/Freetown"],"countryName":"Sierra Leone","countryCode":"SL","mainCities":["Freetown","Bo"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Freetown, Bo"},
-{"name":"Atlantic/St_Helena","alternativeName":"Greenwich Mean Time","group":["Atlantic/St_Helena"],"countryName":"Saint Helena","countryCode":"SH","mainCities":["Jamestown"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Jamestown"},
-{"name":"Africa/Lome","alternativeName":"Greenwich Mean Time","group":["Africa/Lome"],"countryName":"Togo","countryCode":"TG","mainCities":["Lomé","Sokodé"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Lomé, Sokodé"},
-{"name":"Europe/London","alternativeName":"Greenwich Mean Time","group":["Europe/London"],"countryName":"United Kingdom","countryCode":"GB","mainCities":["London","Birmingham"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - London, Birmingham"},
-{"name":"Africa/Monrovia","alternativeName":"Greenwich Mean Time","group":["Africa/Monrovia"],"countryName":"Liberia","countryCode":"LR","mainCities":["Monrovia","Gbarnga"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Monrovia, Gbarnga"},
-{"name":"Africa/Nouakchott","alternativeName":"Greenwich Mean Time","group":["Africa/Nouakchott"],"countryName":"Mauritania","countryCode":"MR","mainCities":["Nouakchott","Nouadhibou"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Nouakchott, Nouadhibou"},
-{"name":"Africa/Ouagadougou","alternativeName":"Greenwich Mean Time","group":["Africa/Ouagadougou"],"countryName":"Burkina Faso","countryCode":"BF","mainCities":["Ouagadougou","Bobo-Dioulasso"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Ouagadougou, Bobo-Dioulasso"},
-{"name":"Atlantic/Reykjavik","alternativeName":"Greenwich Mean Time","group":["Atlantic/Reykjavik"],"countryName":"Iceland","countryCode":"IS","mainCities":["Reykjavík","Kópavogur"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Reykjavík, Kópavogur"},
-{"name":"Europe/Jersey","alternativeName":"Greenwich Mean Time","group":["Europe/Jersey"],"countryName":"Jersey","countryCode":"JE","mainCities":["Saint Helier"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Saint Helier"},
-{"name":"Europe/Guernsey","alternativeName":"Greenwich Mean Time","group":["Europe/Guernsey"],"countryName":"Guernsey","countryCode":"GG","mainCities":["Saint Peter Port"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Saint Peter Port"},
-{"name":"Africa/Banjul","alternativeName":"Greenwich Mean Time","group":["Africa/Banjul"],"countryName":"Gambia","countryCode":"GM","mainCities":["Serekunda","Brikama"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Serekunda, Brikama"},
-{"name":"Africa/Sao_Tome","alternativeName":"Greenwich Mean Time","group":["Africa/Sao_Tome"],"countryName":"Sao Tome and Principe","countryCode":"ST","mainCities":["São Tomé"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - São Tomé"},
-{"name":"Antarctica/Troll","alternativeName":"Greenwich Mean Time","group":["Antarctica/Troll"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Troll"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Greenwich Mean Time - Troll"},
-{"name":"Atlantic/Canary","alternativeName":"Western European Time","group":["Atlantic/Canary"],"countryName":"Spain","countryCode":"ES","mainCities":["Las Palmas de Gran Canaria","Santa Cruz de Tenerife"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Western European Time - Las Palmas de Gran Canaria, Santa Cruz de Tenerife"},
-{"name":"Europe/Lisbon","alternativeName":"Western European Time","group":["Atlantic/Madeira","Europe/Lisbon"],"countryName":"Portugal","countryCode":"PT","mainCities":["Lisbon","Porto"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Western European Time - Lisbon, Porto"},
-{"name":"Atlantic/Faroe","alternativeName":"Western European Time","group":["Atlantic/Faroe"],"countryName":"Faroe Islands","countryCode":"FO","mainCities":["Tórshavn"],"rawOffsetInMinutes":0,"rawFormat":"+00:00 Western European Time - Tórshavn"},
-{"name":"Africa/Algiers","alternativeName":"Central European Time","group":["Africa/Algiers"],"countryName":"Algeria","countryCode":"DZ","mainCities":["Algiers","Boumerdas"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Algiers, Boumerdas"},
-{"name":"Europe/Amsterdam","alternativeName":"Central European Time","group":["Europe/Amsterdam"],"countryName":"Netherlands","countryCode":"NL","mainCities":["Amsterdam","Rotterdam"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Amsterdam, Rotterdam"},
-{"name":"Europe/Andorra","alternativeName":"Central European Time","group":["Europe/Andorra"],"countryName":"Andorra","countryCode":"AD","mainCities":["Andorra la Vella","les Escaldes"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Andorra la Vella, les Escaldes"},
-{"name":"Europe/Belgrade","alternativeName":"Central European Time","group":["Europe/Belgrade"],"countryName":"Serbia","countryCode":"RS","mainCities":["Belgrade","Niš"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Belgrade, Niš"},
-{"name":"Europe/Berlin","alternativeName":"Central European Time","group":["Europe/Berlin","Europe/Busingen"],"countryName":"Germany","countryCode":"DE","mainCities":["Berlin","Hamburg"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Berlin, Hamburg"},
-{"name":"Europe/Malta","alternativeName":"Central European Time","group":["Europe/Malta"],"countryName":"Malta","countryCode":"MT","mainCities":["Birkirkara","Qormi"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Birkirkara, Qormi"},
-{"name":"Europe/Bratislava","alternativeName":"Central European Time","group":["Europe/Bratislava"],"countryName":"Slovakia","countryCode":"SK","mainCities":["Bratislava","Košice"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Bratislava, Košice"},
-{"name":"Europe/Brussels","alternativeName":"Central European Time","group":["Europe/Brussels"],"countryName":"Belgium","countryCode":"BE","mainCities":["Brussels","Antwerpen"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Brussels, Antwerpen"},
-{"name":"Europe/Budapest","alternativeName":"Central European Time","group":["Europe/Budapest"],"countryName":"Hungary","countryCode":"HU","mainCities":["Budapest","Debrecen"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Budapest, Debrecen"},
-{"name":"Europe/Copenhagen","alternativeName":"Central European Time","group":["Europe/Copenhagen"],"countryName":"Denmark","countryCode":"DK","mainCities":["Copenhagen","Århus"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Copenhagen, Århus"},
-{"name":"Europe/Gibraltar","alternativeName":"Central European Time","group":["Europe/Gibraltar"],"countryName":"Gibraltar","countryCode":"GI","mainCities":["Gibraltar"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Gibraltar"},
-{"name":"Europe/Ljubljana","alternativeName":"Central European Time","group":["Europe/Ljubljana"],"countryName":"Slovenia","countryCode":"SI","mainCities":["Ljubljana","Maribor"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Ljubljana, Maribor"},
-{"name":"Arctic/Longyearbyen","alternativeName":"Central European Time","group":["Arctic/Longyearbyen"],"countryName":"Svalbard and Jan Mayen","countryCode":"SJ","mainCities":["Longyearbyen"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Longyearbyen"},
-{"name":"Europe/Luxembourg","alternativeName":"Central European Time","group":["Europe/Luxembourg"],"countryName":"Luxembourg","countryCode":"LU","mainCities":["Luxembourg","Esch-sur-Alzette"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Luxembourg, Esch-sur-Alzette"},
-{"name":"Europe/Madrid","alternativeName":"Central European Time","group":["Africa/Ceuta","Europe/Madrid"],"countryName":"Spain","countryCode":"ES","mainCities":["Madrid","Barcelona"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Madrid, Barcelona"},
-{"name":"Europe/Monaco","alternativeName":"Central European Time","group":["Europe/Monaco"],"countryName":"Monaco","countryCode":"MC","mainCities":["Monaco","Monte-Carlo"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Monaco, Monte-Carlo"},
-{"name":"Europe/Oslo","alternativeName":"Central European Time","group":["Europe/Oslo"],"countryName":"Norway","countryCode":"NO","mainCities":["Oslo","Bergen"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Oslo, Bergen"},
-{"name":"Europe/Paris","alternativeName":"Central European Time","group":["Europe/Paris"],"countryName":"France","countryCode":"FR","mainCities":["Paris","Marseille"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Paris, Marseille"},
-{"name":"Europe/Podgorica","alternativeName":"Central European Time","group":["Europe/Podgorica"],"countryName":"Montenegro","countryCode":"ME","mainCities":["Podgorica","Nikšić"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Podgorica, Nikšić"},
-{"name":"Europe/Prague","alternativeName":"Central European Time","group":["Europe/Prague"],"countryName":"Czechia","countryCode":"CZ","mainCities":["Prague","Brno"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Prague, Brno"},
-{"name":"Europe/Rome","alternativeName":"Central European Time","group":["Europe/Rome"],"countryName":"Italy","countryCode":"IT","mainCities":["Rome","Milan"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Rome, Milan"},
-{"name":"Europe/San_Marino","alternativeName":"Central European Time","group":["Europe/San_Marino"],"countryName":"San Marino","countryCode":"SM","mainCities":["San Marino"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - San Marino"},
-{"name":"Europe/Sarajevo","alternativeName":"Central European Time","group":["Europe/Sarajevo"],"countryName":"Bosnia and Herzegovina","countryCode":"BA","mainCities":["Sarajevo","Banja Luka"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Sarajevo, Banja Luka"},
-{"name":"Europe/Skopje","alternativeName":"Central European Time","group":["Europe/Skopje"],"countryName":"North Macedonia","countryCode":"MK","mainCities":["Skopje","Bitola"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Skopje, Bitola"},
-{"name":"Europe/Stockholm","alternativeName":"Central European Time","group":["Europe/Stockholm"],"countryName":"Sweden","countryCode":"SE","mainCities":["Stockholm","Göteborg"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Stockholm, Göteborg"},
-{"name":"Europe/Tirane","alternativeName":"Central European Time","group":["Europe/Tirane"],"countryName":"Albania","countryCode":"AL","mainCities":["Tirana","Durrës"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Tirana, Durrës"},
-{"name":"Africa/Tunis","alternativeName":"Central European Time","group":["Africa/Tunis"],"countryName":"Tunisia","countryCode":"TN","mainCities":["Tunis","Sfax"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Tunis, Sfax"},
-{"name":"Europe/Vaduz","alternativeName":"Central European Time","group":["Europe/Vaduz"],"countryName":"Liechtenstein","countryCode":"LI","mainCities":["Vaduz"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Vaduz"},
-{"name":"Europe/Vatican","alternativeName":"Central European Time","group":["Europe/Vatican"],"countryName":"Vatican","countryCode":"VA","mainCities":["Vatican City"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Vatican City"},
-{"name":"Europe/Vienna","alternativeName":"Central European Time","group":["Europe/Vienna"],"countryName":"Austria","countryCode":"AT","mainCities":["Vienna","Graz"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Vienna, Graz"},
-{"name":"Europe/Warsaw","alternativeName":"Central European Time","group":["Europe/Warsaw"],"countryName":"Poland","countryCode":"PL","mainCities":["Warsaw","Łódź"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Warsaw, Łódź"},
-{"name":"Europe/Zagreb","alternativeName":"Central European Time","group":["Europe/Zagreb"],"countryName":"Croatia","countryCode":"HR","mainCities":["Zagreb","Split"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Zagreb, Split"},
-{"name":"Europe/Zurich","alternativeName":"Central European Time","group":["Europe/Zurich"],"countryName":"Switzerland","countryCode":"CH","mainCities":["Zürich","Genève"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Central European Time - Zürich, Genève"},
-{"name":"Europe/Dublin","alternativeName":"Greenwich Mean Time","group":["Europe/Dublin"],"countryName":"Ireland","countryCode":"IE","mainCities":["Dublin","Cork"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Greenwich Mean Time - Dublin, Cork"},
-{"name":"Africa/Bangui","alternativeName":"West Africa Time","group":["Africa/Bangui"],"countryName":"Central African Republic","countryCode":"CF","mainCities":["Bangui","Bimbo"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Bangui, Bimbo"},
-{"name":"Africa/Malabo","alternativeName":"West Africa Time","group":["Africa/Malabo"],"countryName":"Equatorial Guinea","countryCode":"GQ","mainCities":["Bata","Malabo"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Bata, Malabo"},
-{"name":"Africa/Brazzaville","alternativeName":"West Africa Time","group":["Africa/Brazzaville"],"countryName":"Republic of the Congo","countryCode":"CG","mainCities":["Brazzaville","Pointe-Noire"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Brazzaville, Pointe-Noire"},
-{"name":"Africa/Porto-Novo","alternativeName":"West Africa Time","group":["Africa/Porto-Novo"],"countryName":"Benin","countryCode":"BJ","mainCities":["Cotonou","Abomey-Calavi"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Cotonou, Abomey-Calavi"},
-{"name":"Africa/Douala","alternativeName":"West Africa Time","group":["Africa/Douala"],"countryName":"Cameroon","countryCode":"CM","mainCities":["Douala","Yaoundé"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Douala, Yaoundé"},
-{"name":"Africa/Kinshasa","alternativeName":"West Africa Time","group":["Africa/Kinshasa"],"countryName":"Democratic Republic of the Congo","countryCode":"CD","mainCities":["Kinshasa","Masina"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Kinshasa, Masina"},
-{"name":"Africa/Lagos","alternativeName":"West Africa Time","group":["Africa/Lagos"],"countryName":"Nigeria","countryCode":"NG","mainCities":["Lagos","Kano"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Lagos, Kano"},
-{"name":"Africa/Libreville","alternativeName":"West Africa Time","group":["Africa/Libreville"],"countryName":"Gabon","countryCode":"GA","mainCities":["Libreville","Port-Gentil"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Libreville, Port-Gentil"},
-{"name":"Africa/Luanda","alternativeName":"West Africa Time","group":["Africa/Luanda"],"countryName":"Angola","countryCode":"AO","mainCities":["Luanda","N’dalatando"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Luanda, N’dalatando"},
-{"name":"Africa/Ndjamena","alternativeName":"West Africa Time","group":["Africa/Ndjamena"],"countryName":"Chad","countryCode":"TD","mainCities":["N'Djamena","Moundou"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - N'Djamena, Moundou"},
-{"name":"Africa/Niamey","alternativeName":"West Africa Time","group":["Africa/Niamey"],"countryName":"Niger","countryCode":"NE","mainCities":["Niamey","Zinder"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 West Africa Time - Niamey, Zinder"},
-{"name":"Africa/Casablanca","alternativeName":"Western European Time","group":["Africa/Casablanca"],"countryName":"Morocco","countryCode":"MA","mainCities":["Casablanca","Rabat"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Western European Time - Casablanca, Rabat"},
-{"name":"Africa/El_Aaiun","alternativeName":"Western European Time","group":["Africa/El_Aaiun"],"countryName":"Western Sahara","countryCode":"EH","mainCities":["Laayoune","Dakhla"],"rawOffsetInMinutes":60,"rawFormat":"+01:00 Western European Time - Laayoune, Dakhla"},
-{"name":"Africa/Bujumbura","alternativeName":"Central Africa Time","group":["Africa/Bujumbura"],"countryName":"Burundi","countryCode":"BI","mainCities":["Bujumbura","Muyinga"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Bujumbura, Muyinga"},
-{"name":"Africa/Gaborone","alternativeName":"Central Africa Time","group":["Africa/Gaborone"],"countryName":"Botswana","countryCode":"BW","mainCities":["Gaborone","Francistown"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Gaborone, Francistown"},
-{"name":"Africa/Harare","alternativeName":"Central Africa Time","group":["Africa/Harare"],"countryName":"Zimbabwe","countryCode":"ZW","mainCities":["Harare","Bulawayo"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Harare, Bulawayo"},
-{"name":"Africa/Khartoum","alternativeName":"Central Africa Time","group":["Africa/Khartoum"],"countryName":"Sudan","countryCode":"SD","mainCities":["Khartoum","Omdurman"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Khartoum, Omdurman"},
-{"name":"Africa/Kigali","alternativeName":"Central Africa Time","group":["Africa/Kigali"],"countryName":"Rwanda","countryCode":"RW","mainCities":["Kigali","Butare"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Kigali, Butare"},
-{"name":"Africa/Blantyre","alternativeName":"Central Africa Time","group":["Africa/Blantyre"],"countryName":"Malawi","countryCode":"MW","mainCities":["Lilongwe","Blantyre"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Lilongwe, Blantyre"},
-{"name":"Africa/Lubumbashi","alternativeName":"Central Africa Time","group":["Africa/Lubumbashi"],"countryName":"Democratic Republic of the Congo","countryCode":"CD","mainCities":["Lubumbashi","Mbuji-Mayi"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Lubumbashi, Mbuji-Mayi"},
-{"name":"Africa/Lusaka","alternativeName":"Central Africa Time","group":["Africa/Lusaka"],"countryName":"Zambia","countryCode":"ZM","mainCities":["Lusaka","Kitwe"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Lusaka, Kitwe"},
-{"name":"Africa/Maputo","alternativeName":"Central Africa Time","group":["Africa/Maputo"],"countryName":"Mozambique","countryCode":"MZ","mainCities":["Maputo","Matola"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Maputo, Matola"},
-{"name":"Africa/Windhoek","alternativeName":"Central Africa Time","group":["Africa/Windhoek"],"countryName":"Namibia","countryCode":"NA","mainCities":["Windhoek","Rundu"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Central Africa Time - Windhoek, Rundu"},
-{"name":"Asia/Damascus","alternativeName":"Eastern European Time","group":["Asia/Damascus"],"countryName":"Syria","countryCode":"SY","mainCities":["Aleppo","Damascus"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Aleppo, Damascus"},
-{"name":"Asia/Amman","alternativeName":"Eastern European Time","group":["Asia/Amman"],"countryName":"Jordan","countryCode":"JO","mainCities":["Amman","Zarqa"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Amman, Zarqa"},
-{"name":"Europe/Athens","alternativeName":"Eastern European Time","group":["Europe/Athens"],"countryName":"Greece","countryCode":"GR","mainCities":["Athens","Thessaloníki"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Athens, Thessaloníki"},
-{"name":"Asia/Beirut","alternativeName":"Eastern European Time","group":["Asia/Beirut"],"countryName":"Lebanon","countryCode":"LB","mainCities":["Beirut","Ra’s Bayrūt"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Beirut, Ra’s Bayrūt"},
-{"name":"Europe/Bucharest","alternativeName":"Eastern European Time","group":["Europe/Bucharest"],"countryName":"Romania","countryCode":"RO","mainCities":["Bucharest","Sector 3"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Bucharest, Sector 3"},
-{"name":"Africa/Cairo","alternativeName":"Eastern European Time","group":["Africa/Cairo"],"countryName":"Egypt","countryCode":"EG","mainCities":["Cairo","Alexandria"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Cairo, Alexandria"},
-{"name":"Europe/Chisinau","alternativeName":"Eastern European Time","group":["Europe/Chisinau"],"countryName":"Moldova","countryCode":"MD","mainCities":["Chisinau","Tiraspol"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Chisinau, Tiraspol"},
-{"name":"Asia/Hebron","alternativeName":"Eastern European Time","group":["Asia/Gaza","Asia/Hebron"],"countryName":"Palestinian Territory","countryCode":"PS","mainCities":["East Jerusalem","Gaza"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - East Jerusalem, Gaza"},
-{"name":"Europe/Helsinki","alternativeName":"Eastern European Time","group":["Europe/Helsinki"],"countryName":"Finland","countryCode":"FI","mainCities":["Helsinki","Espoo"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Helsinki, Espoo"},
-{"name":"Europe/Kaliningrad","alternativeName":"Eastern European Time","group":["Europe/Kaliningrad"],"countryName":"Russia","countryCode":"RU","mainCities":["Kaliningrad","Chernyakhovsk"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Kaliningrad, Chernyakhovsk"},
-{"name":"Europe/Kiev","alternativeName":"Eastern European Time","group":["Europe/Kiev","Europe/Uzhgorod","Europe/Zaporozhye"],"countryName":"Ukraine","countryCode":"UA","mainCities":["Kyiv","Kharkiv"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Kyiv, Kharkiv"},
-{"name":"Europe/Mariehamn","alternativeName":"Eastern European Time","group":["Europe/Mariehamn"],"countryName":"Aland Islands","countryCode":"AX","mainCities":["Mariehamn"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Mariehamn"},
-{"name":"Asia/Nicosia","alternativeName":"Eastern European Time","group":["Asia/Famagusta","Asia/Nicosia"],"countryName":"Cyprus","countryCode":"CY","mainCities":["Nicosia","Limassol"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Nicosia, Limassol"},
-{"name":"Europe/Riga","alternativeName":"Eastern European Time","group":["Europe/Riga"],"countryName":"Latvia","countryCode":"LV","mainCities":["Riga","Daugavpils"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Riga, Daugavpils"},
-{"name":"Europe/Sofia","alternativeName":"Eastern European Time","group":["Europe/Sofia"],"countryName":"Bulgaria","countryCode":"BG","mainCities":["Sofia","Plovdiv"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Sofia, Plovdiv"},
-{"name":"Europe/Tallinn","alternativeName":"Eastern European Time","group":["Europe/Tallinn"],"countryName":"Estonia","countryCode":"EE","mainCities":["Tallinn","Tartu"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Tallinn, Tartu"},
-{"name":"Africa/Tripoli","alternativeName":"Eastern European Time","group":["Africa/Tripoli"],"countryName":"Libya","countryCode":"LY","mainCities":["Tripoli","Benghazi"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Tripoli, Benghazi"},
-{"name":"Europe/Vilnius","alternativeName":"Eastern European Time","group":["Europe/Vilnius"],"countryName":"Lithuania","countryCode":"LT","mainCities":["Vilnius","Kaunas"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Eastern European Time - Vilnius, Kaunas"},
-{"name":"Asia/Jerusalem","alternativeName":"Israel Time","group":["Asia/Jerusalem"],"countryName":"Israel","countryCode":"IL","mainCities":["Jerusalem","Tel Aviv"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 Israel Time - Jerusalem, Tel Aviv"},
-{"name":"Africa/Johannesburg","alternativeName":"South Africa Time","group":["Africa/Johannesburg"],"countryName":"South Africa","countryCode":"ZA","mainCities":["Cape Town","Durban"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 South Africa Time - Cape Town, Durban"},
-{"name":"Africa/Mbabane","alternativeName":"South Africa Time","group":["Africa/Mbabane"],"countryName":"Eswatini","countryCode":"SZ","mainCities":["Manzini","Mbabane"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 South Africa Time - Manzini, Mbabane"},
-{"name":"Africa/Maseru","alternativeName":"South Africa Time","group":["Africa/Maseru"],"countryName":"Lesotho","countryCode":"LS","mainCities":["Maseru","Mafeteng"],"rawOffsetInMinutes":120,"rawFormat":"+02:00 South Africa Time - Maseru, Mafeteng"},
-{"name":"Asia/Kuwait","alternativeName":"Arabian Time","group":["Asia/Kuwait"],"countryName":"Kuwait","countryCode":"KW","mainCities":["Al Aḩmadī","Ḩawallī"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Arabian Time - Al Aḩmadī, Ḩawallī"},
-{"name":"Asia/Baghdad","alternativeName":"Arabian Time","group":["Asia/Baghdad"],"countryName":"Iraq","countryCode":"IQ","mainCities":["Baghdad","Basrah"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Arabian Time - Baghdad, Basrah"},
-{"name":"Asia/Qatar","alternativeName":"Arabian Time","group":["Asia/Qatar"],"countryName":"Qatar","countryCode":"QA","mainCities":["Doha","Ar Rayyān"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Arabian Time - Doha, Ar Rayyān"},
-{"name":"Asia/Bahrain","alternativeName":"Arabian Time","group":["Asia/Bahrain"],"countryName":"Bahrain","countryCode":"BH","mainCities":["Manama","Al Muharraq"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Arabian Time - Manama, Al Muharraq"},
-{"name":"Asia/Riyadh","alternativeName":"Arabian Time","group":["Asia/Riyadh"],"countryName":"Saudi Arabia","countryCode":"SA","mainCities":["Riyadh","Jeddah"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Arabian Time - Riyadh, Jeddah"},
-{"name":"Asia/Aden","alternativeName":"Arabian Time","group":["Asia/Aden"],"countryName":"Yemen","countryCode":"YE","mainCities":["Sanaa","Al Ḩudaydah"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Arabian Time - Sanaa, Al Ḩudaydah"},
-{"name":"Africa/Addis_Ababa","alternativeName":"East Africa Time","group":["Africa/Addis_Ababa"],"countryName":"Ethiopia","countryCode":"ET","mainCities":["Addis Ababa","Dire Dawa"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Addis Ababa, Dire Dawa"},
-{"name":"Indian/Antananarivo","alternativeName":"East Africa Time","group":["Indian/Antananarivo"],"countryName":"Madagascar","countryCode":"MG","mainCities":["Antananarivo","Toamasina"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Antananarivo, Toamasina"},
-{"name":"Africa/Asmara","alternativeName":"East Africa Time","group":["Africa/Asmara"],"countryName":"Eritrea","countryCode":"ER","mainCities":["Asmara","Keren"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Asmara, Keren"},
-{"name":"Africa/Dar_es_Salaam","alternativeName":"East Africa Time","group":["Africa/Dar_es_Salaam"],"countryName":"Tanzania","countryCode":"TZ","mainCities":["Dar es Salaam","Mwanza"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Dar es Salaam, Mwanza"},
-{"name":"Africa/Djibouti","alternativeName":"East Africa Time","group":["Africa/Djibouti"],"countryName":"Djibouti","countryCode":"DJ","mainCities":["Djibouti","'Ali Sabieh"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Djibouti, 'Ali Sabieh"},
-{"name":"Africa/Juba","alternativeName":"East Africa Time","group":["Africa/Juba"],"countryName":"South Sudan","countryCode":"SS","mainCities":["Juba","Winejok"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Juba, Winejok"},
-{"name":"Africa/Kampala","alternativeName":"East Africa Time","group":["Africa/Kampala"],"countryName":"Uganda","countryCode":"UG","mainCities":["Kampala","Gulu"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Kampala, Gulu"},
-{"name":"Indian/Mayotte","alternativeName":"East Africa Time","group":["Indian/Mayotte"],"countryName":"Mayotte","countryCode":"YT","mainCities":["Mamoudzou","Koungou"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Mamoudzou, Koungou"},
-{"name":"Africa/Mogadishu","alternativeName":"East Africa Time","group":["Africa/Mogadishu"],"countryName":"Somalia","countryCode":"SO","mainCities":["Mogadishu","Hargeysa"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Mogadishu, Hargeysa"},
-{"name":"Indian/Comoro","alternativeName":"East Africa Time","group":["Indian/Comoro"],"countryName":"Comoros","countryCode":"KM","mainCities":["Moroni","Moutsamoudou"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Moroni, Moutsamoudou"},
-{"name":"Africa/Nairobi","alternativeName":"East Africa Time","group":["Africa/Nairobi"],"countryName":"Kenya","countryCode":"KE","mainCities":["Nairobi","Mombasa"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 East Africa Time - Nairobi, Mombasa"},
-{"name":"Europe/Minsk","alternativeName":"Moscow Time","group":["Europe/Minsk"],"countryName":"Belarus","countryCode":"BY","mainCities":["Minsk","Homyel'"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Moscow Time - Minsk, Homyel'"},
-{"name":"Europe/Moscow","alternativeName":"Moscow Time","group":["Europe/Kirov","Europe/Moscow","Europe/Simferopol"],"countryName":"Russia","countryCode":"RU","mainCities":["Moscow","Saint Petersburg"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Moscow Time - Moscow, Saint Petersburg"},
-{"name":"Antarctica/Syowa","alternativeName":"Syowa Time","group":["Antarctica/Syowa"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Syowa"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Syowa Time - Syowa"},
-{"name":"Europe/Istanbul","alternativeName":"Turkey Time","group":["Europe/Istanbul"],"countryName":"Turkey","countryCode":"TR","mainCities":["Istanbul","Ankara"],"rawOffsetInMinutes":180,"rawFormat":"+03:00 Turkey Time - Istanbul, Ankara"},
-{"name":"Asia/Tehran","alternativeName":"Iran Time","group":["Asia/Tehran"],"countryName":"Iran","countryCode":"IR","mainCities":["Tehran","Mashhad"],"rawOffsetInMinutes":210,"rawFormat":"+03:30 Iran Time - Tehran, Mashhad"},
-{"name":"Asia/Yerevan","alternativeName":"Armenia Time","group":["Asia/Yerevan"],"countryName":"Armenia","countryCode":"AM","mainCities":["Yerevan","Gyumri"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Armenia Time - Yerevan, Gyumri"},
-{"name":"Asia/Baku","alternativeName":"Azerbaijan Time","group":["Asia/Baku"],"countryName":"Azerbaijan","countryCode":"AZ","mainCities":["Baku","Ganja"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Azerbaijan Time - Baku, Ganja"},
-{"name":"Asia/Tbilisi","alternativeName":"Georgia Time","group":["Asia/Tbilisi"],"countryName":"Georgia","countryCode":"GE","mainCities":["Tbilisi","Kutaisi"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Georgia Time - Tbilisi, Kutaisi"},
-{"name":"Asia/Dubai","alternativeName":"Gulf Time","group":["Asia/Dubai"],"countryName":"United Arab Emirates","countryCode":"AE","mainCities":["Dubai","Sharjah"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Gulf Time - Dubai, Sharjah"},
-{"name":"Asia/Muscat","alternativeName":"Gulf Time","group":["Asia/Muscat"],"countryName":"Oman","countryCode":"OM","mainCities":["Muscat","Seeb"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Gulf Time - Muscat, Seeb"},
-{"name":"Indian/Mauritius","alternativeName":"Mauritius Time","group":["Indian/Mauritius"],"countryName":"Mauritius","countryCode":"MU","mainCities":["Port Louis","Beau Bassin-Rose Hill"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Mauritius Time - Port Louis, Beau Bassin-Rose Hill"},
-{"name":"Indian/Reunion","alternativeName":"Réunion Time","group":["Indian/Reunion"],"countryName":"Reunion","countryCode":"RE","mainCities":["Saint-Denis","Saint-Paul"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Réunion Time - Saint-Denis, Saint-Paul"},
-{"name":"Europe/Samara","alternativeName":"Samara Time","group":["Europe/Astrakhan","Europe/Samara","Europe/Saratov","Europe/Ulyanovsk","Europe/Volgograd"],"countryName":"Russia","countryCode":"RU","mainCities":["Samara","Volgograd"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Samara Time - Samara, Volgograd"},
-{"name":"Indian/Mahe","alternativeName":"Seychelles Time","group":["Indian/Mahe"],"countryName":"Seychelles","countryCode":"SC","mainCities":["Victoria"],"rawOffsetInMinutes":240,"rawFormat":"+04:00 Seychelles Time - Victoria"},
-{"name":"Asia/Kabul","alternativeName":"Afghanistan Time","group":["Asia/Kabul"],"countryName":"Afghanistan","countryCode":"AF","mainCities":["Kabul","Kandahār"],"rawOffsetInMinutes":270,"rawFormat":"+04:30 Afghanistan Time - Kabul, Kandahār"},
-{"name":"Indian/Kerguelen","alternativeName":"French Southern & Antarctic Time","group":["Indian/Kerguelen"],"countryName":"French Southern Territories","countryCode":"TF","mainCities":["Port-aux-Français"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 French Southern & Antarctic Time - Port-aux-Français"},
-{"name":"Indian/Maldives","alternativeName":"Maldives Time","group":["Indian/Maldives"],"countryName":"Maldives","countryCode":"MV","mainCities":["Male"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Maldives Time - Male"},
-{"name":"Antarctica/Mawson","alternativeName":"Mawson Time","group":["Antarctica/Mawson"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Mawson"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Mawson Time - Mawson"},
-{"name":"Asia/Karachi","alternativeName":"Pakistan Time","group":["Asia/Karachi"],"countryName":"Pakistan","countryCode":"PK","mainCities":["Karachi","Lahore"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Pakistan Time - Karachi, Lahore"},
-{"name":"Asia/Dushanbe","alternativeName":"Tajikistan Time","group":["Asia/Dushanbe"],"countryName":"Tajikistan","countryCode":"TJ","mainCities":["Dushanbe","Khujand"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Tajikistan Time - Dushanbe, Khujand"},
-{"name":"Asia/Ashgabat","alternativeName":"Turkmenistan Time","group":["Asia/Ashgabat"],"countryName":"Turkmenistan","countryCode":"TM","mainCities":["Ashgabat","Türkmenabat"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Turkmenistan Time - Ashgabat, Türkmenabat"},
-{"name":"Asia/Tashkent","alternativeName":"Uzbekistan Time","group":["Asia/Samarkand","Asia/Tashkent"],"countryName":"Uzbekistan","countryCode":"UZ","mainCities":["Tashkent","Namangan"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Uzbekistan Time - Tashkent, Namangan"},
-{"name":"Asia/Qyzylorda","alternativeName":"West Kazakhstan Time","group":["Asia/Aqtau","Asia/Aqtobe","Asia/Atyrau","Asia/Oral","Asia/Qyzylorda"],"countryName":"Kazakhstan","countryCode":"KZ","mainCities":["Kyzylorda","Aktobe"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 West Kazakhstan Time - Kyzylorda, Aktobe"},
-{"name":"Asia/Yekaterinburg","alternativeName":"Yekaterinburg Time","group":["Asia/Yekaterinburg"],"countryName":"Russia","countryCode":"RU","mainCities":["Yekaterinburg","Chelyabinsk"],"rawOffsetInMinutes":300,"rawFormat":"+05:00 Yekaterinburg Time - Yekaterinburg, Chelyabinsk"},
-{"name":"Asia/Colombo","alternativeName":"India Time","group":["Asia/Colombo"],"countryName":"Sri Lanka","countryCode":"LK","mainCities":["Colombo","Dehiwala-Mount Lavinia"],"rawOffsetInMinutes":330,"rawFormat":"+05:30 India Time - Colombo, Dehiwala-Mount Lavinia"},
-{"name":"Asia/Kolkata","alternativeName":"India Time","group":["Asia/Kolkata"],"countryName":"India","countryCode":"IN","mainCities":["Mumbai","Delhi"],"rawOffsetInMinutes":330,"rawFormat":"+05:30 India Time - Mumbai, Delhi"},
-{"name":"Asia/Kathmandu","alternativeName":"Nepal Time","group":["Asia/Kathmandu"],"countryName":"Nepal","countryCode":"NP","mainCities":["Kathmandu","Pokhara"],"rawOffsetInMinutes":345,"rawFormat":"+05:45 Nepal Time - Kathmandu, Pokhara"},
-{"name":"Asia/Dhaka","alternativeName":"Bangladesh Time","group":["Asia/Dhaka"],"countryName":"Bangladesh","countryCode":"BD","mainCities":["Dhaka","Chittagong"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 Bangladesh Time - Dhaka, Chittagong"},
-{"name":"Asia/Thimphu","alternativeName":"Bhutan Time","group":["Asia/Thimphu"],"countryName":"Bhutan","countryCode":"BT","mainCities":["Thimphu","Punākha"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 Bhutan Time - Thimphu, Punākha"},
-{"name":"Asia/Urumqi","alternativeName":"China Time","group":["Asia/Urumqi"],"countryName":"China","countryCode":"CN","mainCities":["Zhongshan","Ürümqi"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 China Time - Zhongshan, Ürümqi"},
-{"name":"Asia/Almaty","alternativeName":"East Kazakhstan Time","group":["Asia/Almaty","Asia/Qostanay"],"countryName":"Kazakhstan","countryCode":"KZ","mainCities":["Almaty","Karagandy"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 East Kazakhstan Time - Almaty, Karagandy"},
-{"name":"Indian/Chagos","alternativeName":"Indian Ocean Time","group":["Indian/Chagos"],"countryName":"British Indian Ocean Territory","countryCode":"IO","mainCities":["Chagos"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 Indian Ocean Time - Chagos"},
-{"name":"Asia/Bishkek","alternativeName":"Kyrgyzstan Time","group":["Asia/Bishkek"],"countryName":"Kyrgyzstan","countryCode":"KG","mainCities":["Bishkek","Osh"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 Kyrgyzstan Time - Bishkek, Osh"},
-{"name":"Asia/Omsk","alternativeName":"Omsk Time","group":["Asia/Omsk"],"countryName":"Russia","countryCode":"RU","mainCities":["Omsk","Tara"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 Omsk Time - Omsk, Tara"},
-{"name":"Antarctica/Vostok","alternativeName":"Vostok Time","group":["Antarctica/Vostok"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Vostok"],"rawOffsetInMinutes":360,"rawFormat":"+06:00 Vostok Time - Vostok"},
-{"name":"Indian/Cocos","alternativeName":"Cocos Islands Time","group":["Indian/Cocos"],"countryName":"Cocos Islands","countryCode":"CC","mainCities":["West Island"],"rawOffsetInMinutes":390,"rawFormat":"+06:30 Cocos Islands Time - West Island"},
-{"name":"Asia/Yangon","alternativeName":"Myanmar Time","group":["Asia/Yangon"],"countryName":"Myanmar","countryCode":"MM","mainCities":["Yangon","Mandalay"],"rawOffsetInMinutes":390,"rawFormat":"+06:30 Myanmar Time - Yangon, Mandalay"},
-{"name":"Indian/Christmas","alternativeName":"Christmas Island Time","group":["Indian/Christmas"],"countryName":"Christmas Island","countryCode":"CX","mainCities":["Flying Fish Cove"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Christmas Island Time - Flying Fish Cove"},
-{"name":"Antarctica/Davis","alternativeName":"Davis Time","group":["Antarctica/Davis"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Davis"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Davis Time - Davis"},
-{"name":"Asia/Hovd","alternativeName":"Hovd Time","group":["Asia/Hovd"],"countryName":"Mongolia","countryCode":"MN","mainCities":["Khovd","Ölgii"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Hovd Time - Khovd, Ölgii"},
-{"name":"Asia/Bangkok","alternativeName":"Indochina Time","group":["Asia/Bangkok"],"countryName":"Thailand","countryCode":"TH","mainCities":["Bangkok","Samut Prakan"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Indochina Time - Bangkok, Samut Prakan"},
-{"name":"Asia/Ho_Chi_Minh","alternativeName":"Indochina Time","group":["Asia/Ho_Chi_Minh"],"countryName":"Vietnam","countryCode":"VN","mainCities":["Ho Chi Minh City","Da Nang"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Indochina Time - Ho Chi Minh City, Da Nang"},
-{"name":"Asia/Phnom_Penh","alternativeName":"Indochina Time","group":["Asia/Phnom_Penh"],"countryName":"Cambodia","countryCode":"KH","mainCities":["Phnom Penh","Takeo"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Indochina Time - Phnom Penh, Takeo"},
-{"name":"Asia/Vientiane","alternativeName":"Indochina Time","group":["Asia/Vientiane"],"countryName":"Laos","countryCode":"LA","mainCities":["Vientiane","Pakse"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Indochina Time - Vientiane, Pakse"},
-{"name":"Asia/Novosibirsk","alternativeName":"Novosibirsk Time","group":["Asia/Barnaul","Asia/Krasnoyarsk","Asia/Novokuznetsk","Asia/Novosibirsk","Asia/Tomsk"],"countryName":"Russia","countryCode":"RU","mainCities":["Novosibirsk","Krasnoyarsk"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Novosibirsk Time - Novosibirsk, Krasnoyarsk"},
-{"name":"Asia/Jakarta","alternativeName":"Western Indonesia Time","group":["Asia/Jakarta","Asia/Pontianak"],"countryName":"Indonesia","countryCode":"ID","mainCities":["Jakarta","Surabaya"],"rawOffsetInMinutes":420,"rawFormat":"+07:00 Western Indonesia Time - Jakarta, Surabaya"},
-{"name":"Antarctica/Casey","alternativeName":"Australian Western Time","group":["Antarctica/Casey"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["Casey"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Australian Western Time - Casey"},
-{"name":"Australia/Perth","alternativeName":"Australian Western Time","group":["Australia/Perth"],"countryName":"Australia","countryCode":"AU","mainCities":["Perth","Rockingham"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Australian Western Time - Perth, Rockingham"},
-{"name":"Asia/Brunei","alternativeName":"Brunei Darussalam Time","group":["Asia/Brunei"],"countryName":"Brunei","countryCode":"BN","mainCities":["Bandar Seri Begawan","Kuala Belait"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Brunei Darussalam Time - Bandar Seri Begawan, Kuala Belait"},
-{"name":"Asia/Makassar","alternativeName":"Central Indonesia Time","group":["Asia/Makassar"],"countryName":"Indonesia","countryCode":"ID","mainCities":["Makassar","Denpasar"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Central Indonesia Time - Makassar, Denpasar"},
-{"name":"Asia/Macau","alternativeName":"China Time","group":["Asia/Macau"],"countryName":"Macao","countryCode":"MO","mainCities":["Macau"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 China Time - Macau"},
-{"name":"Asia/Shanghai","alternativeName":"China Time","group":["Asia/Shanghai"],"countryName":"China","countryCode":"CN","mainCities":["Shanghai","Beijing"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 China Time - Shanghai, Beijing"},
-{"name":"Asia/Hong_Kong","alternativeName":"Hong Kong Time","group":["Asia/Hong_Kong"],"countryName":"Hong Kong","countryCode":"HK","mainCities":["Hong Kong","Kowloon"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Hong Kong Time - Hong Kong, Kowloon"},
-{"name":"Asia/Irkutsk","alternativeName":"Irkutsk Time","group":["Asia/Irkutsk"],"countryName":"Russia","countryCode":"RU","mainCities":["Irkutsk","Ulan-Ude"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Irkutsk Time - Irkutsk, Ulan-Ude"},
-{"name":"Asia/Kuala_Lumpur","alternativeName":"Malaysia Time","group":["Asia/Kuala_Lumpur","Asia/Kuching"],"countryName":"Malaysia","countryCode":"MY","mainCities":["Kota Bharu","Kuala Lumpur"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Malaysia Time - Kota Bharu, Kuala Lumpur"},
-{"name":"Asia/Manila","alternativeName":"Philippine Time","group":["Asia/Manila"],"countryName":"Philippines","countryCode":"PH","mainCities":["Quezon City","Manila"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Philippine Time - Quezon City, Manila"},
-{"name":"Asia/Singapore","alternativeName":"Singapore Time","group":["Asia/Singapore"],"countryName":"Singapore","countryCode":"SG","mainCities":["Singapore","Woodlands"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Singapore Time - Singapore, Woodlands"},
-{"name":"Asia/Taipei","alternativeName":"Taipei Time","group":["Asia/Taipei"],"countryName":"Taiwan","countryCode":"TW","mainCities":["Taipei","Kaohsiung"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Taipei Time - Taipei, Kaohsiung"},
-{"name":"Asia/Ulaanbaatar","alternativeName":"Ulaanbaatar Time","group":["Asia/Choibalsan","Asia/Ulaanbaatar"],"countryName":"Mongolia","countryCode":"MN","mainCities":["Ulan Bator","Erdenet"],"rawOffsetInMinutes":480,"rawFormat":"+08:00 Ulaanbaatar Time - Ulan Bator, Erdenet"},
-{"name":"Australia/Eucla","alternativeName":"Australian Central Western Time","group":["Australia/Eucla"],"countryName":"Australia","countryCode":"AU","mainCities":["Eucla"],"rawOffsetInMinutes":525,"rawFormat":"+08:45 Australian Central Western Time - Eucla"},
-{"name":"Asia/Dili","alternativeName":"East Timor Time","group":["Asia/Dili"],"countryName":"Timor Leste","countryCode":"TL","mainCities":["Dili","Maliana"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 East Timor Time - Dili, Maliana"},
-{"name":"Asia/Jayapura","alternativeName":"Eastern Indonesia Time","group":["Asia/Jayapura"],"countryName":"Indonesia","countryCode":"ID","mainCities":["Ambon","Jayapura"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 Eastern Indonesia Time - Ambon, Jayapura"},
-{"name":"Asia/Tokyo","alternativeName":"Japan Time","group":["Asia/Tokyo"],"countryName":"Japan","countryCode":"JP","mainCities":["Tokyo","Yokohama"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 Japan Time - Tokyo, Yokohama"},
-{"name":"Asia/Pyongyang","alternativeName":"Korean Time","group":["Asia/Pyongyang"],"countryName":"North Korea","countryCode":"KP","mainCities":["Pyongyang","Hamhŭng"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 Korean Time - Pyongyang, Hamhŭng"},
-{"name":"Asia/Seoul","alternativeName":"Korean Time","group":["Asia/Seoul"],"countryName":"South Korea","countryCode":"KR","mainCities":["Seoul","Busan"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 Korean Time - Seoul, Busan"},
-{"name":"Pacific/Palau","alternativeName":"Palau Time","group":["Pacific/Palau"],"countryName":"Palau","countryCode":"PW","mainCities":["Ngerulmud"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 Palau Time - Ngerulmud"},
-{"name":"Asia/Chita","alternativeName":"Yakutsk Time","group":["Asia/Chita","Asia/Khandyga","Asia/Yakutsk"],"countryName":"Russia","countryCode":"RU","mainCities":["Chita","Yakutsk"],"rawOffsetInMinutes":540,"rawFormat":"+09:00 Yakutsk Time - Chita, Yakutsk"},
-{"name":"Australia/Adelaide","alternativeName":"Australian Central Time","group":["Australia/Adelaide","Australia/Broken_Hill"],"countryName":"Australia","countryCode":"AU","mainCities":["Adelaide","Adelaide Hills"],"rawOffsetInMinutes":570,"rawFormat":"+09:30 Australian Central Time - Adelaide, Adelaide Hills"},
-{"name":"Australia/Darwin","alternativeName":"Australian Central Time","group":["Australia/Darwin"],"countryName":"Australia","countryCode":"AU","mainCities":["Darwin","Alice Springs"],"rawOffsetInMinutes":570,"rawFormat":"+09:30 Australian Central Time - Darwin, Alice Springs"},
-{"name":"Australia/Brisbane","alternativeName":"Australian Eastern Time","group":["Australia/Brisbane","Australia/Lindeman"],"countryName":"Australia","countryCode":"AU","mainCities":["Brisbane","Gold Coast"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Australian Eastern Time - Brisbane, Gold Coast"},
-{"name":"Australia/Sydney","alternativeName":"Australian Eastern Time","group":["Australia/Currie","Australia/Hobart","Australia/Melbourne","Australia/Sydney"],"countryName":"Australia","countryCode":"AU","mainCities":["Sydney","Melbourne"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Australian Eastern Time - Sydney, Melbourne"},
-{"name":"Pacific/Guam","alternativeName":"Chamorro Time","group":["Pacific/Guam"],"countryName":"Guam","countryCode":"GU","mainCities":["Dededo Village","Yigo Village"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Chamorro Time - Dededo Village, Yigo Village"},
-{"name":"Pacific/Saipan","alternativeName":"Chamorro Time","group":["Pacific/Saipan"],"countryName":"Northern Mariana Islands","countryCode":"MP","mainCities":["Saipan"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Chamorro Time - Saipan"},
-{"name":"Pacific/Chuuk","alternativeName":"Chuuk Time","group":["Pacific/Chuuk"],"countryName":"Micronesia","countryCode":"FM","mainCities":["Chuuk"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Chuuk Time - Chuuk"},
-{"name":"Antarctica/DumontDUrville","alternativeName":"Dumont-d’Urville Time","group":["Antarctica/DumontDUrville"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["DumontDUrville"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Dumont-d’Urville Time - DumontDUrville"},
-{"name":"Pacific/Port_Moresby","alternativeName":"Papua New Guinea Time","group":["Pacific/Port_Moresby"],"countryName":"Papua New Guinea","countryCode":"PG","mainCities":["Port Moresby","Lae"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Papua New Guinea Time - Port Moresby, Lae"},
-{"name":"Asia/Vladivostok","alternativeName":"Vladivostok Time","group":["Asia/Ust-Nera","Asia/Vladivostok"],"countryName":"Russia","countryCode":"RU","mainCities":["Vladivostok","Khabarovsk"],"rawOffsetInMinutes":600,"rawFormat":"+10:00 Vladivostok Time - Vladivostok, Khabarovsk"},
-{"name":"Australia/Lord_Howe","alternativeName":"Lord Howe Time","group":["Australia/Lord_Howe"],"countryName":"Australia","countryCode":"AU","mainCities":["Lord Howe"],"rawOffsetInMinutes":630,"rawFormat":"+10:30 Lord Howe Time - Lord Howe"},
-{"name":"Pacific/Bougainville","alternativeName":"Bougainville Time","group":["Pacific/Bougainville"],"countryName":"Papua New Guinea","countryCode":"PG","mainCities":["Arawa"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Bougainville Time - Arawa"},
-{"name":"Pacific/Kosrae","alternativeName":"Kosrae Time","group":["Pacific/Kosrae","Pacific/Pohnpei"],"countryName":"Micronesia","countryCode":"FM","mainCities":["Kosrae","Palikir - National Government Center"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Kosrae Time - Kosrae, Palikir - National Government Center"},
-{"name":"Antarctica/Macquarie","alternativeName":"Macquarie Island Time","group":["Antarctica/Macquarie"],"countryName":"Australia","countryCode":"AU","mainCities":["Macquarie"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Macquarie Island Time - Macquarie"},
-{"name":"Pacific/Noumea","alternativeName":"New Caledonia Time","group":["Pacific/Noumea"],"countryName":"New Caledonia","countryCode":"NC","mainCities":["Nouméa","Mont-Dore"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 New Caledonia Time - Nouméa, Mont-Dore"},
-{"name":"Pacific/Norfolk","alternativeName":"Norfolk Island Time","group":["Pacific/Norfolk"],"countryName":"Norfolk Island","countryCode":"NF","mainCities":["Kingston"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Norfolk Island Time - Kingston"},
-{"name":"Asia/Sakhalin","alternativeName":"Sakhalin Time","group":["Asia/Magadan","Asia/Sakhalin","Asia/Srednekolymsk"],"countryName":"Russia","countryCode":"RU","mainCities":["Yuzhno-Sakhalinsk","Magadan"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Sakhalin Time - Yuzhno-Sakhalinsk, Magadan"},
-{"name":"Pacific/Guadalcanal","alternativeName":"Solomon Islands Time","group":["Pacific/Guadalcanal"],"countryName":"Solomon Islands","countryCode":"SB","mainCities":["Honiara"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Solomon Islands Time - Honiara"},
-{"name":"Pacific/Efate","alternativeName":"Vanuatu Time","group":["Pacific/Efate"],"countryName":"Vanuatu","countryCode":"VU","mainCities":["Port-Vila"],"rawOffsetInMinutes":660,"rawFormat":"+11:00 Vanuatu Time - Port-Vila"},
-{"name":"Pacific/Fiji","alternativeName":"Fiji Time","group":["Pacific/Fiji"],"countryName":"Fiji","countryCode":"FJ","mainCities":["Suva","Lautoka"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Fiji Time - Suva, Lautoka"},
-{"name":"Pacific/Tarawa","alternativeName":"Gilbert Islands Time","group":["Pacific/Tarawa"],"countryName":"Kiribati","countryCode":"KI","mainCities":["Tarawa"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Gilbert Islands Time - Tarawa"},
-{"name":"Pacific/Majuro","alternativeName":"Marshall Islands Time","group":["Pacific/Kwajalein","Pacific/Majuro"],"countryName":"Marshall Islands","countryCode":"MH","mainCities":["Majuro","Kwajalein"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Marshall Islands Time - Majuro, Kwajalein"},
-{"name":"Pacific/Nauru","alternativeName":"Nauru Time","group":["Pacific/Nauru"],"countryName":"Nauru","countryCode":"NR","mainCities":["Yaren"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Nauru Time - Yaren"},
-{"name":"Pacific/Auckland","alternativeName":"New Zealand Time","group":["Pacific/Auckland"],"countryName":"New Zealand","countryCode":"NZ","mainCities":["Auckland","Wellington"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 New Zealand Time - Auckland, Wellington"},
-{"name":"Antarctica/McMurdo","alternativeName":"New Zealand Time","group":["Antarctica/McMurdo"],"countryName":"Antarctica","countryCode":"AQ","mainCities":["McMurdo"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 New Zealand Time - McMurdo"},
-{"name":"Asia/Kamchatka","alternativeName":"Petropavlovsk-Kamchatski Time","group":["Asia/Anadyr","Asia/Kamchatka"],"countryName":"Russia","countryCode":"RU","mainCities":["Petropavlovsk-Kamchatsky","Yelizovo"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Petropavlovsk-Kamchatski Time - Petropavlovsk-Kamchatsky, Yelizovo"},
-{"name":"Pacific/Funafuti","alternativeName":"Tuvalu Time","group":["Pacific/Funafuti"],"countryName":"Tuvalu","countryCode":"TV","mainCities":["Funafuti"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Tuvalu Time - Funafuti"},
-{"name":"Pacific/Wake","alternativeName":"Wake Island Time","group":["Pacific/Wake"],"countryName":"United States Minor Outlying Islands","countryCode":"UM","mainCities":["Wake"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Wake Island Time - Wake"},
-{"name":"Pacific/Wallis","alternativeName":"Wallis & Futuna Time","group":["Pacific/Wallis"],"countryName":"Wallis and Futuna","countryCode":"WF","mainCities":["Mata-Utu"],"rawOffsetInMinutes":720,"rawFormat":"+12:00 Wallis & Futuna Time - Mata-Utu"},
-{"name":"Pacific/Chatham","alternativeName":"Chatham Time","group":["Pacific/Chatham"],"countryName":"New Zealand","countryCode":"NZ","mainCities":["Chatham"],"rawOffsetInMinutes":765,"rawFormat":"+12:45 Chatham Time - Chatham"},
-{"name":"Pacific/Apia","alternativeName":"Apia Time","group":["Pacific/Apia"],"countryName":"Samoa","countryCode":"WS","mainCities":["Apia"],"rawOffsetInMinutes":780,"rawFormat":"+13:00 Apia Time - Apia"},
-{"name":"Pacific/Enderbury","alternativeName":"Phoenix Islands Time","group":["Pacific/Enderbury"],"countryName":"Kiribati","countryCode":"KI","mainCities":["Enderbury"],"rawOffsetInMinutes":780,"rawFormat":"+13:00 Phoenix Islands Time - Enderbury"},
-{"name":"Pacific/Fakaofo","alternativeName":"Tokelau Time","group":["Pacific/Fakaofo"],"countryName":"Tokelau","countryCode":"TK","mainCities":["Fakaofo"],"rawOffsetInMinutes":780,"rawFormat":"+13:00 Tokelau Time - Fakaofo"},
-{"name":"Pacific/Tongatapu","alternativeName":"Tonga Time","group":["Pacific/Tongatapu"],"countryName":"Tonga","countryCode":"TO","mainCities":["Nuku‘alofa"],"rawOffsetInMinutes":780,"rawFormat":"+13:00 Tonga Time - Nuku‘alofa"},
-{"name":"Pacific/Kiritimati","alternativeName":"Line Islands Time","group":["Pacific/Kiritimati"],"countryName":"Kiribati","countryCode":"KI","mainCities":["Kiritimati"],"rawOffsetInMinutes":840,"rawFormat":"+14:00 Line Islands Time - Kiritimati"}];
+export const TimeZoneList = [
+  {
+    "countryName": "Afghanistan",
+    "timeZone": "+04:30",
+    "timeZoneDescription": "(UTC +04:30) Kabul, Kandahār"
+  },
+  {
+    "countryName": "Aland Islands",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Mariehamn"
+  },
+  {
+    "countryName": "Albania",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Tirana, Durrës"
+  },
+  {
+    "countryName": "Algeria",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Algiers, Boumerdas"
+  },
+  {
+    "countryName": "American Samoa",
+    "timeZone": "-11:00",
+    "timeZoneDescription": "(UTC -11:00) Pago Pago"
+  },
+  {
+    "countryName": "Andorra",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Andorra la Vella, les Escaldes"
+  },
+  {
+    "countryName": "Angola",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Luanda, N’dalatando"
+  },
+  {
+    "countryName": "Anguilla",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) The Valley"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Troll"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Syowa"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Mawson"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Vostok"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Davis"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Casey"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) DumontDUrville"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) McMurdo"
+  },
+  {
+    "countryName": "Antarctica",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Palmer, Rothera"
+  },
+  {
+    "countryName": "Antigua and Barbuda",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Saint John’s"
+  },
+  {
+    "countryName": "Argentina",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Buenos Aires, Córdoba"
+  },
+  {
+    "countryName": "Armenia",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Yerevan, Gyumri"
+  },
+  {
+    "countryName": "Aruba",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Oranjestad, Tanki Leendert"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Perth, Rockingham"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+08:45",
+    "timeZoneDescription": "(UTC +08:45) Eucla"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+09:30",
+    "timeZoneDescription": "(UTC +09:30) Adelaide, Adelaide Hills"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+09:30",
+    "timeZoneDescription": "(UTC +09:30) Darwin, Alice Springs"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Brisbane, Gold Coast"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Sydney, Melbourne"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+10:30",
+    "timeZoneDescription": "(UTC +10:30) Lord Howe"
+  },
+  {
+    "countryName": "Australia",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Macquarie"
+  },
+  {
+    "countryName": "Austria",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Vienna, Graz"
+  },
+  {
+    "countryName": "Azerbaijan",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Baku, Ganja"
+  },
+  {
+    "countryName": "Bahamas",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Nassau, Lucaya"
+  },
+  {
+    "countryName": "Bahrain",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Manama, Al Muharraq"
+  },
+  {
+    "countryName": "Bangladesh",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Dhaka, Chittagong"
+  },
+  {
+    "countryName": "Barbados",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Bridgetown"
+  },
+  {
+    "countryName": "Belarus",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Minsk, Homyel'"
+  },
+  {
+    "countryName": "Belgium",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Brussels, Antwerpen"
+  },
+  {
+    "countryName": "Belize",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Belize City, San Ignacio"
+  },
+  {
+    "countryName": "Benin",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Cotonou, Abomey-Calavi"
+  },
+  {
+    "countryName": "Bermuda",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Hamilton"
+  },
+  {
+    "countryName": "Bhutan",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Thimphu, Punākha"
+  },
+  {
+    "countryName": "Bolivia",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Santa Cruz de la Sierra, Cochabamba"
+  },
+  {
+    "countryName": "Bonaire, Saint Eustatius and Saba ",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Kralendijk"
+  },
+  {
+    "countryName": "Bosnia and Herzegovina",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Sarajevo, Banja Luka"
+  },
+  {
+    "countryName": "Botswana",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Gaborone, Francistown"
+  },
+  {
+    "countryName": "Brazil",
+    "timeZone": "-02:00",
+    "timeZoneDescription": "(UTC -02:00) Noronha"
+  },
+  {
+    "countryName": "Brazil",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) São Paulo, Rio de Janeiro"
+  },
+  {
+    "countryName": "Brazil",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Manaus, Campo Grande"
+  },
+  {
+    "countryName": "Brazil",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Rio Branco, Cruzeiro do Sul"
+  },
+  {
+    "countryName": "British Indian Ocean Territory",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Chagos"
+  },
+  {
+    "countryName": "British Virgin Islands",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Road Town"
+  },
+  {
+    "countryName": "Brunei",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Bandar Seri Begawan, Kuala Belait"
+  },
+  {
+    "countryName": "Bulgaria",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Sofia, Plovdiv"
+  },
+  {
+    "countryName": "Burkina Faso",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Ouagadougou, Bobo-Dioulasso"
+  },
+  {
+    "countryName": "Burundi",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Bujumbura, Muyinga"
+  },
+  {
+    "countryName": "Cabo Verde",
+    "timeZone": "-01:00",
+    "timeZoneDescription": "(UTC -01:00) Praia, Mindelo"
+  },
+  {
+    "countryName": "Cambodia",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Phnom Penh, Takeo"
+  },
+  {
+    "countryName": "Cameroon",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Douala, Yaoundé"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-03:30",
+    "timeZoneDescription": "(UTC -03:30) St. John's, Mount Pearl"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Halifax, Moncton"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Lévis"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Atikokan"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Toronto, Montréal"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Saskatoon, Regina"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Winnipeg, Brandon"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Calgary, Edmonton"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Fort St. John, Creston"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Whitehorse, Dawson"
+  },
+  {
+    "countryName": "Canada",
+    "timeZone": "-08:00",
+    "timeZoneDescription": "(UTC -08:00) Vancouver, Surrey"
+  },
+  {
+    "countryName": "Cayman Islands",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) George Town"
+  },
+  {
+    "countryName": "Central African Republic",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Bangui, Bimbo"
+  },
+  {
+    "countryName": "Chad",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) N'Djamena, Moundou"
+  },
+  {
+    "countryName": "Chile",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Punta Arenas, Puerto Natales"
+  },
+  {
+    "countryName": "Chile",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Santiago, Puente Alto"
+  },
+  {
+    "countryName": "Chile",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Easter"
+  },
+  {
+    "countryName": "China",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Zhongshan, Ürümqi"
+  },
+  {
+    "countryName": "China",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Shanghai, Beijing"
+  },
+  {
+    "countryName": "Christmas Island",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Flying Fish Cove"
+  },
+  {
+    "countryName": "Cocos Islands",
+    "timeZone": "+06:30",
+    "timeZoneDescription": "(UTC +06:30) West Island"
+  },
+  {
+    "countryName": "Colombia",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Bogotá, Cali"
+  },
+  {
+    "countryName": "Comoros",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Moroni, Moutsamoudou"
+  },
+  {
+    "countryName": "Cook Islands",
+    "timeZone": "-10:00",
+    "timeZoneDescription": "(UTC -10:00) Avarua"
+  },
+  {
+    "countryName": "Costa Rica",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) San José, Limón"
+  },
+  {
+    "countryName": "Croatia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Zagreb, Split"
+  },
+  {
+    "countryName": "Cuba",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Havana, Santiago de Cuba"
+  },
+  {
+    "countryName": "Curacao",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Willemstad"
+  },
+  {
+    "countryName": "Cyprus",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Nicosia, Limassol"
+  },
+  {
+    "countryName": "Czechia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Prague, Brno"
+  },
+  {
+    "countryName": "Democratic Republic of the Congo",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Kinshasa, Masina"
+  },
+  {
+    "countryName": "Democratic Republic of the Congo",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Lubumbashi, Mbuji-Mayi"
+  },
+  {
+    "countryName": "Denmark",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Copenhagen, Århus"
+  },
+  {
+    "countryName": "Djibouti",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Djibouti, 'Ali Sabieh"
+  },
+  {
+    "countryName": "Dominica",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Roseau"
+  },
+  {
+    "countryName": "Dominican Republic",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Santo Domingo, Santiago de los Caballeros"
+  },
+  {
+    "countryName": "Ecuador",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Guayaquil, Quito"
+  },
+  {
+    "countryName": "Ecuador",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Galapagos"
+  },
+  {
+    "countryName": "Egypt",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Cairo, Alexandria"
+  },
+  {
+    "countryName": "El Salvador",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) San Salvador, Soyapango"
+  },
+  {
+    "countryName": "Equatorial Guinea",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Bata, Malabo"
+  },
+  {
+    "countryName": "Eritrea",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Asmara, Keren"
+  },
+  {
+    "countryName": "Estonia",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Tallinn, Tartu"
+  },
+  {
+    "countryName": "Eswatini",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Manzini, Mbabane"
+  },
+  {
+    "countryName": "Ethiopia",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Addis Ababa, Dire Dawa"
+  },
+  {
+    "countryName": "Falkland Islands",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Stanley"
+  },
+  {
+    "countryName": "Faroe Islands",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Tórshavn"
+  },
+  {
+    "countryName": "Fiji",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Suva, Lautoka"
+  },
+  {
+    "countryName": "Finland",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Helsinki, Espoo"
+  },
+  {
+    "countryName": "France",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Paris, Marseille"
+  },
+  {
+    "countryName": "French Guiana",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Cayenne, Matoury"
+  },
+  {
+    "countryName": "French Polynesia",
+    "timeZone": "-09:00",
+    "timeZoneDescription": "(UTC -09:00) Gambier"
+  },
+  {
+    "countryName": "French Polynesia",
+    "timeZone": "-09:30",
+    "timeZoneDescription": "(UTC -09:30) Marquesas"
+  },
+  {
+    "countryName": "French Polynesia",
+    "timeZone": "-10:00",
+    "timeZoneDescription": "(UTC -10:00) Faaa, Papeete"
+  },
+  {
+    "countryName": "French Southern Territories",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Port-aux-Français"
+  },
+  {
+    "countryName": "Gabon",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Libreville, Port-Gentil"
+  },
+  {
+    "countryName": "Gambia",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Serekunda, Brikama"
+  },
+  {
+    "countryName": "Georgia",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Tbilisi, Kutaisi"
+  },
+  {
+    "countryName": "Germany",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Berlin, Hamburg"
+  },
+  {
+    "countryName": "Ghana",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Accra, Kumasi"
+  },
+  {
+    "countryName": "Gibraltar",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Gibraltar"
+  },
+  {
+    "countryName": "Greece",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Athens, Thessaloníki"
+  },
+  {
+    "countryName": "Greenland",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Danmarkshavn"
+  },
+  {
+    "countryName": "Greenland",
+    "timeZone": "-01:00",
+    "timeZoneDescription": "(UTC -01:00) Scoresbysund"
+  },
+  {
+    "countryName": "Greenland",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Nuuk"
+  },
+  {
+    "countryName": "Greenland",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Thule"
+  },
+  {
+    "countryName": "Grenada",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Saint George's"
+  },
+  {
+    "countryName": "Guadeloupe",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Les Abymes, Baie-Mahault"
+  },
+  {
+    "countryName": "Guam",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Dededo Village, Yigo Village"
+  },
+  {
+    "countryName": "Guatemala",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Guatemala City, Mixco"
+  },
+  {
+    "countryName": "Guernsey",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Saint Peter Port"
+  },
+  {
+    "countryName": "Guinea",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Camayenne, Conakry"
+  },
+  {
+    "countryName": "Guinea-Bissau",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Bissau, Bafatá"
+  },
+  {
+    "countryName": "Guyana",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Georgetown, Linden"
+  },
+  {
+    "countryName": "Haiti",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Port-au-Prince, Carrefour"
+  },
+  {
+    "countryName": "Honduras",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Tegucigalpa, San Pedro Sula"
+  },
+  {
+    "countryName": "Hong Kong",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Hong Kong, Kowloon"
+  },
+  {
+    "countryName": "Hungary",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Budapest, Debrecen"
+  },
+  {
+    "countryName": "Iceland",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Reykjavík, Kópavogur"
+  },
+  {
+    "countryName": "India",
+    "timeZone": "+05:30",
+    "timeZoneDescription": "(UTC +05:30) Mumbai, Delhi"
+  },
+  {
+    "countryName": "Indonesia",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Jakarta, Surabaya"
+  },
+  {
+    "countryName": "Indonesia",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Makassar, Denpasar"
+  },
+  {
+    "countryName": "Indonesia",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Ambon, Jayapura"
+  },
+  {
+    "countryName": "Iran",
+    "timeZone": "+03:30",
+    "timeZoneDescription": "(UTC +03:30) Tehran, Mashhad"
+  },
+  {
+    "countryName": "Iraq",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Baghdad, Basrah"
+  },
+  {
+    "countryName": "Ireland",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Dublin, Cork"
+  },
+  {
+    "countryName": "Isle of Man",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Douglas"
+  },
+  {
+    "countryName": "Israel",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Jerusalem, Tel Aviv"
+  },
+  {
+    "countryName": "Italy",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Rome, Milan"
+  },
+  {
+    "countryName": "Ivory Coast",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Abidjan, Abobo"
+  },
+  {
+    "countryName": "Jamaica",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Kingston, New Kingston"
+  },
+  {
+    "countryName": "Japan",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Tokyo, Yokohama"
+  },
+  {
+    "countryName": "Jersey",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Saint Helier"
+  },
+  {
+    "countryName": "Jordan",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Amman, Zarqa"
+  },
+  {
+    "countryName": "Kazakhstan",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Kyzylorda, Aktobe"
+  },
+  {
+    "countryName": "Kazakhstan",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Almaty, Karagandy"
+  },
+  {
+    "countryName": "Kenya",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Nairobi, Mombasa"
+  },
+  {
+    "countryName": "Kiribati",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Tarawa"
+  },
+  {
+    "countryName": "Kiribati",
+    "timeZone": "+13:00",
+    "timeZoneDescription": "(UTC +13:00) Enderbury"
+  },
+  {
+    "countryName": "Kiribati",
+    "timeZone": "+14:00",
+    "timeZoneDescription": "(UTC +14:00) Kiritimati"
+  },
+  {
+    "countryName": "Kuwait",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Al Aḩmadī, Ḩawallī"
+  },
+  {
+    "countryName": "Kyrgyzstan",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Bishkek, Osh"
+  },
+  {
+    "countryName": "Laos",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Vientiane, Pakse"
+  },
+  {
+    "countryName": "Latvia",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Riga, Daugavpils"
+  },
+  {
+    "countryName": "Lebanon",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Beirut, Ra’s Bayrūt"
+  },
+  {
+    "countryName": "Lesotho",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Maseru, Mafeteng"
+  },
+  {
+    "countryName": "Liberia",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Monrovia, Gbarnga"
+  },
+  {
+    "countryName": "Libya",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Tripoli, Benghazi"
+  },
+  {
+    "countryName": "Liechtenstein",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Vaduz"
+  },
+  {
+    "countryName": "Lithuania",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Vilnius, Kaunas"
+  },
+  {
+    "countryName": "Luxembourg",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Luxembourg, Esch-sur-Alzette"
+  },
+  {
+    "countryName": "Macao",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Macau"
+  },
+  {
+    "countryName": "Madagascar",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Antananarivo, Toamasina"
+  },
+  {
+    "countryName": "Malawi",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Lilongwe, Blantyre"
+  },
+  {
+    "countryName": "Malaysia",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Kota Bharu, Kuala Lumpur"
+  },
+  {
+    "countryName": "Maldives",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Male"
+  },
+  {
+    "countryName": "Mali",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Bamako, Sikasso"
+  },
+  {
+    "countryName": "Malta",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Birkirkara, Qormi"
+  },
+  {
+    "countryName": "Marshall Islands",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Majuro, Kwajalein"
+  },
+  {
+    "countryName": "Martinique",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Fort-de-France, Le Lamentin"
+  },
+  {
+    "countryName": "Mauritania",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Nouakchott, Nouadhibou"
+  },
+  {
+    "countryName": "Mauritius",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Port Louis, Beau Bassin-Rose Hill"
+  },
+  {
+    "countryName": "Mayotte",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Mamoudzou, Koungou"
+  },
+  {
+    "countryName": "Mexico",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Cancún, Chetumal"
+  },
+  {
+    "countryName": "Mexico",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Mexico City, Iztapalapa"
+  },
+  {
+    "countryName": "Mexico",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Ciudad Juárez, Chihuahua"
+  },
+  {
+    "countryName": "Mexico",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Hermosillo, Ciudad Obregón"
+  },
+  {
+    "countryName": "Mexico",
+    "timeZone": "-08:00",
+    "timeZoneDescription": "(UTC -08:00) Tijuana, Mexicali"
+  },
+  {
+    "countryName": "Micronesia",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Chuuk"
+  },
+  {
+    "countryName": "Micronesia",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Kosrae, Palikir - National Government Center"
+  },
+  {
+    "countryName": "Moldova",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Chisinau, Tiraspol"
+  },
+  {
+    "countryName": "Monaco",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Monaco, Monte-Carlo"
+  },
+  {
+    "countryName": "Mongolia",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Khovd, Ölgii"
+  },
+  {
+    "countryName": "Mongolia",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Ulan Bator, Erdenet"
+  },
+  {
+    "countryName": "Montenegro",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Podgorica, Nikšić"
+  },
+  {
+    "countryName": "Montserrat",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Brades, Plymouth"
+  },
+  {
+    "countryName": "Morocco",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Casablanca, Rabat"
+  },
+  {
+    "countryName": "Mozambique",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Maputo, Matola"
+  },
+  {
+    "countryName": "Myanmar",
+    "timeZone": "+06:30",
+    "timeZoneDescription": "(UTC +06:30) Yangon, Mandalay"
+  },
+  {
+    "countryName": "Namibia",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Windhoek, Rundu"
+  },
+  {
+    "countryName": "Nauru",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Yaren"
+  },
+  {
+    "countryName": "Nepal",
+    "timeZone": "+05:45",
+    "timeZoneDescription": "(UTC +05:45) Kathmandu, Pokhara"
+  },
+  {
+    "countryName": "Netherlands",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Amsterdam, Rotterdam"
+  },
+  {
+    "countryName": "New Caledonia",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Nouméa, Mont-Dore"
+  },
+  {
+    "countryName": "New Zealand",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Auckland, Wellington"
+  },
+  {
+    "countryName": "New Zealand",
+    "timeZone": "+12:45",
+    "timeZoneDescription": "(UTC +12:45) Chatham"
+  },
+  {
+    "countryName": "Nicaragua",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Managua, León"
+  },
+  {
+    "countryName": "Niger",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Niamey, Zinder"
+  },
+  {
+    "countryName": "Nigeria",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Lagos, Kano"
+  },
+  {
+    "countryName": "Niue",
+    "timeZone": "-11:00",
+    "timeZoneDescription": "(UTC -11:00) Alofi"
+  },
+  {
+    "countryName": "Norfolk Island",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Kingston"
+  },
+  {
+    "countryName": "North Korea",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Pyongyang, Hamhŭng"
+  },
+  {
+    "countryName": "North Macedonia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Skopje, Bitola"
+  },
+  {
+    "countryName": "Northern Mariana Islands",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Saipan"
+  },
+  {
+    "countryName": "Norway",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Oslo, Bergen"
+  },
+  {
+    "countryName": "Oman",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Muscat, Seeb"
+  },
+  {
+    "countryName": "Pakistan",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Karachi, Lahore"
+  },
+  {
+    "countryName": "Palau",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Ngerulmud"
+  },
+  {
+    "countryName": "Palestinian Territory",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) East Jerusalem, Gaza"
+  },
+  {
+    "countryName": "Panama",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Panamá, San Miguelito"
+  },
+  {
+    "countryName": "Papua New Guinea",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Port Moresby, Lae"
+  },
+  {
+    "countryName": "Papua New Guinea",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Arawa"
+  },
+  {
+    "countryName": "Paraguay",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Asunción, Ciudad del Este"
+  },
+  {
+    "countryName": "Peru",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Lima, Arequipa"
+  },
+  {
+    "countryName": "Philippines",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Quezon City, Manila"
+  },
+  {
+    "countryName": "Pitcairn",
+    "timeZone": "-08:00",
+    "timeZoneDescription": "(UTC -08:00) Adamstown"
+  },
+  {
+    "countryName": "Poland",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Warsaw, Łódź"
+  },
+  {
+    "countryName": "Portugal",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Lisbon, Porto"
+  },
+  {
+    "countryName": "Portugal",
+    "timeZone": "-01:00",
+    "timeZoneDescription": "(UTC -01:00) Ponta Delgada"
+  },
+  {
+    "countryName": "Puerto Rico",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) San Juan, Bayamón"
+  },
+  {
+    "countryName": "Qatar",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Doha, Ar Rayyān"
+  },
+  {
+    "countryName": "Republic of the Congo",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Brazzaville, Pointe-Noire"
+  },
+  {
+    "countryName": "Reunion",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Saint-Denis, Saint-Paul"
+  },
+  {
+    "countryName": "Romania",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Bucharest, Sector 3"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Kaliningrad, Chernyakhovsk"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Moscow, Saint Petersburg"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Samara, Volgograd"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Yekaterinburg, Chelyabinsk"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+06:00",
+    "timeZoneDescription": "(UTC +06:00) Omsk, Tara"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Novosibirsk, Krasnoyarsk"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Irkutsk, Ulan-Ude"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Chita, Yakutsk"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+10:00",
+    "timeZoneDescription": "(UTC +10:00) Vladivostok, Khabarovsk"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Yuzhno-Sakhalinsk, Magadan"
+  },
+  {
+    "countryName": "Russia",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Petropavlovsk-Kamchatsky, Yelizovo"
+  },
+  {
+    "countryName": "Rwanda",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Kigali, Butare"
+  },
+  {
+    "countryName": "Saint Barthelemy",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Gustavia"
+  },
+  {
+    "countryName": "Saint Helena",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Jamestown"
+  },
+  {
+    "countryName": "Saint Kitts and Nevis",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Basseterre"
+  },
+  {
+    "countryName": "Saint Lucia",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Castries"
+  },
+  {
+    "countryName": "Saint Martin",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Marigot"
+  },
+  {
+    "countryName": "Saint Pierre and Miquelon",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Saint-Pierre"
+  },
+  {
+    "countryName": "Saint Vincent and the Grenadines",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Kingstown, Kingstown Park"
+  },
+  {
+    "countryName": "Samoa",
+    "timeZone": "+13:00",
+    "timeZoneDescription": "(UTC +13:00) Apia"
+  },
+  {
+    "countryName": "San Marino",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) San Marino"
+  },
+  {
+    "countryName": "Sao Tome and Principe",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) São Tomé"
+  },
+  {
+    "countryName": "Saudi Arabia",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Riyadh, Jeddah"
+  },
+  {
+    "countryName": "Senegal",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Dakar, Pikine"
+  },
+  {
+    "countryName": "Serbia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Belgrade, Niš"
+  },
+  {
+    "countryName": "Seychelles",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Victoria"
+  },
+  {
+    "countryName": "Sierra Leone",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Freetown, Bo"
+  },
+  {
+    "countryName": "Singapore",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Singapore, Woodlands"
+  },
+  {
+    "countryName": "Sint Maarten",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Philipsburg"
+  },
+  {
+    "countryName": "Slovakia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Bratislava, Košice"
+  },
+  {
+    "countryName": "Slovenia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Ljubljana, Maribor"
+  },
+  {
+    "countryName": "Solomon Islands",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Honiara"
+  },
+  {
+    "countryName": "Somalia",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Mogadishu, Hargeysa"
+  },
+  {
+    "countryName": "South Africa",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Cape Town, Durban"
+  },
+  {
+    "countryName": "South Georgia and the South Sandwich Islands",
+    "timeZone": "-02:00",
+    "timeZoneDescription": "(UTC -02:00) Grytviken"
+  },
+  {
+    "countryName": "South Korea",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Seoul, Busan"
+  },
+  {
+    "countryName": "South Sudan",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Juba, Winejok"
+  },
+  {
+    "countryName": "Spain",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Las Palmas de Gran Canaria, Santa Cruz de Tenerife"
+  },
+  {
+    "countryName": "Spain",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Madrid, Barcelona"
+  },
+  {
+    "countryName": "Sri Lanka",
+    "timeZone": "+05:30",
+    "timeZoneDescription": "(UTC +05:30) Colombo, Dehiwala-Mount Lavinia"
+  },
+  {
+    "countryName": "Sudan",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Khartoum, Omdurman"
+  },
+  {
+    "countryName": "Suriname",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Paramaribo, Lelydorp"
+  },
+  {
+    "countryName": "Svalbard and Jan Mayen",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Longyearbyen"
+  },
+  {
+    "countryName": "Sweden",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Stockholm, Göteborg"
+  },
+  {
+    "countryName": "Switzerland",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Zürich, Genève"
+  },
+  {
+    "countryName": "Syria",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Aleppo, Damascus"
+  },
+  {
+    "countryName": "Taiwan",
+    "timeZone": "+08:00",
+    "timeZoneDescription": "(UTC +08:00) Taipei, Kaohsiung"
+  },
+  {
+    "countryName": "Tajikistan",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Dushanbe, Khujand"
+  },
+  {
+    "countryName": "Tanzania",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Dar es Salaam, Mwanza"
+  },
+  {
+    "countryName": "Thailand",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Bangkok, Samut Prakan"
+  },
+  {
+    "countryName": "Timor Leste",
+    "timeZone": "+09:00",
+    "timeZoneDescription": "(UTC +09:00) Dili, Maliana"
+  },
+  {
+    "countryName": "Togo",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) Lomé, Sokodé"
+  },
+  {
+    "countryName": "Tokelau",
+    "timeZone": "+13:00",
+    "timeZoneDescription": "(UTC +13:00) Fakaofo"
+  },
+  {
+    "countryName": "Tonga",
+    "timeZone": "+13:00",
+    "timeZoneDescription": "(UTC +13:00) Nuku‘alofa"
+  },
+  {
+    "countryName": "Trinidad and Tobago",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Chaguanas, Mon Repos"
+  },
+  {
+    "countryName": "Tunisia",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Tunis, Sfax"
+  },
+  {
+    "countryName": "Turkey",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Istanbul, Ankara"
+  },
+  {
+    "countryName": "Turkmenistan",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Ashgabat, Türkmenabat"
+  },
+  {
+    "countryName": "Turks and Caicos Islands",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) Cockburn Town"
+  },
+  {
+    "countryName": "Tuvalu",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Funafuti"
+  },
+  {
+    "countryName": "U.S. Virgin Islands",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Saint Croix, Charlotte Amalie"
+  },
+  {
+    "countryName": "Uganda",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Kampala, Gulu"
+  },
+  {
+    "countryName": "Ukraine",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Kyiv, Kharkiv"
+  },
+  {
+    "countryName": "United Arab Emirates",
+    "timeZone": "+04:00",
+    "timeZoneDescription": "(UTC +04:00) Dubai, Sharjah"
+  },
+  {
+    "countryName": "United Kingdom",
+    "timeZone": "+00:00",
+    "timeZoneDescription": "(UTC +00:00) London, Birmingham"
+  },
+  {
+    "countryName": "United States Minor Outlying Islands",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Wake"
+  },
+  {
+    "countryName": "United States Minor Outlying Islands",
+    "timeZone": "-11:00",
+    "timeZoneDescription": "(UTC -11:00) Midway"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-05:00",
+    "timeZoneDescription": "(UTC -05:00) New York City, Brooklyn"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-06:00",
+    "timeZoneDescription": "(UTC -06:00) Chicago, Houston"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Denver, El Paso"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-07:00",
+    "timeZoneDescription": "(UTC -07:00) Phoenix, Tucson"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-08:00",
+    "timeZoneDescription": "(UTC -08:00) Los Angeles, San Diego"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-09:00",
+    "timeZoneDescription": "(UTC -09:00) Anchorage, Juneau"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-10:00",
+    "timeZoneDescription": "(UTC -10:00) Adak"
+  },
+  {
+    "countryName": "United States",
+    "timeZone": "-10:00",
+    "timeZoneDescription": "(UTC -10:00) Honolulu, East Honolulu"
+  },
+  {
+    "countryName": "Uruguay",
+    "timeZone": "-03:00",
+    "timeZoneDescription": "(UTC -03:00) Montevideo, Salto"
+  },
+  {
+    "countryName": "Uzbekistan",
+    "timeZone": "+05:00",
+    "timeZoneDescription": "(UTC +05:00) Tashkent, Namangan"
+  },
+  {
+    "countryName": "Vanuatu",
+    "timeZone": "+11:00",
+    "timeZoneDescription": "(UTC +11:00) Port-Vila"
+  },
+  {
+    "countryName": "Vatican",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Vatican City"
+  },
+  {
+    "countryName": "Venezuela",
+    "timeZone": "-04:00",
+    "timeZoneDescription": "(UTC -04:00) Caracas, Maracaibo"
+  },
+  {
+    "countryName": "Vietnam",
+    "timeZone": "+07:00",
+    "timeZoneDescription": "(UTC +07:00) Ho Chi Minh City, Da Nang"
+  },
+  {
+    "countryName": "Wallis and Futuna",
+    "timeZone": "+12:00",
+    "timeZoneDescription": "(UTC +12:00) Mata-Utu"
+  },
+  {
+    "countryName": "Western Sahara",
+    "timeZone": "+01:00",
+    "timeZoneDescription": "(UTC +01:00) Laayoune, Dakhla"
+  },
+  {
+    "countryName": "Yemen",
+    "timeZone": "+03:00",
+    "timeZoneDescription": "(UTC +03:00) Sanaa, Al Ḩudaydah"
+  },
+  {
+    "countryName": "Zambia",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Lusaka, Kitwe"
+  },
+  {
+    "countryName": "Zimbabwe",
+    "timeZone": "+02:00",
+    "timeZoneDescription": "(UTC +02:00) Harare, Bulawayo"
+  }
+];
