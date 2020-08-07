@@ -12,7 +12,7 @@ namespace FinanceTracker.Application.Dtos
         public string Description { get; set; }
         public string Currency { get; set; }
         public decimal Price { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public string CreatedDateString { get; set; }
     }
 }

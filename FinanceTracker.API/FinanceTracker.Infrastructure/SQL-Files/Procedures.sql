@@ -120,7 +120,7 @@ Begin
 					[Name],
 					[Number],
 					IsActive,
-					AccountCurrency,
+					Currency,
 					CurrentBalance,
 					CreatedDate) 
 		Values     (@bankId,
@@ -198,7 +198,7 @@ Begin
 					[Name],
 					[Number],
 					IsActive,
-					AccountCurrency,
+					Currency,
 					CurrentBalance,
 					CreatedDate) 
 		Values     (@bankId,

@@ -81,7 +81,7 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(responseBody.user));
           this.currentUser = responseBody.user;
           this.currencyService.fetchListOfCurrencies();
-          this.currencyService.setUserBaseCurrency = this.currentUser.userCurrency;
+          this.currencyService.setUserBaseCurrency = this.currentUser.baseCurrency;
         }
         this.uiService.showSnackBar('Successfully logged in.', 3000);
         this.setIsAuthenticated = true;

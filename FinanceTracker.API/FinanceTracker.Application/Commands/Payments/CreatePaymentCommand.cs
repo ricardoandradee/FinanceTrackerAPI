@@ -39,7 +39,7 @@ namespace FinanceTracker.Application.Commands.Payments
 
                 if (await _unitOfWorkRepository.SaveChanges() > 0)
                 {
-                    payment.Category = await _categoryRepository.RetrieveById(payment.CategoryId);
+                    payment.Category = await _categoryRepository.RetrieveById(payment.Category.Id);
                     return _mapper.Map<PaymentToReturnDto>(payment);
                 }
 

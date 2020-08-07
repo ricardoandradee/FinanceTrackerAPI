@@ -10,14 +10,13 @@ using System.Text;
 
 namespace FinanceTracker.Infrastructure
 {
-
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(
-                        configuration.GetConnectionString("DefaultConnectionLocal"),
+                    options.UseLazyLoadingProxies(false)
+                           .UseSqlServer(configuration.GetConnectionString("DefaultConnectionLocal"),
                         b => b.MigrationsAssembly("FinanceTracker.API")));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Account } from 'src/app/models/account.model';
 import { Transaction } from 'src/app/models/transaction.model';
 
 @Component({
@@ -19,7 +18,6 @@ export class AccountActionsComponent implements OnInit {
 
   onSave() {
     this.dialogRef.close({ data: this.transaction });
-
   }
 
   ngOnInit() {

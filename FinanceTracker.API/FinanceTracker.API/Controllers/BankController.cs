@@ -4,7 +4,6 @@ using FinanceTracker.Application.Dtos;
 using FinanceTracker.Application.Queries.Banks;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
@@ -33,9 +32,9 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPost]
         [Route("CreateBankWithAccount")]
-        public async Task<IActionResult> CreateBankWithAccount(BankForCreationDto bankForCreationDto)
+        public async Task<IActionResult> CreateBankWithAccount(int userId, BankForCreationDto bankForCreationDto)
         {
-            bankForCreationDto.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            bankForCreationDto.UserId = userId;
             var command = new CreateBankWithAccountCommand(bankForCreationDto);
 
             var result = await Mediator.Send(command);

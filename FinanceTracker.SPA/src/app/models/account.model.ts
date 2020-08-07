@@ -6,7 +6,7 @@ export interface Account {
     isActive: boolean;
     number: string;
     currentBalance: number;
-    accountCurrency: string;
+    currency: string;
     createdDate?: Date;
     transactions: Transaction[];
 }

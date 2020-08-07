@@ -44,8 +44,8 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
-      const subscription = this.authService.registerUser({ userName: user.userName, password: user.password, created: new Date(),
-            lastActive: new Date(), city: user.city, country: user.country } as User).subscribe(() => {
+      const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
+            city: user.city, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
             this.uiService.showSnackBar(error, 3000);

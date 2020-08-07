@@ -10,11 +10,11 @@ namespace FinanceTracker.Application.Commands.Users
     public class UpdateUserBaseCurrencyCommand : IRequest<UserForDetailedDto>
     {
         public int UserId { get; }
-        public string UserCurrency { get; }
-        public UpdateUserBaseCurrencyCommand(int userId, string userCurrency)
+        public string BaseCurrency { get; }
+        public UpdateUserBaseCurrencyCommand(int userId, string baseCurrency)
         {
             UserId = userId;
-            UserCurrency = userCurrency;
+            BaseCurrency = baseCurrency;
         }
 
         public class UpdateUserBaseCurrencyHandler : IRequestHandler<UpdateUserBaseCurrencyCommand, UserForDetailedDto>
@@ -35,9 +35,9 @@ namespace FinanceTracker.Application.Commands.Users
             {
                 var userFromRepo = await _userUepository.RetrieveById(request.UserId);
 
-                if (userFromRepo.UserCurrency != request.UserCurrency)
+                if (userFromRepo.BaseCurrency != request.BaseCurrency)
                 {
-                    userFromRepo.UserCurrency = request.UserCurrency;
+                    userFromRepo.BaseCurrency = request.BaseCurrency;
                     if (await _unitOfWorkRepository.SaveChanges() > 0)
                     {
                         return _mapper.Map<UserForDetailedDto>(userFromRepo);

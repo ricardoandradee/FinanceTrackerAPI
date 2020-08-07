@@ -45,12 +45,12 @@ namespace FinanceTracker.Infrastructure.Persistence
             }
             var account = bank.Accounts.First();
 
-            var userIdParam = new SqlParameter("userId", bank.UserId);
+            var userIdParam = new SqlParameter("userId", bank.User.Id);
             var bankNameParam = new SqlParameter("bankName", bank.Name);
             var branchParam = new SqlParameter("branch", bank.Branch);
             var accountNameParam = new SqlParameter("accountName", account.Name);
             var accountNumberParam = new SqlParameter("accountNumber", account.Number);
-            var accountCurrencyParam = new SqlParameter("accountCurrency", account.AccountCurrency);
+            var accountCurrencyParam = new SqlParameter("accountCurrency", account.Currency);
             var currentBalanceParam = new SqlParameter("currentBalance", account.CurrentBalance);
             var createdDateParam = new SqlParameter("createdDate", bank.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss"));
             var bankIdParam = new SqlParameter("bankId", DbType.Int32) { Direction = ParameterDirection.Output };
@@ -61,7 +61,8 @@ namespace FinanceTracker.Infrastructure.Persistence
                   , new[] { userIdParam, bankNameParam, branchParam, accountNameParam, accountNumberParam, accountCurrencyParam,
                     currentBalanceParam, createdDateParam, bankIdParam });
 
-            return await RetrieveById(Convert.ToInt32(bankIdParam.Value));
+            return await _unitOfWork.Context.Banks.Include(a => a.Accounts).ThenInclude(t => t.Transactions)
+                           .FirstAsync(a => a.Id == Convert.ToInt32(bankIdParam.Value));
         }
     }
 }

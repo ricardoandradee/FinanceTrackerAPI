@@ -28,8 +28,8 @@ export class CurrencyService implements OnDestroy {
         return this.dataSource$.asObservable();
     }
 
-    set setUserBaseCurrency(userCurrency: string) {
-        this.dataSource$.next(userCurrency);
+    set setUserBaseCurrency(baseCurrency: string) {
+        this.dataSource$.next(baseCurrency);
     }
 
     private loadDevCurrencies() {

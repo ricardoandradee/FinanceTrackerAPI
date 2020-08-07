@@ -26,7 +26,7 @@ export class AccountService {
         const newAccount = {
             name: account.name,
             number: account.number,
-            accountCurrency: account.accountCurrency,
+            currency: account.currency,
             currentBalance: account.currentBalance,
             bankId: account.bankId,
             isActive: account.isActive,
@@ -47,7 +47,7 @@ export class AccountService {
         const accountToUpdate = {
             name: account.name,
             number: account.number,
-            accountCurrency: account.accountCurrency,
+            currency: account.currency,
             isActive: account.isActive
         };
         const httpHeaders = new HttpHeaders({

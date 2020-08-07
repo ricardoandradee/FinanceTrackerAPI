@@ -7,6 +7,5 @@ export class BankAccount {
     isActive: boolean;
     createdDate?: Date;
     accounts: Account[];
-    account: Account;
     close = true;
 }

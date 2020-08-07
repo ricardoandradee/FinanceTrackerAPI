@@ -39,7 +39,7 @@
             <mat-form-field [style.width.px]=120>
                 <mat-label> Currency </mat-label>
                 <mat-select #currencyInput="ngModel" name="currency" id="currency" 
-                    [disabled]="actionMode === 'Edit'" [(ngModel)]="account.accountCurrency" required>
+                    [disabled]="actionMode === 'Edit'" [(ngModel)]="account.currency" required>
                     <mat-option value=""> - Select - </mat-option>
                     <mat-option *ngFor="let currency of currencies" [value]="currency">
                         {{currency}}

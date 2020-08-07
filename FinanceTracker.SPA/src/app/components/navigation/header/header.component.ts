@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         const user = this.getUserBaseCurrencyFromLocalStorage();
         this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
-        user.userCurrency = this.userBaseCurrency;
+        user.baseCurrency = this.userBaseCurrency;
         localStorage.setItem('user', JSON.stringify(user));
       });
       this.allSubscriptions.push(subscription);

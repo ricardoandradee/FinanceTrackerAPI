@@ -42,17 +42,15 @@ export class BankAccountService {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         });
     }
-
+    
     createBankWithAccount(bankAccount: BankAccount) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const createdDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm:ss');
         const newBankInfo = {
             userId: user.id,
             name: bankAccount.name,
             branch: bankAccount.branch,
             isActive: bankAccount.isActive,
-            createdDate,
-            accountForCreation: { ...bankAccount.account, createdDate }
+            accounts: bankAccount.accounts
         };
 
         const url = `${this.baseUrl}user/${user.id}/bank/CreateBankWithAccount`;

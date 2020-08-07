@@ -1,9 +1,9 @@
 export interface User {
     id: number;
     userName: string;
-    userCurrency: string;
+    baseCurrency: string;
     age?: number;
-    created: Date;
+    createdDate: Date;
     wallet: number;
     lastActive: Date;
     city: string;

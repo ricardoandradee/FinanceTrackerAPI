@@ -300,7 +300,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   onAddAccout(bankInfo: BankAccount) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,
     {
-      data: { actionMode: 'Add', account: { bankId: bankInfo.id, name: '', isActive: true, accountCurrency: '' } as Account }
+      data: { actionMode: 'Add', account: { bankId: bankInfo.id, name: '', isActive: true, currency: '' } as Account }
     });
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe((accountToAdded: Account) => {
       if (accountToAdded) {

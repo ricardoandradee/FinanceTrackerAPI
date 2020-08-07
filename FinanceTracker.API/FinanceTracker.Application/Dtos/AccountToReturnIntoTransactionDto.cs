@@ -6,7 +6,7 @@ namespace FinanceTracker.Application.Dtos
     public class AccountToReturnIntoTransactionDto
     {
         public int Id { get; set; }
-        public string AccountCurrency { get; set; }
+        public string Currency { get; set; }
         public decimal CurrentBalance { get; set; }
         public bool IsActive { get; set; }
     }

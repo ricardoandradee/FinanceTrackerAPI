@@ -10,6 +10,6 @@ namespace FinanceTracker.Application.Dtos
         public string Action { get; set; }
         public decimal BalanceAfterTransaction { get; set; }
         public AccountToReturnIntoTransactionDto Account { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

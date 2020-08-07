@@ -4,7 +4,6 @@ using FinanceTracker.Application.Dtos;
 using FinanceTracker.Application.Queries.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FinanceTracker.API.Controllers
@@ -54,9 +53,9 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPost]
         [Route("CreateCategory")]
-        public async Task<IActionResult> CreateCategory(CategoryForCreationDto categoryForCreationDto)
+        public async Task<IActionResult> CreateCategory(int userId, CategoryForCreationDto categoryForCreationDto)
         {
-            categoryForCreationDto.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            categoryForCreationDto.UserId = userId;
 
             var command = new CreateCategoryCommand(categoryForCreationDto);
             var result = await Mediator.Send(command);

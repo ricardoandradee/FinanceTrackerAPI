@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Application.Common.Extensions;
 using FinanceTracker.Application.Dtos;
 using FinanceTracker.Domain.Entities;
 using System.Collections.Generic;
@@ -31,62 +31,89 @@ namespace FinanceTracker.Application.Common.Mappings
             #region Category related mappings
 
             CreateMap<Category, CategoryToReturnDto>().ReverseMap();
-            CreateMap<CategoryForCreationDto, Category>().ReverseMap();
-            CreateMap<CategoryForUpdateDto, Category>().ReverseMap();
+            CreateMap<Category, CategoryForCreationDto>()
+            .ForMember(dest => dest.UserId, opt =>
+            {
+                opt.MapFrom((s, d) => s.User.Id);
+            }).ReverseMap();
+            CreateMap<Category, CategoryForUpdateDto>().ReverseMap();
 
             #endregion
 
             #region Payment related mappings
 
             CreateMap<Payment, PaymentToReturnDto>()
+            .ForMember(dest => dest.CategoryId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Category.Id);
+            })
             .ForMember(dest => dest.CategoryName, opt =>
             {
                 opt.MapFrom((s, d) => s.Category?.Name);
             })
             .ForMember(dest => dest.CreatedDateString, opt =>
             {
-                opt.MapFrom((s, d) => s.CreatedDate.HasValue ? s.CreatedDate.Value.ToString("MMM/yyyy") : string.Empty);
+                opt.MapFrom((s, d) => s.CreatedDate.ToString("MMM/yyyy"));
             }).ReverseMap();
 
 
-            CreateMap<PaymentForCreationDto, Payment>().ReverseMap();
-            CreateMap<PaymentForUpdateDto, Payment>().ReverseMap();
+            CreateMap<Payment, PaymentForCreationDto>()
+            .ForMember(dest => dest.CategoryId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Category.Id);
+            }).ReverseMap();
+            CreateMap<Payment, PaymentForUpdateDto>()
+            .ForMember(dest => dest.CategoryId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Category.Id);
+            }).ReverseMap();
 
             #endregion
 
             #region Bank related mappings
 
-            CreateMap<BankToReturnDto, Bank>().ReverseMap();
-            CreateMap<BankForCreationDto, Bank>().ReverseMap();
+            CreateMap<Bank, BankToReturnDto>().ReverseMap();
 
-            CreateMap<BankForCreationDto, Bank>()
-            .ForMember(dest => dest.Accounts, opt =>
+            CreateMap<Bank, BankForCreationDto>()
+            .ForMember(dest => dest.UserId, opt =>
             {
-                opt.MapFrom((s, d) => new List<AccountForCreationDto> { s.AccountForCreation });
+                opt.MapFrom((s, d) => s.User.Id);
             }).ReverseMap();
 
-            CreateMap<BankForUpdateDto, Bank>()
-            .ForMember(dest => dest.Accounts, opt =>
+            CreateMap<Bank, BankForUpdateDto>()
+            .ForMember(dest => dest.AccountsForCreation, opt =>
             {
-                opt.MapFrom((s, d) => s.AccountsForCreation);
+                opt.MapFrom((s, d) => s.Accounts);
             }).ReverseMap();
 
             #endregion
 
             #region Account related mappings
 
-            CreateMap<AccountToReturnDto, Account>().ReverseMap();
-            CreateMap<AccountForCreationDto, Account>().ReverseMap();
-            CreateMap<AccountForUpdateDto, Account>().ReverseMap();
-            CreateMap<AccountToReturnIntoTransactionDto, Account>().ReverseMap();
+            CreateMap<Account, AccountToReturnDto>()
+            .ForMember(dest => dest.BankId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Bank.Id);
+            }).ReverseMap();
+            CreateMap<Account, AccountForCreationDto>()
+            .ForMember(dest => dest.BankId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Bank.Id);
+            }).ReverseMap();
+            CreateMap<Account, AccountForUpdateDto>().ReverseMap();
+            CreateMap<Account, AccountToReturnIntoTransactionDto>().ReverseMap();
 
             #endregion
 
             #region Transaction related mappings
 
-            CreateMap<TransactionToReturnDto, Transaction>().ReverseMap();
-            CreateMap<TransactionForCreationDto, Transaction>().ReverseMap();
-            CreateMap<TransactionToReturnWithoutAccountDto, Transaction>().ReverseMap();
+            CreateMap<Transaction, TransactionToReturnDto>().ReverseMap();
+            CreateMap<Transaction, TransactionForCreationDto>()
+            .ForMember(dest => dest.AccountId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Account.Id);
+            }).ReverseMap();
+            CreateMap<Transaction, TransactionToReturnWithoutAccountDto>().ReverseMap();
 
             #endregion
         }

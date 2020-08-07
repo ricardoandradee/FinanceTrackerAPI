@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FinanceTracker.Application.Common.Exceptions
+namespace FinanceTracker.Application.Common.Extensions
 {
     public static class Calculations
     {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FinanceTracker.API.Migrations
 {
-    public partial class InitialMigrationAfterProjectRestructure : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,16 +13,16 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(nullable: true),
-                    UserCurrency = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(maxLength: 30, nullable: false),
+                    BaseCurrency = table.Column<string>(maxLength: 3, nullable: false),
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Wallet = table.Column<decimal>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     LastActive = table.Column<DateTime>(nullable: false),
-                    City = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true)
+                    City = table.Column<string>(maxLength: 50, nullable: false),
+                    Country = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,9 +35,9 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Branch = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Branch = table.Column<string>(maxLength: 50, nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
@@ -49,7 +49,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,10 +58,10 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,7 +71,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,12 +80,12 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    AccountCurrency = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 30, nullable: false),
+                    Currency = table.Column<string>(maxLength: 3, nullable: false),
                     CurrentBalance = table.Column<decimal>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,7 +95,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,12 +104,12 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Number = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Number = table.Column<string>(maxLength: 30, nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    AccountCurrency = table.Column<string>(nullable: true),
+                    Currency = table.Column<string>(maxLength: 3, nullable: false),
                     CurrentBalance = table.Column<decimal>(nullable: false),
-                    BankId = table.Column<int>(nullable: false),
+                    BankId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -120,7 +120,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.BankId,
                         principalTable: "Banks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,11 +129,11 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 255, nullable: false),
                     Amount = table.Column<decimal>(nullable: false),
                     BalanceAfterTransaction = table.Column<decimal>(nullable: false),
-                    Action = table.Column<string>(nullable: true),
-                    AccountId = table.Column<int>(nullable: false),
+                    Action = table.Column<string>(maxLength: 10, nullable: false),
+                    AccountId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -144,7 +144,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,14 +153,14 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(nullable: false),
-                    Address = table.Column<string>(nullable: true),
-                    Establishment = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Currency = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: true),
+                    Address = table.Column<string>(maxLength: 255, nullable: false),
+                    Establishment = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: false),
+                    Currency = table.Column<string>(maxLength: 3, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TransactionId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -170,7 +170,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Payments_Transactions_TransactionId",
                         column: x => x.TransactionId,

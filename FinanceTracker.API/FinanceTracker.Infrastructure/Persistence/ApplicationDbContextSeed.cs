@@ -1,10 +1,7 @@
 ﻿using FinanceTracker.Domain.Entities;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace FinanceTracker.Infrastructure.Persistence
 {
@@ -12,13 +9,40 @@ namespace FinanceTracker.Infrastructure.Persistence
     {
         public static void SeedUsers(ApplicationDbContext context)
         {
+            // Seed, if necessary
             if (!context.Users.Any())
             {
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                              @"Data\UserSeedData.json");
-                var userData = System.IO.File.ReadAllText(path);
-                var users = JsonConvert.DeserializeObject<List<User>>(userData);
-
+                var users = new List<User>()
+                {
+                    new User {
+                        UserName = "Lauren",
+                        DateOfBirth = DateTime.Parse("1990-03-04"),
+                        CreatedDate = DateTime.Parse("2020-06-08"),
+                        LastActive = DateTime.Parse("2020-06-08"),
+                        BaseCurrency = "EUR",
+                        City = "Caledonia",
+                        Country = "Viet Nam"
+                     },
+                    new User {
+                        UserName = "Cameron",
+                        DateOfBirth = DateTime.Parse("1994-08-03"),
+                        CreatedDate = DateTime.Parse("2020-01-06"),
+                        LastActive = DateTime.Parse("2020-01-06"),
+                        BaseCurrency = "AUD",
+                        City = "Galesville",
+                        Country = "French Polynesia"
+                     },
+                    new User {
+                        UserName = "Joshwa",
+                        DateOfBirth = DateTime.Parse("1986-03-16"),
+                        CreatedDate = DateTime.Parse("2020-07-02"),
+                        LastActive = DateTime.Parse("2017-08-09"),
+                        BaseCurrency = "CAD",
+                        City = "Shawmut",
+                        Country = "Pakistan"
+                     }
+                };
+                
                 foreach (var user in users)
                 {
                     byte[] passwordHash, passwordSalt;
