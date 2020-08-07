@@ -8,6 +8,11 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Account> builder)
         {
+            builder.HasOne(u => u.Bank)
+                .WithMany(u => u.Accounts)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Property(t => t.Name)
                 .HasMaxLength(50)
                 .IsRequired();

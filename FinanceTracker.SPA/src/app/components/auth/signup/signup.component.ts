@@ -32,28 +32,36 @@ export class SignupComponent implements OnInit, OnDestroy {
       un.forEach((i) => { this.userNames.push(i); });
     });
 
-    this.countries = TimeZoneList.map((tz) => {
-      return (
-        tz.countryName
-      );
-    }).sort();
+    this.countries = this.getCountries();
     this.currencies = CurrencyList;
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
   filterCity(form: NgForm) {
     const country = form.value.country;
-    this.timeZones = TimeZoneList.filter((tz) => {
-      return ( tz.countryName === country );
+    this.timeZones = this.getTimezoneByCountry(country);
+  }
+
+  private getTimezoneByCountry(countryName: string): string[] {
+    return TimeZoneList.filter((tz) => {
+      return ( tz.countryName === countryName );
     }).map((tz) => {
-      return ( tz.rawFormat );
+      return ( `(UTC ${tz.rawFormat.substring(0, 6)}) ${tz.mainCities.join(', ')}` );
+    }).sort();
+  }
+
+  private getCountries(): string[] {
+    return TimeZoneList.map((tz) => {
+      return (
+        tz.countryName
+      );
     }).sort();
   }
 
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
-            timeZone: this.getTimeZone(user.timeZone), dateOfBirth: user.birthdayPicker,
+            timeZone: user.timeZone, dateOfBirth: user.birthdayPicker,
             baseCurrency: user.currency, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
@@ -65,16 +73,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       });
   
       this.allSubscriptions.push(subscription);
-  }
-
-  private getTimeZone(timeZone: string): string {
-    let timeZoneToReturn = '';
-
-    if (timeZone && timeZone.length > 6 && timeZone.indexOf(':') > -1 && timeZone.indexOf(' ') > -1) {
-      timeZoneToReturn = timeZone.split(' ')[0];
-    }
-
-    return timeZoneToReturn;
   }
   
   login(form: NgForm) {

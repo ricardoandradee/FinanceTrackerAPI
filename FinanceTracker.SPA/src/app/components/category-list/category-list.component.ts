@@ -33,12 +33,12 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   
   constructor(private dialog: MatDialog, private uiService: UiService,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>) {
-                const user: User = JSON.parse(localStorage.getItem('user'));
-                this.userTimeZone = user.timeZone;
-              }
+              private store: Store<{ui: fromRoot.State}>) { }
 
   ngOnInit() {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    this.userTimeZone = user.timeZone.trim().substring(5, 11);
+    console.log(this.userTimeZone);
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
 

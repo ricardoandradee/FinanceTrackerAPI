@@ -16,16 +16,15 @@ export class AccountTransactionsComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   dataSource = new MatTableDataSource<Transaction>();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public passedData: any) {
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.timeZone;
-    
+  constructor(@Inject(MAT_DIALOG_DATA) public passedData: any) {    
     this.account = { ...passedData.account };
     this.dataSource = new MatTableDataSource(this.account.transactions);
     setTimeout(() => { this.dataSource.sort = this.sort; }, 150);
   }
 
   ngOnInit() {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    this.userTimeZone = user.timeZone.trim().substring(5, 11);
   }
 
 }

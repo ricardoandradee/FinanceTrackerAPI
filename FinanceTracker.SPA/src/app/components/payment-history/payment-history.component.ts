@@ -46,14 +46,14 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   constructor(private uiService: UiService, private paymentService: PaymentService,
               private currencyService: CurrencyService, private dialog: MatDialog,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>) {
-                const user: User = JSON.parse(localStorage.getItem('user'));
-                this.userTimeZone = user.timeZone;
-                
+              private store: Store<{ui: fromRoot.State}>) {                
                 this.currencies = CurrencyList;
               }
 
   ngOnInit() {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    this.userTimeZone = user.timeZone.trim().substring(5, 11);
+    
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.allCategories = categoryList;
