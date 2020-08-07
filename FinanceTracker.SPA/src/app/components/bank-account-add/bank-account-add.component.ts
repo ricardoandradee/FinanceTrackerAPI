@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { BankAccount } from 'src/app/models/bank-account.model';
 import { Account } from 'src/app/models/account.model';
 import { NgForm } from '@angular/forms';
-import { CurrencyList } from 'src/app/models/currency.model';
+import { CurrencyList } from 'src/app/data/currency.data';
 
 @Component({
   selector: 'app-bank-account-add',

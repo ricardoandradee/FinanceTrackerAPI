@@ -30,12 +30,12 @@ namespace FinanceTracker.Infrastructure.Persistence
 
         public async Task<Account> CreateAccount(Account account)
         {
-            var bankIdParam = new SqlParameter("bankId", account.Bank.Id);
+            var bankIdParam = new SqlParameter("bankId", account.BankId);
             var accountNameParam = new SqlParameter("accountName", account.Name);
             var accountNumberParam = new SqlParameter("accountNumber", account.Number);
             var accountCurrencyParam = new SqlParameter("accountCurrency", account.Currency);
             var currentBalanceParam = new SqlParameter("currentBalance", account.CurrentBalance);
-            var createdDateParam = new SqlParameter("createdDate", account.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss"));
+            var createdDateParam = new SqlParameter("createdDate", account.CreatedDate);
             var accountIdParam = new SqlParameter("accountId", DbType.Int32) { Direction = ParameterDirection.Output };
 
             await _unitOfWork.Context.Database

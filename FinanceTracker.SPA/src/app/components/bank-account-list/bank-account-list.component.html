@@ -8,7 +8,7 @@
 <mat-table *ngIf="!(isLoading$ | async)" [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="CreatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy hh:mm' }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }} </mat-cell>
     </ng-container>
     <ng-container  matColumnDef="Name">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>

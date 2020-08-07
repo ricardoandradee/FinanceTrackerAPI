@@ -25,7 +25,7 @@
 <mat-table *ngIf="!(isLoading$ | async)" [ngClass]="{'mat-table-no-items': dataSource.data.length === 0, 'mat-table-with-items': dataSource.data.length > 0 }" [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="CreatedDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy hh:mm' }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }} </mat-cell>
         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
     </ng-container>
     <ng-container matColumnDef="Category">

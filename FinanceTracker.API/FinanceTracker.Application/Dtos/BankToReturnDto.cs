@@ -10,6 +10,6 @@ namespace FinanceTracker.Application.Dtos
         public string Branch { get; set; }
         public bool IsActive { get; set; }
         public ICollection<AccountToReturnDto> Accounts { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

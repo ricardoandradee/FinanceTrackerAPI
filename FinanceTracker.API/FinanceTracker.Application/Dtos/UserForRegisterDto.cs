@@ -6,8 +6,8 @@ namespace FinanceTracker.Application.Dtos
     {
         public UserForRegisterDto()
         {
-            CreatedDate = DateTime.Now;
-            LastActive = DateTime.Now;
+            CreatedDate = DateTimeOffset.UtcNow;
+            LastActive = DateTime.UtcNow;
         }
 
         public string UserName { get; set; }
@@ -15,10 +15,10 @@ namespace FinanceTracker.Application.Dtos
         public decimal Wallet { get; set; }
         public string Password { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string City { get; set; }
+        public string TimeZone { get; set; }
         public string Country { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime LastActive { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset LastActive { get; set; }
 
     }
 }

@@ -10,6 +10,7 @@ namespace FinanceTracker.Domain.Entities
         public decimal BalanceAfterTransaction { get; set; }
         public string Action { get; set; }
         public virtual Account Account { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public int AccountId { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

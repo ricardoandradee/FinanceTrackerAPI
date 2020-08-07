@@ -10,6 +10,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-category-list',
@@ -20,6 +21,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   displayedColumns = ['CreatedDate', 'Description', 'Name', 'Actions'];
   dataSource = new MatTableDataSource<Category>();
   isLoading$: Observable<boolean>;
+  userTimeZone = '';
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -31,7 +33,10 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   
   constructor(private dialog: MatDialog, private uiService: UiService,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>) { }
+              private store: Store<{ui: fromRoot.State}>) {
+                const user: User = JSON.parse(localStorage.getItem('user'));
+                this.userTimeZone = user.timeZone;
+              }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);

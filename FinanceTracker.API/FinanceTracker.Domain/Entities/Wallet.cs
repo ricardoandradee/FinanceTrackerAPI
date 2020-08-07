@@ -10,6 +10,7 @@ namespace FinanceTracker.Domain.Entities
         public decimal CurrentBalance { get; set; }
         public bool IsActive { get; set; }
         public virtual User User { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public int UserId { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

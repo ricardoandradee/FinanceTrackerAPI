@@ -15,9 +15,10 @@
                 <mat-error>Password should be 6 characters long.</mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input matInput placeholder="Birthdate" [matDatepicker]="picker" [max]="maxDate" ngModel name="birthday">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput placeholder="Birthdate" [matDatepicker]="birthdayPicker"
+                [max]="maxDate" ngModel name="birthdayPicker">
+            <mat-datepicker-toggle matSuffix [for]="birthdayPicker"></mat-datepicker-toggle>
+            <mat-datepicker #birthdayPicker></mat-datepicker>
         </mat-form-field>
             <mat-form-field>
                 <mat-label> Currency </mat-label>
@@ -40,14 +41,14 @@
                 <mat-error>Country is required.</mat-error>
             </mat-form-field>
             <mat-form-field>
-                <mat-label> City </mat-label>
-                <mat-select #cityInput="ngModel" name="city" id="city" ngModel required>
+                <mat-label> Time Zone </mat-label>
+                <mat-select #timeZoneInput="ngModel" name="timeZone" id="timeZone" ngModel required>
                     <mat-option value=""> - Select - </mat-option>
-                    <mat-option *ngFor="let city of cities" [value]="city">
-                        {{city}}
+                    <mat-option *ngFor="let timeZone of timeZones" [value]="timeZone">
+                        {{timeZone}}
                     </mat-option>
                 </mat-select>
-                <mat-error>City is required.</mat-error>
+                <mat-error>Time Zone is required.</mat-error>
             </mat-form-field>
         <button type="submit" [disabled]="f.invalid" mat-raised-button color="warn">Submit</button>
     </form>

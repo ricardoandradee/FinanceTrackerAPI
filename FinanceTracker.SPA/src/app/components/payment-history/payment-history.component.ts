@@ -4,11 +4,10 @@ import { Payment } from '../../models/payment.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
 import { PaymentAddComponent } from '../payment-add/payment-add.component';
 import { Category } from '../../models/category.model';
-import { CurrencyConverterMapper } from '../../models/currency.converter.mapper.model';
 import { PaymentService } from 'src/app/services/payment.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
-import { CurrencyList } from 'src/app/models/currency.model';
+import { CurrencyList } from 'src/app/data/currency.data';
 import { CategoryService } from 'src/app/services/category.service';
 
 import { Store } from '@ngrx/store';
@@ -16,6 +15,7 @@ import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
 import { Observable, Subscription } from 'rxjs';
 import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.model';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-payment-history',
@@ -39,6 +39,7 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
   private paymentDate = 'All';
   private category = 'All';
   userBaseCurrency: string;
+  userTimeZone = '';
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -46,6 +47,9 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
               private currencyService: CurrencyService, private dialog: MatDialog,
               private categoryService: CategoryService,
               private store: Store<{ui: fromRoot.State}>) {
+                const user: User = JSON.parse(localStorage.getItem('user'));
+                this.userTimeZone = user.timeZone;
+                
                 this.currencies = CurrencyList;
               }
 

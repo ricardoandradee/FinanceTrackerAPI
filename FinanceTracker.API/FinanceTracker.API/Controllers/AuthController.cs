@@ -68,7 +68,6 @@ namespace FinanceTracker.API.Controllers
             }
 
             return BadRequest();
-
         }
 
         private string GenerateToken(string userName, int userId)
@@ -78,7 +77,7 @@ namespace FinanceTracker.API.Controllers
                 new Claim(ClaimTypes.Name, userName),
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddMinutes(1)).ToUnixTimeSeconds().ToString())
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddHours(1)).ToUnixTimeSeconds().ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8

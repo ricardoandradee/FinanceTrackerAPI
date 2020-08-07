@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { UiService } from 'src/app/services/ui.service';
-import { CountryCityList } from 'src/app/models/country-city.model';
-import { CurrencyList } from 'src/app/models/currency.model';
+import { TimeZoneList } from 'src/app/data/timezone.data';
+import { CurrencyList } from 'src/app/data/currency.data';
 import { Subscription } from 'rxjs';
 import { ErrorUserNameAlreadyTakenMatcher } from 'src/app/errorMatchers/error-username-already-taken.matcher';
 
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
   countries = [];
-  cities = [];
+  timeZones = [];
   currencies = [];
 
   constructor(private authService: AuthService,
@@ -29,23 +29,32 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.userNames.subscribe((un) => {
-      un.forEach((i) => { this.userNames.push(i); });        
+      un.forEach((i) => { this.userNames.push(i); });
     });
 
-    this.countries = Object.keys(CountryCityList);
+    this.countries = TimeZoneList.map((tz) => {
+      return (
+        tz.countryName
+      );
+    }).sort();
     this.currencies = CurrencyList;
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
   filterCity(form: NgForm) {
     const country = form.value.country;
-    this.cities = CountryCityList[country];
+    this.timeZones = TimeZoneList.filter((tz) => {
+      return ( tz.countryName === country );
+    }).map((tz) => {
+      return ( tz.rawFormat );
+    }).sort();
   }
 
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
-            city: user.city, country: user.country } as User).subscribe(() => {
+            timeZone: this.getTimeZone(user.timeZone), dateOfBirth: user.birthdayPicker,
+            baseCurrency: user.currency, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
             this.uiService.showSnackBar(error, 3000);
@@ -56,6 +65,16 @@ export class SignupComponent implements OnInit, OnDestroy {
       });
   
       this.allSubscriptions.push(subscription);
+  }
+
+  private getTimeZone(timeZone: string): string {
+    let timeZoneToReturn = '';
+
+    if (timeZone && timeZone.length > 6 && timeZone.indexOf(':') > -1 && timeZone.indexOf(' ') > -1) {
+      timeZoneToReturn = timeZone.split(' ')[0];
+    }
+
+    return timeZoneToReturn;
   }
   
   login(form: NgForm) {

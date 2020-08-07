@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { CurrencyList } from 'src/app/models/currency.model';
+import { CurrencyList } from 'src/app/data/currency.data';
 import { Account } from 'src/app/models/account.model';
 
 @Component({

@@ -16,7 +16,7 @@
                 </ng-container>
                 <ng-container matColumnDef="CreatedDate">
                     <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy hh:mm' }} </mat-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }} </mat-cell>
                 </ng-container>
       
                 <ng-container matColumnDef="Description">

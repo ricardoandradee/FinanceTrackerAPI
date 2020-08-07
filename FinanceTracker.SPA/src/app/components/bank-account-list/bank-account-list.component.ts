@@ -19,6 +19,7 @@ import { TransactionService } from 'src/app/services/transaction.service';
 import { Transaction } from 'src/app/models/transaction.model';
 import { AccountTransactionsComponent } from '../account-transactions/account-transactions.component';
 import { CurrencyService } from 'src/app/services/currency.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -37,7 +38,8 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<BankAccount>();
   private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
-  accountAction = 'withdraw';
+  userTimeZone = '';
+  accountAction = 'Withdraw';
 
   isExpansionDetailRow = (index, row) => row.hasOwnProperty('accounts');
   @Input() singleChildRowDetail: boolean;
@@ -57,7 +59,10 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
               private bankAccountService: BankAccountService,
               private accountService: AccountService,
               private transactionService: TransactionService,
-              private store: Store<{ui: fromRoot.State}>) { }
+              private store: Store<{ui: fromRoot.State}>) {
+                const user: User = JSON.parse(localStorage.getItem('user'));
+                this.userTimeZone = user.timeZone;
+              }
 
   ngOnInit() {
 

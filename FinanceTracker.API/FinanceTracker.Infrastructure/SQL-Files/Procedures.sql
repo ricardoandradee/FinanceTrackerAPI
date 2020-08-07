@@ -11,7 +11,7 @@ Create Procedure PerformAccountTransaction
 	@action Varchar(10),
 	@amount Decimal(10, 2),
 	@description Varchar(100),
-	@createdDate DateTime,
+	@createdDate DateTimeOffset(7),
 	@accountId Int,
     @transactionId Int Output
 )
@@ -92,7 +92,7 @@ Create Procedure CreateBankWithAccount
 	@accountNumber Varchar(25),
 	@accountCurrency Varchar(3),
 	@currentBalance Decimal(18, 2),
-	@createdDate DateTime,
+	@createdDate DateTimeOffset(7),
     @bankId Int Output
 )
 As
@@ -184,7 +184,7 @@ Create Procedure CreateAccount
 	@accountNumber Varchar(25),
 	@accountCurrency Varchar(3),
 	@currentBalance Decimal(18, 2),
-	@createdDate DateTime,
+	@createdDate DateTimeOffset(7),
     @accountId Int Output
 )
 As

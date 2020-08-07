@@ -3,10 +3,11 @@ export interface User {
     userName: string;
     baseCurrency: string;
     age?: number;
+    dateOfBirth?: Date;
     createdDate: Date;
     wallet: number;
     lastActive: Date;
-    city: string;
+    timeZone: string;
     password: string;
     country: string;
 }

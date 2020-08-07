@@ -7,10 +7,11 @@ namespace FinanceTracker.Domain.Entities
     {
         public int Id { get; set; }
         public virtual User User { get; set; }
+        public int UserId { get; set; }
         public string Name { get; set; }
         public string Branch { get; set; }
         public bool IsActive { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

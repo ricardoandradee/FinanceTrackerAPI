@@ -12,7 +12,8 @@ namespace FinanceTracker.Domain.Entities
         public string Currency { get; set; }
         public decimal CurrentBalance { get; set; }
         public virtual Bank Bank { get; set; }
+        public int BankId { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

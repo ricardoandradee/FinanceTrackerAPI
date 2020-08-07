@@ -1,6 +1,6 @@
 import { Component, OnInit,  EventEmitter, Output, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { CurrencyList } from 'src/app/models/currency.model';
+import { CurrencyList } from 'src/app/data/currency.data';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
 import { Observable, Subscription } from 'rxjs';

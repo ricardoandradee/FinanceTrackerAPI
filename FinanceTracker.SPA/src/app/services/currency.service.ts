@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { KeyValuePair } from '../models/key-value-pair.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { Rates } from '../models/rates.mock.model';
+import { Rates } from '../data/rates.mock.data';
 
 @Injectable()
 export class CurrencyService implements OnDestroy {

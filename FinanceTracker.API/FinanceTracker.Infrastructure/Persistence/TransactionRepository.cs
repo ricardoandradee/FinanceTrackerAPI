@@ -28,8 +28,8 @@ namespace FinanceTracker.Infrastructure.Persistence
             var actionParam = new SqlParameter("action", transaction.Action);
             var amountParam = new SqlParameter("amount", transaction.Amount);
             var descriptionParam = new SqlParameter("description", transaction.Description);
-            var createdDateParam = new SqlParameter("createdDate", transaction.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ss"));
-            var accountIdParam = new SqlParameter("accountId", transaction.Account.Id);
+            var createdDateParam = new SqlParameter("createdDate", transaction.CreatedDate);
+            var accountIdParam = new SqlParameter("accountId", transaction.AccountId);
             var transactionIdParam = new SqlParameter("transactionId", DbType.Int32) { Direction = ParameterDirection.Output };
 
             await _unitOfWork.Context.Database

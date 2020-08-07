@@ -7,7 +7,7 @@ namespace FinanceTracker.Application.Dtos
     {
         public BankForCreationDto()
         {
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTimeOffset.UtcNow;
         }
 
         public int UserId { get; set; }
@@ -15,6 +15,6 @@ namespace FinanceTracker.Application.Dtos
         public string Branch { get; set; }
         public bool IsActive { get; set; }
         public ICollection<AccountForCreationDto> Accounts { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

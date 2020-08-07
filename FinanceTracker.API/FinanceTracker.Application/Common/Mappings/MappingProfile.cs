@@ -2,7 +2,6 @@
 using FinanceTracker.Application.Common.Extensions;
 using FinanceTracker.Application.Dtos;
 using FinanceTracker.Domain.Entities;
-using System.Collections.Generic;
 
 namespace FinanceTracker.Application.Common.Mappings
 {
@@ -31,11 +30,7 @@ namespace FinanceTracker.Application.Common.Mappings
             #region Category related mappings
 
             CreateMap<Category, CategoryToReturnDto>().ReverseMap();
-            CreateMap<Category, CategoryForCreationDto>()
-            .ForMember(dest => dest.UserId, opt =>
-            {
-                opt.MapFrom((s, d) => s.User.Id);
-            }).ReverseMap();
+            CreateMap<Category, CategoryForCreationDto>().ReverseMap();
             CreateMap<Category, CategoryForUpdateDto>().ReverseMap();
 
             #endregion
@@ -43,10 +38,6 @@ namespace FinanceTracker.Application.Common.Mappings
             #region Payment related mappings
 
             CreateMap<Payment, PaymentToReturnDto>()
-            .ForMember(dest => dest.CategoryId, opt =>
-            {
-                opt.MapFrom((s, d) => s.Category.Id);
-            })
             .ForMember(dest => dest.CategoryName, opt =>
             {
                 opt.MapFrom((s, d) => s.Category?.Name);
@@ -57,16 +48,8 @@ namespace FinanceTracker.Application.Common.Mappings
             }).ReverseMap();
 
 
-            CreateMap<Payment, PaymentForCreationDto>()
-            .ForMember(dest => dest.CategoryId, opt =>
-            {
-                opt.MapFrom((s, d) => s.Category.Id);
-            }).ReverseMap();
-            CreateMap<Payment, PaymentForUpdateDto>()
-            .ForMember(dest => dest.CategoryId, opt =>
-            {
-                opt.MapFrom((s, d) => s.Category.Id);
-            }).ReverseMap();
+            CreateMap<Payment, PaymentForCreationDto>().ReverseMap();
+            CreateMap<Payment, PaymentForUpdateDto>().ReverseMap();
 
             #endregion
 
@@ -74,11 +57,7 @@ namespace FinanceTracker.Application.Common.Mappings
 
             CreateMap<Bank, BankToReturnDto>().ReverseMap();
 
-            CreateMap<Bank, BankForCreationDto>()
-            .ForMember(dest => dest.UserId, opt =>
-            {
-                opt.MapFrom((s, d) => s.User.Id);
-            }).ReverseMap();
+            CreateMap<Bank, BankForCreationDto>().ReverseMap();
 
             CreateMap<Bank, BankForUpdateDto>()
             .ForMember(dest => dest.AccountsForCreation, opt =>
@@ -90,16 +69,8 @@ namespace FinanceTracker.Application.Common.Mappings
 
             #region Account related mappings
 
-            CreateMap<Account, AccountToReturnDto>()
-            .ForMember(dest => dest.BankId, opt =>
-            {
-                opt.MapFrom((s, d) => s.Bank.Id);
-            }).ReverseMap();
-            CreateMap<Account, AccountForCreationDto>()
-            .ForMember(dest => dest.BankId, opt =>
-            {
-                opt.MapFrom((s, d) => s.Bank.Id);
-            }).ReverseMap();
+            CreateMap<Account, AccountToReturnDto>().ReverseMap();
+            CreateMap<Account, AccountForCreationDto>().ReverseMap();
             CreateMap<Account, AccountForUpdateDto>().ReverseMap();
             CreateMap<Account, AccountToReturnIntoTransactionDto>().ReverseMap();
 
@@ -108,11 +79,7 @@ namespace FinanceTracker.Application.Common.Mappings
             #region Transaction related mappings
 
             CreateMap<Transaction, TransactionToReturnDto>().ReverseMap();
-            CreateMap<Transaction, TransactionForCreationDto>()
-            .ForMember(dest => dest.AccountId, opt =>
-            {
-                opt.MapFrom((s, d) => s.Account.Id);
-            }).ReverseMap();
+            CreateMap<Transaction, TransactionForCreationDto>().ReverseMap();
             CreateMap<Transaction, TransactionToReturnWithoutAccountDto>().ReverseMap();
 
             #endregion

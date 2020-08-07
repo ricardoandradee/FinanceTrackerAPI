@@ -6,7 +6,7 @@ namespace FinanceTracker.Application.Dtos
     {
         public PaymentForCreationDto()
         {
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTimeOffset.UtcNow;
         }
 
         public int CategoryId { get; set; }
@@ -15,6 +15,6 @@ namespace FinanceTracker.Application.Dtos
         public string Description { get; set; }
         public string Currency { get; set; }
         public decimal Price { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

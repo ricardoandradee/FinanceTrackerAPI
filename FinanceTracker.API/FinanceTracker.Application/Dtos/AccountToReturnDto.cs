@@ -13,6 +13,6 @@ namespace FinanceTracker.Application.Dtos
         public bool IsActive { get; set; }
         public ICollection<TransactionToReturnWithoutAccountDto> Transactions { get; set; }
         public int BankId { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
     }
 }

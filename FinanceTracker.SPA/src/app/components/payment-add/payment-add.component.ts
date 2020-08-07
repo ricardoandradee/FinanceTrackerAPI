@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { Category } from '../../models/category.model';
 import { NgForm } from '@angular/forms';
 import { Payment } from '../../models/payment.model';
-import { CurrencyList } from '../../models/currency.model';
+import { CurrencyList } from '../../data/currency.data';
 import { CategoryService } from 'src/app/services/category.service';
 import { Subscription } from 'rxjs';
 
