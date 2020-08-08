@@ -15,8 +15,11 @@ namespace FinanceTracker.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionLocal"),
-                        b => b.MigrationsAssembly("FinanceTracker.API")));
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionLocal"),
+                        b => b.MigrationsAssembly("FinanceTracker.API"));
+                options.EnableSensitiveDataLogging();
+            });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

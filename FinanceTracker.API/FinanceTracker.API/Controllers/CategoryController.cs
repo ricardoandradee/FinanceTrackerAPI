@@ -14,7 +14,6 @@ namespace FinanceTracker.API.Controllers
     {
         [HttpGet]
         [Route("GetCategoryById/{categoryId}")]
-        [TypeFilter(typeof(CategoryAuthorizationAttribute))]
         public async Task<IActionResult> GetCategoryById(int categoryId)
         {
             var query = new GetCategoryByIdQuery(categoryId);
@@ -33,7 +32,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpDelete]
         [Route("DeleteCategory/{categoryId}")]
-        [TypeFilter(typeof(CategoryAuthorizationAttribute))]
         public async Task<IActionResult> DeleteCategory(int categoryId)
         {
             var command = new DeleteCategoryCommand(categoryId);
@@ -43,7 +41,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPut]
         [Route("UpdateCategory/{categoryId}")]
-        [TypeFilter(typeof(CategoryAuthorizationAttribute))]
         public async Task<IActionResult> UpdateCategory(int categoryId, CategoryForUpdateDto categoryForUpdateDto)
         {
             var command = new UpdateCategoryCommand(categoryId, categoryForUpdateDto);

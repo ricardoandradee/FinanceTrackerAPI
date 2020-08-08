@@ -1,5 +1,7 @@
 using FinanceTracker.Application;
+using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Infrastructure;
+using FinanceTracker.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,10 @@ namespace FinanceTracker.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //OR
+            //services.AddHttpContextAccessor();
+            services.AddTransient<IUserResolverService, UserResolverService>();
             services.AddApplication();
             services.AddInfrastructure(Configuration);
 

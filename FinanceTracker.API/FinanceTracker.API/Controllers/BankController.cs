@@ -45,7 +45,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpDelete]
         [Route("DeleteBankInfo/{bankId}")]
-        [TypeFilter(typeof(BankAuthorizationAttribute))]
         public async Task<IActionResult> DeleteBankInfo(int bankId)
         {
             var command = new DeleteBankInfoCommand(bankId);
@@ -61,7 +60,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPut]
         [Route("UpdateBankInfo/{bankId}")]
-        [TypeFilter(typeof(BankAuthorizationAttribute))]
         public async Task<IActionResult> UpdateBankInfo(int bankId, BankForUpdateDto bankForUpdateDto)
         {
             var command = new UpdateBankInfoCommand(bankId, bankForUpdateDto);

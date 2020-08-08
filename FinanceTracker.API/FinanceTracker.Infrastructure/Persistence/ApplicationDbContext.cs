@@ -1,18 +1,26 @@
-﻿using System.Threading.Tasks;
+﻿using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Domain.Entities;
+using FinanceTracker.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
-using FinanceTracker.Domain.Entities;
-using FinanceTracker.Application.Common.Interfaces;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace FinanceTracker.Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         private IDbContextTransaction _currentTransaction;
+        private readonly IUserResolverService _userResolverService;
+        internal int _currentUserId { get; private set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+                                    IUserResolverService userResolverService) : base(options) {
+            _userResolverService = userResolverService;
+            _currentUserId = GetCurrentUserId();
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -85,6 +93,41 @@ namespace FinanceTracker.Infrastructure.Persistence
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
+
+            builder.Entity<Bank>()
+            .HasQueryFilter(bank => bank.UserId == _currentUserId);
+
+            builder.Entity<Account>()
+            .HasQueryFilter(account => account.Bank.UserId == _currentUserId);
+
+            builder.Entity<Transaction>()
+            .HasQueryFilter(transaction => transaction.Account.Bank.UserId == _currentUserId);
+
+            builder.Entity<Payment>()
+            .HasQueryFilter(payment => payment.Category.UserId == _currentUserId);
+
+            builder.Entity<Category>()
+            .HasQueryFilter(category => category.UserId == _currentUserId);
+
+            builder.Entity<Wallet>()
+            .HasQueryFilter(wallet => wallet.UserId == _currentUserId);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.ReplaceService<IModelCacheKeyFactory, UserCacheKeyFactory>();
+        }
+
+        private int GetCurrentUserId()
+        {
+            var userClaims = _userResolverService.GetUserClaimsPrincipal();
+            var currentUserId = 0;
+            if (userClaims != null)
+            {
+                currentUserId = int.Parse(userClaims.GetUserId() ?? "0");
+            }
+            return currentUserId;
         }
     }
 }

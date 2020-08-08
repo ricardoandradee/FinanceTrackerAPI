@@ -1,6 +1,5 @@
 ﻿using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.Application.Commands.Payments;
-using FinanceTracker.Application.Dtos;
 using FinanceTracker.Application.Dtos.Payments;
 using FinanceTracker.Application.Queries.Payments;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,6 @@ namespace FinanceTracker.API.Controllers
     {
         [HttpGet]
         [Route("GetPaymentById/{paymentId}")]
-        [TypeFilter(typeof(PaymentAuthorizationAttribute))]
         public async Task<IActionResult> GetPaymentById(int paymentId)
         {
             var query = new GetPaymentByIdQuery(paymentId);
@@ -34,7 +32,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpDelete]
         [Route("DeletePayment/{paymentId}")]
-        [TypeFilter(typeof(PaymentAuthorizationAttribute))]
         public async Task<IActionResult> DeletePayment(int paymentId)
         {
             var command = new DeletePaymentCommand(paymentId);
@@ -50,7 +47,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPut]
         [Route("UpdatePayment/{paymentId}")]
-        [TypeFilter(typeof(PaymentAuthorizationAttribute))]
         public async Task<IActionResult> UpdatePayment(int paymentId, PaymentForUpdateDto paymentForUpdateDto)
         {
             var command = new UpdatePaymentCommand(paymentId, paymentForUpdateDto);

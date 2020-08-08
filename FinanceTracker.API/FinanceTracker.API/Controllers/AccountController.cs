@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 namespace FinanceTracker.API.Controllers
 {
     [UserAuthorization]
-    [TypeFilter(typeof(BankAuthorizationAttribute))]
     [Route("api/user/{userId}/bank/{bankId}/account")]
     public class AccountController : ApiController
     {        
         [HttpGet]
         [Route("GetAccountById/{accountId}")]
-        [TypeFilter(typeof(AccountAuthorizationAttribute))]
         public async Task<IActionResult> GetAccountById(int accountId)
         {
             var query = new GetAccountByIdQuery(accountId);
@@ -34,7 +32,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPut]
         [Route("UpdateAccount/{accountId}")]
-        [TypeFilter(typeof(AccountAuthorizationAttribute))]
         public async Task<IActionResult> UpdateAccount(int accountId, AccountForUpdateDto accountForUpdateDto)
         {
             var command = new UpdateAccountCommand(accountForUpdateDto, accountId);
@@ -50,7 +47,6 @@ namespace FinanceTracker.API.Controllers
 
         [HttpDelete]
         [Route("DeleteAccount/{accountId}")]
-        [TypeFilter(typeof(AccountAuthorizationAttribute))]
         public async Task<IActionResult> DeleteAccount(int accountId)
         {
             var command = new DeleteAccountCommand(accountId);

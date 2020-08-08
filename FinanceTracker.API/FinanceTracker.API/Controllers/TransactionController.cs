@@ -9,7 +9,6 @@ namespace FinanceTracker.API.Controllers
 {
     [UserAuthorization]
     [Route("api/user/{userId}/account/{accountId}/transaction")]
-    [TypeFilter(typeof(AccountAuthorizationAttribute))]
     public class TransactionController : ApiController
     {
         [HttpGet]
