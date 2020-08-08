@@ -4,6 +4,8 @@ import { CurrencyList } from 'src/app/data/currency.data';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
 import { Observable, Subscription } from 'rxjs';
+import { BankAccountService } from 'src/app/services/bank-account.service';
+import { Account } from 'src/app/models/account.model';
 
 @Component({
   selector: 'app-header',
@@ -17,18 +19,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userBaseCurrency = '';
   openSideNav = false;
   disableBaseCurrency = true;
+  allAccounts: Account[];
   isAuth$: Observable<boolean>;
 
   constructor(private authService: AuthService,
+              private bankAccountService: BankAccountService,
               private currencyService: CurrencyService) {
     this.currencies = CurrencyList;
    }
 
   ngOnInit() {
     this.isAuth$ = this.authService.getIsAuthenticated;
-    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe(currency => {
+    
+    const currencySubscription = this.currencyService.getUserBaseCurrency.subscribe(currency => {
       this.userBaseCurrency = currency ? currency : 'EUR';
-    }));
+    });
+
+    const bankSubscription = this.bankAccountService.getBankAccountInfos.subscribe(bank => {
+      const accounts = ([] as Account[]).concat(...bank.map(x => ( x.accounts )));
+      this.allAccounts = [...accounts];
+    });
+
+    this.allSubscriptions.push(currencySubscription);
+    this.allSubscriptions.push(bankSubscription);
+
+
   }
 
   saveUserBaseCurrency() {

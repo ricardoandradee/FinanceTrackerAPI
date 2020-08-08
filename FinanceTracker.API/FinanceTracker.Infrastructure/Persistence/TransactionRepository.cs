@@ -36,7 +36,9 @@ namespace FinanceTracker.Infrastructure.Persistence
                        .ExecuteSqlRawAsync(@"Exec PerformAccountTransaction @action, @amount, @description, @createdDate, @accountId, @transactionId Out"
                   , new[] { actionParam, amountParam, descriptionParam, createdDateParam, accountIdParam, transactionIdParam });
 
-            return await RetrieveById(Convert.ToInt32(transactionIdParam.Value));
+
+            return await _unitOfWork.Context.Transactions.Include(a => a.Account)
+                           .FirstAsync(t => t.Id == Convert.ToInt32(transactionIdParam.Value));
         }
     }
 }

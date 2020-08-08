@@ -7,7 +7,6 @@ import { CategoryListComponent } from '../category-list/category-list.component'
 import { BankAccountListComponent } from '../bank-account-list/bank-account-list.component';
 import { CdkDetailRowDirective } from '../../directives/detail-row.directive';
 import { PaymentTotalPricePipe } from 'src/app/pipes/payment-total-price.pipe';
-import { BankAccountsBalance } from 'src/app/pipes/bank-accounts-balance.pipe copy';
 
 @NgModule({
     declarations: [
@@ -16,8 +15,7 @@ import { BankAccountsBalance } from 'src/app/pipes/bank-accounts-balance.pipe co
         BankAccountListComponent,
         PaymentHistoryComponent,
         CdkDetailRowDirective,
-        PaymentTotalPricePipe,
-        BankAccountsBalance
+        PaymentTotalPricePipe
     ],
     entryComponents: [BankAccountListComponent],
     bootstrap: [BankAccountListComponent],

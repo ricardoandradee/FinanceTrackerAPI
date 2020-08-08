@@ -7,8 +7,13 @@ a.toolbar-link:hover,
 a.toolbar-link:active {
     color: lightgray;
 }
+.mat-icon {
+    display:inline-flex;
+    vertical-align:top;
+}
 
 .navigation-items {
+    font-size:  14px;
     list-style: none;
     padding: 0;
     margin: 0;

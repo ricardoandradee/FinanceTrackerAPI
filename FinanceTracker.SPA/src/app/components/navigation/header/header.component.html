@@ -7,6 +7,14 @@
         </button>
         <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/paymenthistory'] : ['/']">Spend wise</a></h1>
         <div fxLayoutGap="40px" fxFlex fxLayout fxLayoutAlign="end">
+            <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
+                <li>
+                    <span>
+                        {{ allAccounts | bankAccountsBalance: userBaseCurrency | currency: userBaseCurrency }}
+                    </span>
+                        <mat-icon class="small" [matTooltip]="'User current balance'">info_outline</mat-icon>
+                </li>
+            </ul>
             <mat-form-field *ngIf="(isAuth$ | async)" class="currency" [style.width.px]=60 [style.height.px]=30 [style.fontSize.px]=12>
                 <mat-label> Base Currency </mat-label>
                 <mat-select #currencyInput="ngModel" [disabled]="disableBaseCurrency"

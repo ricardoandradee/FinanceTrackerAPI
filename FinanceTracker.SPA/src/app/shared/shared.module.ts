@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BankAccountsBalance } from 'src/app/pipes/bank-accounts-balance.pipe copy';
 
 @NgModule({
     imports: [
@@ -12,12 +13,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         MaterialModule,
         FlexLayoutModule
     ],
+    declarations: [
+        BankAccountsBalance
+    ],
     exports: [
         ReactiveFormsModule,
         FormsModule,
         CommonModule,
         MaterialModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        BankAccountsBalance
     ]
 })
 export class SharedModule { }

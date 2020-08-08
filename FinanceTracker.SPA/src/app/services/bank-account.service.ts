@@ -4,7 +4,6 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { BankAccount } from '../models/bank-account.model';
 import { User } from '../models/user.model';
-import { DatePipe } from '@angular/common';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -12,8 +11,7 @@ export class BankAccountService {
     private baseUrl = environment.apiUrl;
     private dataSource$: BehaviorSubject<BankAccount[]> = new BehaviorSubject([]);
 
-    constructor(private http: HttpClient,
-        private datePipe: DatePipe) { }
+    constructor(private http: HttpClient) { }
 
         get getBankAccountInfos(): Observable<BankAccount[]> {
             return this.dataSource$.asObservable();
