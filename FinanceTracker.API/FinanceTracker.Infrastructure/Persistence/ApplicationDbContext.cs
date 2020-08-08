@@ -23,7 +23,7 @@ namespace FinanceTracker.Infrastructure.Persistence
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Account> Accounts { get; set; }
@@ -103,8 +103,8 @@ namespace FinanceTracker.Infrastructure.Persistence
             builder.Entity<Transaction>()
             .HasQueryFilter(transaction => transaction.Account.Bank.UserId == _currentUserId);
 
-            builder.Entity<Payment>()
-            .HasQueryFilter(payment => payment.Category.UserId == _currentUserId);
+            builder.Entity<Expense>()
+            .HasQueryFilter(expense => expense.Category.UserId == _currentUserId);
 
             builder.Entity<Category>()
             .HasQueryFilter(category => category.UserId == _currentUserId);

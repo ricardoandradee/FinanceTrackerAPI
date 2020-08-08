@@ -32,11 +32,11 @@
         </div>
     </a>
     <a *ngIf="isAuth$ | async"  mat-list-item
-        [class.active]="isActive('finance/paymenthistory')" [routerLink]="'/finance/paymenthistory'">
+        [class.active]="isActive('finance/expensehistory')" [routerLink]="'/finance/expensehistory'">
         <mat-icon>payments</mat-icon>
         <div fxFlex="10"></div>
         <div *ngIf="sidenavWidth > 6" class="sidenav-item">
-            <span class="nav-caption">Payments</span>
+            <span class="nav-caption">Expenses</span>
         </div>
     </a>
     <mat-list-item *ngIf="isAuth$ | async" fxHide.gt-xs>

@@ -11,7 +11,7 @@ import { MaterialModule } from './material.module';
 import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { YesNoDialogComponent } from './shared/yes.no.dialog.component';
-import { PaymentAddComponent } from './components/payment-add/payment-add.component';
+import { ExpenseAddComponent } from './components/expense-add/expense-add.component';
 import { CategoryAddComponent } from './components/category-add/category-add.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HeaderComponent } from './components/navigation/header/header.component';
@@ -19,7 +19,7 @@ import { SidenavListComponent } from './components/navigation/sidenav-list/siden
 import { UiService } from './services/ui.service';
 import { AuthService } from './services/auth.service';
 import { CurrencyService } from './services/currency.service';
-import { PaymentService } from './services/payment.service';
+import { ExpenseService } from './services/expense.service';
 import { CategoryService } from './services/category.service';
 import { BankAccountService } from './services/bank-account.service';
 import { AccountService } from './services/account.service';
@@ -43,7 +43,7 @@ export function tokenGetter() {
     HeaderComponent,
     SidenavListComponent,
     YesNoDialogComponent,
-    PaymentAddComponent,
+    ExpenseAddComponent,
     CategoryAddComponent,
     BankAccountAddComponent,
     AccountAddEditComponent,
@@ -75,14 +75,14 @@ export function tokenGetter() {
     BankAccountService,
     TransactionService,
     AccountService,
-    PaymentService,
+    ExpenseService,
     UiService,
     DatePipe
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     YesNoDialogComponent,
-    PaymentAddComponent,
+    ExpenseAddComponent,
     CategoryAddComponent,
     BankAccountAddComponent,
     AccountAddEditComponent,

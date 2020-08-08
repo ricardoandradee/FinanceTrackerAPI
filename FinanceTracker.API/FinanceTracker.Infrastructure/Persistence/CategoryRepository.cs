@@ -19,9 +19,9 @@ namespace FinanceTracker.Infrastructure.Persistence
             return await _unitOfWork.Context.Categories.AnyAsync(c => c.Id == categoryId && c.User.Id == userId);
         }
 
-        public async Task<bool> ExistsAnyPaymentsConnectedToCategory(int categoryId)
+        public async Task<bool> ExistsAnyExpensesConnectedToCategory(int categoryId)
         {
-            return await _unitOfWork.Context.Payments.AnyAsync(u => u.Category.Id == categoryId);
+            return await _unitOfWork.Context.Expenses.AnyAsync(u => u.Category.Id == categoryId);
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesByUserId(int userId)

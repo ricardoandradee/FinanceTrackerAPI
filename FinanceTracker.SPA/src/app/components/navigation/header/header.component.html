@@ -5,7 +5,7 @@
               {{ openSideNav ? 'close' : 'menu' }}
           </mat-icon>
         </button>
-        <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/paymenthistory'] : ['/']">Spend wise</a></h1>
+        <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/expensehistory'] : ['/']">Spend wise</a></h1>
         <div fxLayoutGap="20px" fxFlex fxLayout fxLayoutAlign="end">
             <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
                 <li>

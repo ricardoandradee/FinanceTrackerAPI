@@ -9,7 +9,7 @@ namespace FinanceTracker.Application.Common.Interfaces
     public interface IApplicationDbContext : IDisposable
     {
         DbSet<User> Users { get; set; }
-        DbSet<Payment> Payments { get; set; }
+        DbSet<Expense> Expenses { get; set; }
         DbSet<Category> Categories { get; set; }
         DbSet<Bank> Banks { get; set; }
         DbSet<Account> Accounts { get; set; }

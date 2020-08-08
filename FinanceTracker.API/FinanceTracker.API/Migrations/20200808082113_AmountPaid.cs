@@ -8,7 +8,7 @@ namespace FinanceTracker.API.Migrations
         {
             migrationBuilder.AddColumn<decimal>(
                 name: "AmountPaid",
-                table: "Payments",
+                table: "Expenses",
                 type: "decimal(18,2)",
                 nullable: false,
                 defaultValue: 0m);
@@ -18,7 +18,7 @@ namespace FinanceTracker.API.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "AmountPaid",
-                table: "Payments");
+                table: "Expenses");
         }
     }
 }

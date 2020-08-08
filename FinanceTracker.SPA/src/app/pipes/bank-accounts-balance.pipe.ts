@@ -12,9 +12,9 @@ export class BankAccountsBalance implements PipeTransform {
     transform(items: Account[], userBaseCurrency: string): number {
         const allCurrenciesToConvert = items.map(x => x.currency);
         if (this.currencyService.checkIfCurrenciesAreLoaded(allCurrenciesToConvert)) {
-        const currencyMapperList = items.filter((x) => (x.isActive)).map((payment: Account) => {
-            return { currencyFrom: payment.currency, currencyTo: userBaseCurrency,
-                     price: payment.currentBalance } as CurrencyConverterMapper;
+        const currencyMapperList = items.filter((x) => (x.isActive)).map((expense: Account) => {
+            return { currencyFrom: expense.currency, currencyTo: userBaseCurrency,
+                     price: expense.currentBalance } as CurrencyConverterMapper;
         });
         return this.currencyService.convertCurrencyList(currencyMapperList);
         }

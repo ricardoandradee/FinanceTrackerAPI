@@ -27,7 +27,7 @@ namespace FinanceTracker.Application.Commands.Categories
 
             public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
             {
-                if (await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(request.CategoryId))
+                if (await _categoryRepository.ExistsAnyExpensesConnectedToCategory(request.CategoryId))
                 {
                     return false;
                 }

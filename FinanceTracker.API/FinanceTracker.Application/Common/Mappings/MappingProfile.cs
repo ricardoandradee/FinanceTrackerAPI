@@ -3,7 +3,7 @@ using FinanceTracker.Application.Common.Extensions;
 using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Application.Dtos.Banks;
 using FinanceTracker.Application.Dtos.Categories;
-using FinanceTracker.Application.Dtos.Payments;
+using FinanceTracker.Application.Dtos.Expenses;
 using FinanceTracker.Application.Dtos.Transactions;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
@@ -40,9 +40,9 @@ namespace FinanceTracker.Application.Common.Mappings
 
             #endregion
 
-            #region Payment related mappings
+            #region Expense related mappings
 
-            CreateMap<Payment, PaymentToReturnDto>()
+            CreateMap<Expense, ExpenseToReturnDto>()
             .ForMember(dest => dest.CategoryName, opt =>
             {
                 opt.MapFrom((s, d) => s.Category?.Name);
@@ -53,8 +53,8 @@ namespace FinanceTracker.Application.Common.Mappings
             }).ReverseMap();
 
 
-            CreateMap<Payment, PaymentForCreationDto>().ReverseMap();
-            CreateMap<Payment, PaymentForUpdateDto>().ReverseMap();
+            CreateMap<Expense, ExpenseForCreationDto>().ReverseMap();
+            CreateMap<Expense, ExpenseForUpdateDto>().ReverseMap();
 
             #endregion
 

@@ -2,22 +2,22 @@ import { Component, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Category } from '../../models/category.model';
 import { NgForm } from '@angular/forms';
-import { Payment } from '../../models/payment.model';
+import { Expense } from '../../models/expense.model';
 import { CurrencyList } from '../../data/currency.data';
 import { CategoryService } from 'src/app/services/category.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-payment-add',
-  templateUrl: './payment-add.component.html',
-  styleUrls: ['./payment-add.component.scss']
+  selector: 'app-expense-add',
+  templateUrl: './expense-add.component.html',
+  styleUrls: ['./expense-add.component.scss']
 })
-export class PaymentAddComponent implements OnDestroy {
+export class ExpenseAddComponent implements OnDestroy {
   private subscription: Subscription;
   categories: Category[] = [];
   currencies = [];
 
-  constructor(private dialogRef: MatDialogRef<PaymentAddComponent>, private categoryService: CategoryService) {
+  constructor(private dialogRef: MatDialogRef<ExpenseAddComponent>, private categoryService: CategoryService) {
     
     this.subscription = this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.categories = categoryList;
@@ -26,7 +26,7 @@ export class PaymentAddComponent implements OnDestroy {
   }
   
   onSave(form: NgForm) {
-    const payment = {
+    const expense = {
       categoryId: form.value.category,
       address: form.value.address,
       establishment: form.value.establishment,
@@ -34,8 +34,8 @@ export class PaymentAddComponent implements OnDestroy {
       currency: form.value.currency,
       price: form.value.price,
       createdDate: new Date()
-    } as Payment;
-    this.dialogRef.close({ data: payment });    
+    } as Expense;
+    this.dialogRef.close({ data: expense });
   }
 
   ngOnDestroy(): void {

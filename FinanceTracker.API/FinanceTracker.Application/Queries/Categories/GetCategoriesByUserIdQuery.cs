@@ -34,7 +34,7 @@ namespace FinanceTracker.Application.Queries.Categories
 
                 foreach (var category in categoriesToReturnDto)
                 {
-                    if (!await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(category.Id))
+                    if (!await _categoryRepository.ExistsAnyExpensesConnectedToCategory(category.Id))
                     {
                         category.CanBeDeleted = true;
                     }

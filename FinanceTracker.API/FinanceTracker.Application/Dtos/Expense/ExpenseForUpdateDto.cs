@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace FinanceTracker.Application.Dtos.Payments
+namespace FinanceTracker.Application.Dtos.Expenses
 {
-    public class PaymentForUpdateDto
+    public class ExpenseForUpdateDto
     {
         public int CategoryId { get; set; }
         public string Address { get; set; }

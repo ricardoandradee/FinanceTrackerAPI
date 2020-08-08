@@ -148,7 +148,7 @@ namespace FinanceTracker.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payments",
+                name: "Expenses",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -164,15 +164,15 @@ namespace FinanceTracker.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.PrimaryKey("PK_Expenses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payments_Categories_CategoryId",
+                        name: "FK_Expenses_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Payments_Transactions_TransactionId",
+                        name: "FK_Expenses_Transactions_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transactions",
                         principalColumn: "Id",
@@ -195,13 +195,13 @@ namespace FinanceTracker.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_CategoryId",
-                table: "Payments",
+                name: "IX_Expenses_CategoryId",
+                table: "Expenses",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_TransactionId",
-                table: "Payments",
+                name: "IX_Expenses_TransactionId",
+                table: "Expenses",
                 column: "TransactionId");
 
             migrationBuilder.CreateIndex(
@@ -218,7 +218,7 @@ namespace FinanceTracker.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "Expenses");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

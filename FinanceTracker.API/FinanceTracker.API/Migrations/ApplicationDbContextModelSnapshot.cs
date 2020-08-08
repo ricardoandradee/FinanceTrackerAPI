@@ -123,7 +123,7 @@ namespace FinanceTracker.API.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("FinanceTracker.Domain.Entities.Payment", b =>
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.Expense", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,7 +166,7 @@ namespace FinanceTracker.API.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Transaction", b =>
@@ -198,14 +198,14 @@ namespace FinanceTracker.API.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<int>("PaymentId")
+                    b.Property<int>("ExpenseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("ExpenseId");
 
                     b.ToTable("Transactions");
                 });
@@ -323,7 +323,7 @@ namespace FinanceTracker.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FinanceTracker.Domain.Entities.Payment", b =>
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.Expense", b =>
                 {
                     b.HasOne("FinanceTracker.Domain.Entities.Category", "Category")
                         .WithMany()
@@ -340,9 +340,9 @@ namespace FinanceTracker.API.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("FinanceTracker.Domain.Entities.Payment", "Payment")
+                    b.HasOne("FinanceTracker.Domain.Entities.Expense", "Expense")
                         .WithMany("Transactions")
-                        .HasForeignKey("PaymentId")
+                        .HasForeignKey("ExpenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

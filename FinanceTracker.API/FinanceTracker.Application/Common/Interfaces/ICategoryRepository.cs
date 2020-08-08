@@ -7,6 +7,6 @@ namespace FinanceTracker.Application.Common.Interfaces
     public interface ICategoryRepository : IUserVerification, IRepository<Category>
     {
         Task<IEnumerable<Category>> GetCategoriesByUserId(int userId);
-        Task<bool> ExistsAnyPaymentsConnectedToCategory(int categoryId);
+        Task<bool> ExistsAnyExpensesConnectedToCategory(int categoryId);
     }
 }

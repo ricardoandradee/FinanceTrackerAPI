@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace FinanceTracker.Application.Dtos.Payments
+namespace FinanceTracker.Application.Dtos.Expenses
 {
-    public class PaymentToReturnDto
+    public class ExpenseToReturnDto
     {
         public int Id { get; set; }
         public String CategoryName { get; set; }

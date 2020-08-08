@@ -125,7 +125,7 @@ namespace FinanceTracker.API.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("FinanceTracker.Domain.Entities.Payment", b =>
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.Expense", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,7 +173,7 @@ namespace FinanceTracker.API.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Transaction", b =>
@@ -325,7 +325,7 @@ namespace FinanceTracker.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FinanceTracker.Domain.Entities.Payment", b =>
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.Expense", b =>
                 {
                     b.HasOne("FinanceTracker.Domain.Entities.Category", "Category")
                         .WithMany()
