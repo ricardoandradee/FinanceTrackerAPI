@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BankAccountsBalance } from 'src/app/pipes/bank-accounts-balance.pipe copy';
+import { BankAccountsBalance } from 'src/app/pipes/bank-accounts-balance.pipe';
 
 @NgModule({
     imports: [
