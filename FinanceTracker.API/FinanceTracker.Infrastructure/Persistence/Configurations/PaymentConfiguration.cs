@@ -27,6 +27,10 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
             builder.Property(t => t.Price)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+
+            builder.Property(t => t.AmountPaid)
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
         }
     }
 }

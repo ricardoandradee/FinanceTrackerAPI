@@ -6,6 +6,7 @@ export interface Payment {
     categoryName?: string;
     categoryId?: number;
     currency: string;
+    status?: 'Paid' | 'Unpaid' | 'Partial';
     price: number;
     createdDateString?: string;
     createdDate?: Date;

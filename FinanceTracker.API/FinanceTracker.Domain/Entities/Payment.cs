@@ -12,6 +12,7 @@ namespace FinanceTracker.Domain.Entities
         public string Description { get; set; }
         public string Currency { get; set; }
         public decimal Price { get; set; }
+        public decimal AmountPaid { get; set; }
         public virtual Transaction Transaction { get; set; }
         public int TransactionId { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
