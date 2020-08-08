@@ -20,7 +20,7 @@ namespace FinanceTracker.Infrastructure.Persistence
                         CreatedDate = DateTime.Parse("2020-06-08"),
                         LastActive = DateTime.Parse("2020-06-08"),
                         BaseCurrency = "EUR",
-                        TimeZone = "+10:00",
+                        TimeZone = "(UTC +10:00) Sydney, Melbourne",
                         Country = "Viet Nam"
                      },
                     new User {
@@ -29,7 +29,7 @@ namespace FinanceTracker.Infrastructure.Persistence
                         CreatedDate = DateTime.Parse("2020-01-06"),
                         LastActive = DateTime.Parse("2020-01-06"),
                         BaseCurrency = "AUD",
-                        TimeZone = "+09:30",
+                        TimeZone = "(UTC +10:00) Sydney, Melbourne",
                         Country = "French Polynesia"
                      },
                     new User {
@@ -38,7 +38,7 @@ namespace FinanceTracker.Infrastructure.Persistence
                         CreatedDate = DateTime.Parse("2020-07-02"),
                         LastActive = DateTime.Parse("2017-08-09"),
                         BaseCurrency = "CAD",
-                        TimeZone = "+11:00",
+                        TimeZone = "(UTC +10:00) Sydney, Melbourne",
                         Country = "Pakistan"
                      }
                 };

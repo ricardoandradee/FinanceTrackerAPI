@@ -8,6 +8,10 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
+            builder.HasOne(t => t.Category);
+
+            builder.HasMany(t => t.Transactions);
+
             builder.Property(t => t.Address)
                 .HasMaxLength(255)
                 .IsRequired();
