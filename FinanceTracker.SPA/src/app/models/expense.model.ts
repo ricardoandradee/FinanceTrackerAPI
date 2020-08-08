@@ -1,4 +1,4 @@
-export interface Payment {
+export interface Expense {
     id: number;
     description?: string;
     address: string;

@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./finance.component.scss']
 })
 export class FinanceComponent implements OnInit, OnDestroy {
-  currentPage = 'paymenthistory';
+  currentPage = 'expensehistory';
   private subscription: Subscription;
   
   constructor(private activatedRoute: ActivatedRoute) { }

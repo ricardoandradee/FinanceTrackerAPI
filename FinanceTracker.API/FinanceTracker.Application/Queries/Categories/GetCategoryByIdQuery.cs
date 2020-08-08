@@ -31,7 +31,7 @@ namespace FinanceTracker.Application.Queries.Categories
                 var categoryFromRepo = await _categoryRepository.RetrieveById(request.CategoryId);
 
                 var categoryToReturnDto = _mapper.Map<CategoryToReturnDto>(categoryFromRepo);
-                if (!await _categoryRepository.ExistsAnyPaymentsConnectedToCategory(categoryToReturnDto.Id))
+                if (!await _categoryRepository.ExistsAnyExpensesConnectedToCategory(categoryToReturnDto.Id))
                 {
                     categoryToReturnDto.CanBeDeleted = true;
                 }

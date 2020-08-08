@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Infrastructure.Persistence
 {
-    public class PaymentRepository : Repository<Payment>, IPaymentRepository
+    public class ExpenseRepository : Repository<Expense>, IExpenseRepository
     {
-        public PaymentRepository(IUnitOfWorkRepository unitOfWork)
+        public ExpenseRepository(IUnitOfWorkRepository unitOfWork)
             : base(unitOfWork)
         {
         }
 
-        public async Task<IList<Payment>> GetPaymentsByUserId(int userId)
+        public async Task<IList<Expense>> GetExpensesByUserId(int userId)
         {
-            var payments = await _unitOfWork.Context.Payments.Where(b => b.Category.User.Id == userId)
+            var expenses = await _unitOfWork.Context.Expenses.Where(b => b.Category.User.Id == userId)
                 .Include(c => c.Category)
                 .ToListAsync();
 
-            return payments;
+            return expenses;
         }
 
-        public async Task<bool> BelongsToUser(int userId, int paymentId)
+        public async Task<bool> BelongsToUser(int userId, int expenseId)
         {
-            return await _unitOfWork.Context.Payments.AnyAsync(b => b.Id == paymentId && b.Category.User.Id == userId);
+            return await _unitOfWork.Context.Expenses.AnyAsync(b => b.Id == expenseId && b.Category.User.Id == userId);
         }
     }
 }

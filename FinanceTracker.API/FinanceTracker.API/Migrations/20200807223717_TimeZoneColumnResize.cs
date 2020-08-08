@@ -15,12 +15,12 @@ namespace FinanceTracker.API.Migrations
                 table: "Categories");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Payments_Categories_CategoryId",
-                table: "Payments");
+                name: "FK_Expenses_Categories_CategoryId",
+                table: "Expenses");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Payments_Transactions_TransactionId",
-                table: "Payments");
+                name: "FK_Expenses_Transactions_TransactionId",
+                table: "Expenses");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Wallets_Users_UserId",
@@ -53,7 +53,7 @@ namespace FinanceTracker.API.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "TransactionId",
-                table: "Payments",
+                table: "Expenses",
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
@@ -61,7 +61,7 @@ namespace FinanceTracker.API.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "CategoryId",
-                table: "Payments",
+                table: "Expenses",
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
@@ -108,16 +108,16 @@ namespace FinanceTracker.API.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Payments_Categories_CategoryId",
-                table: "Payments",
+                name: "FK_Expenses_Categories_CategoryId",
+                table: "Expenses",
                 column: "CategoryId",
                 principalTable: "Categories",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Payments_Transactions_TransactionId",
-                table: "Payments",
+                name: "FK_Expenses_Transactions_TransactionId",
+                table: "Expenses",
                 column: "TransactionId",
                 principalTable: "Transactions",
                 principalColumn: "Id",
@@ -143,12 +143,12 @@ namespace FinanceTracker.API.Migrations
                 table: "Categories");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Payments_Categories_CategoryId",
-                table: "Payments");
+                name: "FK_Expenses_Categories_CategoryId",
+                table: "Expenses");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Payments_Transactions_TransactionId",
-                table: "Payments");
+                name: "FK_Expenses_Transactions_TransactionId",
+                table: "Expenses");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Wallets_Users_UserId",
@@ -179,14 +179,14 @@ namespace FinanceTracker.API.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "TransactionId",
-                table: "Payments",
+                table: "Expenses",
                 type: "int",
                 nullable: true,
                 oldClrType: typeof(int));
 
             migrationBuilder.AlterColumn<int>(
                 name: "CategoryId",
-                table: "Payments",
+                table: "Expenses",
                 type: "int",
                 nullable: true,
                 oldClrType: typeof(int));
@@ -229,16 +229,16 @@ namespace FinanceTracker.API.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Payments_Categories_CategoryId",
-                table: "Payments",
+                name: "FK_Expenses_Categories_CategoryId",
+                table: "Expenses",
                 column: "CategoryId",
                 principalTable: "Categories",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Payments_Transactions_TransactionId",
-                table: "Payments",
+                name: "FK_Expenses_Transactions_TransactionId",
+                table: "Expenses",
                 column: "TransactionId",
                 principalTable: "Transactions",
                 principalColumn: "Id",

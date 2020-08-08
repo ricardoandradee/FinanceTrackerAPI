@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
-import { Payment } from '../../models/payment.model';
+import { Expense } from '../../models/expense.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
-import { PaymentAddComponent } from '../payment-add/payment-add.component';
+import { ExpenseAddComponent } from '../expense-add/expense-add.component';
 import { Category } from '../../models/category.model';
-import { PaymentService } from 'src/app/services/payment.service';
+import { ExpenseService } from 'src/app/services/expense.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
 import { CurrencyList } from 'src/app/data/currency.data';
@@ -18,35 +18,35 @@ import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.mode
 import { User } from 'src/app/models/user.model';
 
 @Component({
-  selector: 'app-payment-history',
-  templateUrl: './payment-history.component.html',
-  styleUrls: ['./payment-history.component.scss']
+  selector: 'app-expense-history',
+  templateUrl: './expense-history.component.html',
+  styleUrls: ['./expense-history.component.scss']
 })
 
-export class PaymentHistoryComponent implements OnInit, OnDestroy {
+export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   displayedColumns = ['CreatedDate', 'Category', 'Description', 'Establishment', 'Price', 'Actions'];
-  dataSource = new MatTableDataSource<Payment>();
+  dataSource = new MatTableDataSource<Expense>();
   private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
-  editPayment: Payment;
-  oldPayment: Payment;
+  editExpense: Expense;
+  oldExpense: Expense;
   rowInEditMode = false;
   private currencies: string[];
   private allCategories: Category[];
 
   private datesKeyValue: KeyValuePair<string, string>[];
   private categoriesKeyValue: KeyValuePair<number, string>[];
-  private paymentDate = 'All';
+  private expenseDate = 'All';
   private category = 'All';
   userBaseCurrency: string;
   userTimeZone = '';
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  constructor(private uiService: UiService, private paymentService: PaymentService,
+  constructor(private uiService: UiService, private expenseService: ExpenseService,
               private currencyService: CurrencyService, private dialog: MatDialog,
               private categoryService: CategoryService,
-              private store: Store<{ui: fromRoot.State}>) {                
+              private store: Store<{ui: fromRoot.State}>) {
                 this.currencies = CurrencyList;
               }
 
@@ -66,16 +66,16 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
       if (loading) {
         setTimeout(() => {
-          this.refreshPaymentDataSource();
+          this.refreshExpenseDataSource();
         }, 500);
       } else {
-        this.refreshPaymentDataSource();
+        this.refreshExpenseDataSource();
       }
     }));
   }
 
-  bindDataSource(payments: Payment[]) {
-    this.dataSource = new MatTableDataSource(payments);
+  bindDataSource(expenses: Expense[]) {
+    this.dataSource = new MatTableDataSource(expenses);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     
@@ -84,28 +84,28 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     };
   }
 
-  populateDropDownLists(payments: Payment[]) {
-    this.categoriesKeyValue  = getUniquePairs(payments.map((payment: Payment) =>
+  populateDropDownLists(expenses: Expense[]) {
+    this.categoriesKeyValue  = getUniquePairs(expenses.map((expense: Expense) =>
     {
-        return { key: payment.categoryId, value: payment.categoryName } as KeyValuePair<number, string>;
+        return { key: expense.categoryId, value: expense.categoryName } as KeyValuePair<number, string>;
     }));
     
-    this.datesKeyValue = getUniquePairs(payments.map((payment: Payment) =>
+    this.datesKeyValue = getUniquePairs(expenses.map((expense: Expense) =>
     {
-        return { key: payment.createdDateString, value: payment.createdDateString } as KeyValuePair<string, string>;
+        return { key: expense.createdDateString, value: expense.createdDateString } as KeyValuePair<string, string>;
     }));
   }
 
-  onOpenAddPaymentDialog() {
-    const dialogRef = this.dialog.open(PaymentAddComponent);
+  onOpenAddExpenseDialog() {
+    const dialogRef = this.dialog.open(ExpenseAddComponent);
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
       if (result.data) {
-        this.createPayment(result.data as Payment);
+        this.createExpense(result.data as Expense);
       }
     }));
   }
 
-  onDelete(payment: Payment) {
+  onDelete(expense: Expense) {
     const dialogRef = this.dialog.open(YesNoDialogComponent,
     { data:
       {
@@ -116,29 +116,29 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.deletePayment(payment);
+        this.deleteExpense(expense);
       }
     }));
   }
   
   onUpdate() {
     this.store.dispatch(new UI.StartLoading());
-    this.updatePayment();
+    this.updateExpense();
   }
 
-  private createPayment(paymentToBeCreated: Payment) {
+  private createExpense(expenseToBeCreated: Expense) {
     this.store.dispatch(new UI.StartLoading());
-    const subscription = this.paymentService.createPayment(paymentToBeCreated).subscribe(response => {
+    const subscription = this.expenseService.createExpense(expenseToBeCreated).subscribe(response => {
       if (response.ok) {
-        const paymentCreated = response.body as Payment;
-        this.pushPaymentToDataSource(paymentCreated);
-        this.uiService.showSnackBar('Payment was sucessfully created.', 3000);
+        const expenseCreated = response.body as Expense;
+        this.pushExpenseToDataSource(expenseCreated);
+        this.uiService.showSnackBar('Expense was sucessfully created.', 3000);
       }
       else {
-        this.uiService.showSnackBar('An error occured while adding payment details, please, try again later.', 3000);
+        this.uiService.showSnackBar('An error occured while adding expense details, please, try again later.', 3000);
       }
     }, (err) => {
-      this.uiService.showSnackBar(`An error occured while adding payment details. Error code: ${err.status} - ${err.statusText}`, 3000);
+      this.uiService.showSnackBar(`An error occured while adding expense details. Error code: ${err.status} - ${err.statusText}`, 3000);
     });
 
     subscription.add(() => {
@@ -148,17 +148,17 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(subscription);
   }
   
-  private updatePayment() {
+  private updateExpense() {
     this.store.dispatch(new UI.StartLoading());
-    const subscription = this.paymentService.updatePayment(this.editPayment).subscribe(response => {
+    const subscription = this.expenseService.updateExpense(this.editExpense).subscribe(response => {
       if (response.ok) {
-        this.paymentService.setPayments = this.dataSource.data;
-        this.uiService.showSnackBar('Payment successfully updated.', 3000);
+        this.expenseService.setExpenses = this.dataSource.data;
+        this.uiService.showSnackBar('Expense successfully updated.', 3000);
         } else {
-          this.uiService.showSnackBar('There was an error while trying to update your Payment. Please, try again later!', 3000);
+          this.uiService.showSnackBar('There was an error while trying to update your Expense. Please, try again later!', 3000);
         }
     }, (err) => {
-      this.uiService.showSnackBar(`An error occured while updating payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
+      this.uiService.showSnackBar(`An error occured while updating expense info. Error code: ${err.status} - ${err.statusText}`, 3000);
     });
 
     subscription.add(() => {
@@ -169,12 +169,12 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(subscription);
   }
 
-  private deletePayment(payment: Payment) {
+  private deleteExpense(expense: Expense) {
     this.store.dispatch(new UI.StartLoading());
-    const subscription = this.paymentService.deletePayment(payment.id).subscribe(response => {
-      this.removePaymentFromDataSource(payment.id);
+    const subscription = this.expenseService.deleteExpense(expense.id).subscribe(response => {
+      this.removeExpenseFromDataSource(expense.id);
     }, (err) => {
-      this.uiService.showSnackBar(`An error occured while deleting payment info. Error code: ${err.status} - ${err.statusText}`, 3000);
+      this.uiService.showSnackBar(`An error occured while deleting expense info. Error code: ${err.status} - ${err.statusText}`, 3000);
     });
 
     subscription.add(() => {
@@ -184,26 +184,26 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(subscription);
   }
 
-  private refreshPaymentDataSource() {
-    this.allSubscriptions.push(this.paymentService.getPayments.subscribe((payments: Payment[]) => {
-      this.bindDataSource(payments);
-      this.populateDropDownLists(payments);
+  private refreshExpenseDataSource() {
+    this.allSubscriptions.push(this.expenseService.getExpenses.subscribe((expenses: Expense[]) => {
+      this.bindDataSource(expenses);
+      this.populateDropDownLists(expenses);
     }));
  }
 
-  private pushPaymentToDataSource(paymentCreated: Payment) {
-    const paymentsFromDataSource = this.dataSource.data;
-    paymentsFromDataSource.push(paymentCreated);
-    this.paymentService.setPayments = paymentsFromDataSource;
+  private pushExpenseToDataSource(expenseCreated: Expense) {
+    const expensesFromDataSource = this.dataSource.data;
+    expensesFromDataSource.push(expenseCreated);
+    this.expenseService.setExpenses = expensesFromDataSource;
   }
 
-  private removePaymentFromDataSource(paymentId: number) {
-    const paymentsFromDataSource = this.dataSource.data;
-    const paymentIndex = paymentsFromDataSource.findIndex(x => x.id === paymentId);
-    if (paymentIndex > -1) {
-      paymentsFromDataSource.splice(paymentIndex, 1);
+  private removeExpenseFromDataSource(expenseId: number) {
+    const expensesFromDataSource = this.dataSource.data;
+    const expenseIndex = expensesFromDataSource.findIndex(x => x.id === expenseId);
+    if (expenseIndex > -1) {
+      expensesFromDataSource.splice(expenseIndex, 1);
     }
-    this.paymentService.setPayments = paymentsFromDataSource;
+    this.expenseService.setExpenses = expensesFromDataSource;
   }
   
   applyFilterByDate() {
@@ -214,33 +214,33 @@ export class PaymentHistoryComponent implements OnInit, OnDestroy {
     this.dataSource.filter = '[FilterByCategory]' + this.category;
   }
 
-  dateFilterMatches(payment: Payment): boolean {
+  dateFilterMatches(expense: Expense): boolean {
     const filter = this.getDateFilter();
-    const value = '[FilterByDate]' + payment.createdDateString;
+    const value = '[FilterByDate]' + expense.createdDateString;
     return filter.indexOf('[FilterByDate]') === -1 || (filter === '[FilterByDate]All' || value.indexOf(filter) >= 0);
   }
 
-  categoryFilterMatches(payment: Payment): boolean {
+  categoryFilterMatches(expense: Expense): boolean {
     const filter = '[FilterByCategory]' + this.category;
-    const value = '[FilterByCategory]' + payment.categoryId;
+    const value = '[FilterByCategory]' + expense.categoryId;
     return filter.indexOf('[FilterByCategory]') === -1 || (filter === '[FilterByCategory]All' || value.indexOf(filter) >= 0);
   }
 
   getDateFilter(): string {
-    const dateToBeSearched = this.paymentDate === 'All' ? 'All' : this.paymentDate;
+    const dateToBeSearched = this.expenseDate === 'All' ? 'All' : this.expenseDate;
     return '[FilterByDate]' + dateToBeSearched;
   }
 
-  onEdit(payment: Payment) {
-    this.editPayment = payment && payment.id ? payment : {} as Payment;
-    this.oldPayment = {...this.editPayment};
+  onEdit(expense: Expense) {
+    this.editExpense = expense && expense.id ? expense : {} as Expense;
+    this.oldExpense = {...this.editExpense};
     this.rowInEditMode = true;
   }
 
   onCancelEdit() {
     this.rowInEditMode = false;
-    this.editPayment = {} as Payment;
-    this.oldPayment = {} as Payment;
+    this.editExpense = {} as Expense;
+    this.oldExpense = {} as Expense;
   }
 
   ngOnDestroy(): void {

@@ -1,5 +1,5 @@
-    <form #addPaymentForm="ngForm" (ngSubmit)="onSave(addPaymentForm)">
-        <h2 mat-dialog-title>Add Payment</h2>
+    <form #addExpenseForm="ngForm" (ngSubmit)="onSave(addExpenseForm)">
+        <h2 mat-dialog-title>Add Expense</h2>
         <div mat-dialog-content>
             <mat-form-field>
                 <input type="text" matInput placeholder="Establishment" #nameInput="ngModel"
@@ -48,6 +48,6 @@
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="addPaymentForm.invalid" mat-raised-button color="primary">Save</button>
+            <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="addExpenseForm.invalid" mat-raised-button color="primary">Save</button>
         </mat-dialog-actions>
     </form>

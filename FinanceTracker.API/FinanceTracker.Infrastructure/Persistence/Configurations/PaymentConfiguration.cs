@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FinanceTracker.Infrastructure.Persistence.Configurations
 {
-    public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+    public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
     {
-        public void Configure(EntityTypeBuilder<Payment> builder)
+        public void Configure(EntityTypeBuilder<Expense> builder)
         {
             builder.HasOne(t => t.Category);
 

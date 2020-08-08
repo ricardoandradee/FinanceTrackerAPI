@@ -97,7 +97,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
 
   onDelete(category: Category) {
     if (!category.canBeDeleted) {
-      this.uiService.showSnackBar('This category has payments linked to it, therefore, it cannot be removed.', 3000);
+      this.uiService.showSnackBar('This category has expenses linked to it, therefore, it cannot be removed.', 3000);
     } else {
       const dialogRef = this.dialog.open(YesNoDialogComponent,
       {

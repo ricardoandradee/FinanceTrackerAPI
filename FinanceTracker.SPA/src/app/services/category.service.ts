@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 import { DatePipe } from '@angular/common';
-import { PaymentService } from './payment.service';
+import { ExpenseService } from './expense.service';
 
 @Injectable()
 export class CategoryService {
@@ -15,10 +15,10 @@ export class CategoryService {
     private dataSource$: BehaviorSubject<Category[]> = new BehaviorSubject([]);
 
     constructor(private http: HttpClient,
-                private paymentService: PaymentService,
+                private expenseService: ExpenseService,
                 private datePipe: DatePipe) {
 
-                this.paymentService.getPayments.subscribe((p) => {
+                this.expenseService.getExpenses.subscribe((p) => {
                     let allcategories = this.dataSource$.value;
                     allcategories.forEach(c => {
                       c.canBeDeleted = !p.some(b => b.categoryId === c.id);

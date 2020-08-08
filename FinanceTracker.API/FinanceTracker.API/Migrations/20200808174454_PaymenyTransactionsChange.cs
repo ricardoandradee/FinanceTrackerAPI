@@ -7,33 +7,33 @@ namespace FinanceTracker.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Payments_Transactions_TransactionId",
-                table: "Payments");
+                name: "FK_Expenses_Transactions_TransactionId",
+                table: "Expenses");
 
             migrationBuilder.DropIndex(
-                name: "IX_Payments_TransactionId",
-                table: "Payments");
+                name: "IX_Expenses_TransactionId",
+                table: "Expenses");
 
             migrationBuilder.DropColumn(
                 name: "TransactionId",
-                table: "Payments");
+                table: "Expenses");
 
             migrationBuilder.AddColumn<int>(
-                name: "PaymentId",
+                name: "ExpenseId",
                 table: "Transactions",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_PaymentId",
+                name: "IX_Transactions_ExpenseId",
                 table: "Transactions",
-                column: "PaymentId");
+                column: "ExpenseId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Transactions_Payments_PaymentId",
+                name: "FK_Transactions_Expenses_ExpenseId",
                 table: "Transactions",
-                column: "PaymentId",
-                principalTable: "Payments",
+                column: "ExpenseId",
+                principalTable: "Expenses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -41,32 +41,32 @@ namespace FinanceTracker.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Transactions_Payments_PaymentId",
+                name: "FK_Transactions_Expenses_ExpenseId",
                 table: "Transactions");
 
             migrationBuilder.DropIndex(
-                name: "IX_Transactions_PaymentId",
+                name: "IX_Transactions_ExpenseId",
                 table: "Transactions");
 
             migrationBuilder.DropColumn(
-                name: "PaymentId",
+                name: "ExpenseId",
                 table: "Transactions");
 
             migrationBuilder.AddColumn<int>(
                 name: "TransactionId",
-                table: "Payments",
+                table: "Expenses",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_TransactionId",
-                table: "Payments",
+                name: "IX_Expenses_TransactionId",
+                table: "Expenses",
                 column: "TransactionId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Payments_Transactions_TransactionId",
-                table: "Payments",
+                name: "FK_Expenses_Transactions_TransactionId",
+                table: "Expenses",
                 column: "TransactionId",
                 principalTable: "Transactions",
                 principalColumn: "Id",

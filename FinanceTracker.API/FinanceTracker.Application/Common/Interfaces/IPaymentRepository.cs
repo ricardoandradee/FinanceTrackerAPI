@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Common.Interfaces
 {
-    public interface IPaymentRepository : IUserVerification, IRepository<Payment>
+    public interface IExpenseRepository : IUserVerification, IRepository<Expense>
     {
-        Task<IList<Payment>> GetPaymentsByUserId(int userId);
+        Task<IList<Expense>> GetExpensesByUserId(int userId);
     }
 }

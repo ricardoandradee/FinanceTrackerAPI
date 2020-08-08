@@ -48,7 +48,7 @@ namespace FinanceTracker.API.Migrations
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "CreatedDate",
-                table: "Payments",
+                table: "Expenses",
                 nullable: false,
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2");
@@ -119,7 +119,7 @@ namespace FinanceTracker.API.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedDate",
-                table: "Payments",
+                table: "Expenses",
                 type: "datetime2",
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset));

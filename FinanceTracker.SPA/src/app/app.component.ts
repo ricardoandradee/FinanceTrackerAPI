@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CategoryService } from './services/category.service';
 import { Category } from './models/category.model';
-import { PaymentService } from './services/payment.service';
-import { Payment } from './models/payment.model';
+import { ExpenseService } from './services/expense.service';
+import { Expense } from './models/expense.model';
 import { AuthService } from './services/auth.service';
 import { switchMap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(SidenavListComponent, { static: false }) sidNav: SidenavListComponent;
 
   private jwtHelper = new JwtHelperService();
-  private payments: Payment[];
+  private expenses: Expense[];
   private categories: Category[];
   private allSubscriptions: Subscription[] = [];
 
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sidenavWidth = 4;
 
   constructor(private categoryService: CategoryService,
-              private paymentService: PaymentService,
+              private expenseService: ExpenseService,
               private authService: AuthService,
               private currencyService: CurrencyService) {
 
@@ -57,35 +57,35 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.allSubscriptions.push(this.authService.getIsAuthenticated.subscribe(isAuth => {
           if (isAuth) {
-            const getPaymentCategoryMap = (id) => {
+            const getExpenseCategoryMap = (id) => {
               return this.categoryService.getCategoriesByUserId().pipe(
                 switchMap(categories => 
-                  this.paymentService.getPaymentsByUserId().pipe(
-                    switchMap(payments => [{ categories: categories, payments: payments }])
+                  this.expenseService.getExpensesByUserId().pipe(
+                    switchMap(expenses => [{ categories: categories, expenses: expenses }])
                   )
                 )
               )
             };
 
-            this.allSubscriptions.push(getPaymentCategoryMap(0).subscribe(result => {
+            this.allSubscriptions.push(getExpenseCategoryMap(0).subscribe(result => {
               this.categories = result.categories;
-              this.payments = result.payments;
+              this.expenses = result.expenses;
             }).add(() => {
-              this.updatePaymentListToContainer();
+              this.updateExpenseListToContainer();
               this.updateCategoryListToContainers();
             }));
           }
       }));
   }
 
-  updatePaymentListToContainer() {
+  updateExpenseListToContainer() {
     this.categoryService.setCategories = this.categories;
-    this.paymentService.setPayments = this.payments;
+    this.expenseService.setExpenses = this.expenses;
   }
 
   updateCategoryListToContainers() {
     this.categoryService.setCategories = this.categories;
-    this.paymentService.setPayments = this.payments;
+    this.expenseService.setExpenses = this.expenses;
   }
   
   ngOnDestroy(): void {
