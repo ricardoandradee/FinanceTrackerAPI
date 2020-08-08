@@ -1,5 +1,5 @@
 
-namespace FinanceTracker.Application.Dtos
+namespace FinanceTracker.Application.Dtos.Accounts
 {
     public class AccountForUpdateDto
     {

@@ -1,6 +1,6 @@
 using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.Application.Commands.Accounts;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Application.Queries.Accounts;
 using Microsoft.AspNetCore.Mvc;
 using System;

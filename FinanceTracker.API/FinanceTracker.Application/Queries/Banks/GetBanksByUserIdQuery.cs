@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FinanceTracker.Application.Common.Interfaces;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Banks;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,7 +15,6 @@ namespace FinanceTracker.Application.Queries.Banks
         {
             UserId = userId;
         }
-
 
         public class GetBanksByUserIdHandler : IRequestHandler<GetBanksByUserIdQuery, List<BankToReturnDto>>
         {

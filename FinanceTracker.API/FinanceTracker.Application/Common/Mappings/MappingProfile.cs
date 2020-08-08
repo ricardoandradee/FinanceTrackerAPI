@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using FinanceTracker.Application.Common.Extensions;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Accounts;
+using FinanceTracker.Application.Dtos.Banks;
+using FinanceTracker.Application.Dtos.Categories;
+using FinanceTracker.Application.Dtos.Payments;
+using FinanceTracker.Application.Dtos.Transactions;
+using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
 
 namespace FinanceTracker.Application.Common.Mappings

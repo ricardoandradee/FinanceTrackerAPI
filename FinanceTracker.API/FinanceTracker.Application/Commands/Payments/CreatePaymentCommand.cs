@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FinanceTracker.Application.Common.Interfaces;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Payments;
 using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;

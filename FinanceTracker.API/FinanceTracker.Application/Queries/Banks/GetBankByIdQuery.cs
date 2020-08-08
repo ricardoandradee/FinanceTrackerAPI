@@ -3,7 +3,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceTracker.Application.Common.Interfaces;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Banks;
 
 namespace FinanceTracker.Application.Queries.Banks
 {

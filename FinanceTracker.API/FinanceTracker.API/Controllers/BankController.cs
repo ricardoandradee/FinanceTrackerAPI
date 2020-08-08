@@ -1,6 +1,6 @@
 using FinanceTracker.API.AuthorizationAttributes;
 using FinanceTracker.Application.Commands.Banks;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Banks;
 using FinanceTracker.Application.Queries.Banks;
 using Microsoft.AspNetCore.Mvc;
 using System;

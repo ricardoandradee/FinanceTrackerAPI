@@ -1,7 +1,8 @@
+using FinanceTracker.Application.Dtos.Accounts;
 using System;
 using System.Collections.Generic;
 
-namespace FinanceTracker.Application.Dtos
+namespace FinanceTracker.Application.Dtos.Banks
 {
     public class BankForCreationDto
     {

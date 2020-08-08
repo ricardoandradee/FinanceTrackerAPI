@@ -1,5 +1,5 @@
 ﻿using FinanceTracker.Application.Commands.Users;
-using FinanceTracker.Application.Dtos;
+using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Application.Queries.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

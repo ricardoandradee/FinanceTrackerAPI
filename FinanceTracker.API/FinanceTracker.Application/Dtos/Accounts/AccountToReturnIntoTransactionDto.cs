@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FinanceTracker.Application.Dtos
+namespace FinanceTracker.Application.Dtos.Accounts
 {
     public class AccountToReturnIntoTransactionDto
     {

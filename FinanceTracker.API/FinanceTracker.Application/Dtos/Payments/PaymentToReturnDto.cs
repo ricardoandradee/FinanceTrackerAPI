@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinanceTracker.Application.Dtos
+namespace FinanceTracker.Application.Dtos.Payments
 {
     public class PaymentToReturnDto
     {

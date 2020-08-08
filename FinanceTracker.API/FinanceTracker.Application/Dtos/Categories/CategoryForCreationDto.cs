@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinanceTracker.Application.Dtos
+namespace FinanceTracker.Application.Dtos.Categories
 {
     public class CategoryForCreationDto
     {
