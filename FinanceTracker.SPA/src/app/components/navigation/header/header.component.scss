@@ -48,10 +48,20 @@ a.toolbar-link:active {
     font-weight: bold;
 }
 
+.currency {
+    padding-right: 30px;
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+}
 
 @media only screen and (max-width: 599px) {
     .currency {
-        margin-right: 20px;
+        padding-right: 20px;
+    }
+    
+    .navigation-items {
+        font-size:  10px;
     }
 }
 
