@@ -10,12 +10,15 @@ import { Subscription } from 'rxjs';
 export class FinanceComponent implements OnInit, OnDestroy {
   currentPage = 'expensehistory';
   private subscription: Subscription;
+  pageTitle = '';
   
   constructor(private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.subscription = this.activatedRoute.params.subscribe(params => {
        this.currentPage = params.pageId;
+       this.pageTitle = this.currentPage === 'expensehistory' ? 'Expenses'
+            : (this.currentPage === 'income' ? 'Income' : 'Categories');
      });
   }
 
