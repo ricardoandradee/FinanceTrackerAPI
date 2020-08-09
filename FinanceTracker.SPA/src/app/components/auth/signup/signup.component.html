@@ -1,18 +1,31 @@
-<section>
+<section class="signup-section">
     <form fxLayout="column" fxLayoutAlign="center center" #f="ngForm" fxLayoutGap="10px" (ngSubmit)="onSubmit(f)">
         <mat-form-field>
             <input type="text" matInput placeholder="User Name" #userNameInput="ngModel"
-                name="userName" id="userName" [errorStateMatcher]="matcher" ngModel required minlength="6">
+                name="userName" id="userName" [errorStateMatcher]="matcher" ngModel minlength="6">
                 <mat-hint align="end">{{ userNameInput.value?.length }} / 6 </mat-hint>
                 <mat-error *ngIf="userNameInput.hasError('userNameAlreadyTaken')">
                     User Name was already taken.
                 </mat-error>
-                <mat-error *ngIf="userNameInput.hasError('minlength')">User Name should be 6 characters long.</mat-error>
+                <mat-error *ngIf="!userNameInput.hasError('userNameAlreadyTaken')">
+                    User Name should be 6 characters long.
+                </mat-error>
         </mat-form-field>
         <mat-form-field hintLabel="Password should be at least 6 characters long.">
             <input type="password" matInput placeholder="Password" #pwInput="ngModel"
                 name="password" id="password" ngModel required minlength="6">
                 <mat-error>Password should be 6 characters long.</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+        <input type="text" matInput placeholder="Email" maxlength="100"
+            #emailInput="ngModel" name="email" id="email" 
+            ngModel required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" />
+        <mat-error *ngIf="emailInput.hasError('required')">
+            Email is required
+        </mat-error>
+        <mat-error *ngIf="emailInput.hasError('email')">
+            Please enter a valid email address
+        </mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label> Currency </mat-label>
