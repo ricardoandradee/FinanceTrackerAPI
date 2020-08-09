@@ -14,7 +14,6 @@ namespace FinanceTracker.Application.Dtos.Users
         public string BaseCurrency { get; set; }
         public decimal Wallet { get; set; }
         public string Password { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public int StateTimeZoneId { get; set; }
         public string Country { get; set; }
         public DateTimeOffset CreatedDate { get; set; }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FinanceTracker.Application.Common.Extensions;
 using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Application.Dtos.Banks;
 using FinanceTracker.Application.Dtos.Categories;
@@ -19,20 +18,12 @@ namespace FinanceTracker.Application.Common.Mappings
             #region User related mappings
 
             CreateMap<User, UserForListDto>()
-                 .ForMember(dest => dest.Age, opt =>
-                 {
-                     opt.MapFrom((s, d) => s.DateOfBirth.CalculateAge());
-                 })
                  .ForMember(dest => dest.TimeZoneUtc, opt =>
                  {
                      opt.MapFrom((s, d) => s?.StateTimeZone?.UTC);
                  })
                 .ReverseMap();
             CreateMap<User, UserForDetailedDto>()
-                 .ForMember(dest => dest.Age, opt =>
-                 {
-                     opt.MapFrom((s, d) => s.DateOfBirth.CalculateAge());
-                 })
                  .ForMember(dest => dest.TimeZoneUtc, opt =>
                  {
                      opt.MapFrom((s, d) => s?.StateTimeZone?.UTC);

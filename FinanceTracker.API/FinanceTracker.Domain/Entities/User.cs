@@ -9,7 +9,6 @@ namespace FinanceTracker.Domain.Entities
         public string BaseCurrency { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public decimal Wallet { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset LastActive { get; set; }
