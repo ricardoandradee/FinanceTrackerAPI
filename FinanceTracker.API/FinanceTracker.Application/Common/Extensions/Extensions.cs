@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FinanceTracker.Application.Common.Extensions
 {
-    public static class Calculations
+    public static class Extensions
     {
         public static IEnumerable<List<T>> SplitList<T>(this List<T> source, int chunksize)
         {

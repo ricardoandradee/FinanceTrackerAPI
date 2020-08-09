@@ -123,7 +123,6 @@ namespace FinanceTracker.API.Migrations
                     b.ToTable("Categories");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Currency", b =>
                 {
                     b.Property<int>("Id")
@@ -139,8 +138,6 @@ namespace FinanceTracker.API.Migrations
                     b.ToTable("Currencies");
                 });
 
-=======
->>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Expense", b =>
                 {
                     b.Property<int>("Id")
@@ -183,7 +180,6 @@ namespace FinanceTracker.API.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Expenses");
-<<<<<<< HEAD
                 });
 
             modelBuilder.Entity("FinanceTracker.Domain.Entities.StateTimeZone", b =>
@@ -205,8 +201,6 @@ namespace FinanceTracker.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StateTimeZones");
-=======
->>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3
                 });
 
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Transaction", b =>
@@ -383,7 +377,6 @@ namespace FinanceTracker.API.Migrations
                     b.HasOne("FinanceTracker.Domain.Entities.Expense", "Expense")
                         .WithMany("Transactions")
                         .HasForeignKey("ExpenseId")
-<<<<<<< HEAD
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -393,8 +386,6 @@ namespace FinanceTracker.API.Migrations
                     b.HasOne("FinanceTracker.Domain.Entities.StateTimeZone", "StateTimeZone")
                         .WithMany()
                         .HasForeignKey("StateTimeZoneId")
-=======
->>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

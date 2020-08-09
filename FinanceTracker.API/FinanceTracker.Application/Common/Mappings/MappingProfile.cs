@@ -3,13 +3,9 @@ using FinanceTracker.Application.Common.Extensions;
 using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Application.Dtos.Banks;
 using FinanceTracker.Application.Dtos.Categories;
-<<<<<<< HEAD
 using FinanceTracker.Application.Dtos.Currencies;
 using FinanceTracker.Application.Dtos.Expenses;
 using FinanceTracker.Application.Dtos.TimeZones;
-=======
-using FinanceTracker.Application.Dtos.Expenses;
->>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3
 using FinanceTracker.Application.Dtos.Transactions;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
