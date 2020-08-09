@@ -72,21 +72,28 @@ export class AuthService {
     return this.http.post(url, model, { headers: httpHeaders, observe: 'response' }).subscribe((response) => {
       if (response.ok) {
         const responseBody = response.body as any;
+        if (responseBody.user.ok) {
+          const user = responseBody.user.data as User;
+          const userToken = responseBody.token;
 
-        if (responseBody.token) {
-          localStorage.setItem('token', responseBody.token);
-          this.decodedToken = this.jwtHelper.decodeToken(responseBody.token);
+          if (userToken) {
+            localStorage.setItem('token', userToken);
+            this.decodedToken = this.jwtHelper.decodeToken(userToken);
+          }
+
+          if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+            this.currentUser = user;
+            this.currencyService.fetchListOfCurrencies();
+            this.currencyService.setUserBaseCurrency = this.currentUser.currency;
+          }
+
+          this.uiService.showSnackBar('Successfully logged in.', 3000);
+          this.setIsAuthenticated = true;
+          this.router.navigate(['/finance/income']);
+        } else {
+          this.uiService.showSnackBar(responseBody.user.message, 3000);
         }
-        if (responseBody.user) {
-          localStorage.setItem('user', JSON.stringify(responseBody.user));
-          this.currentUser = responseBody.user;
-          console.log(this.currentUser);
-          this.currencyService.fetchListOfCurrencies();
-          this.currencyService.setUserBaseCurrency = this.currentUser.currency;
-        }
-        this.uiService.showSnackBar('Successfully logged in.', 3000);
-        this.setIsAuthenticated = true;
-        this.router.navigate(['/finance/income']);
       }
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while processing login. Error code: ${err.status} - ${err.statusText}`, 3000);

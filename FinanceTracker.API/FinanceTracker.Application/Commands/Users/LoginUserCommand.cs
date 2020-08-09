@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Common.Models;
 using FinanceTracker.Application.Dtos.Users;
 using MediatR;
 using System.Threading;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Commands.Users
 {
-    public class LoginUserCommand : IRequest<UserForListDto>
+    public class LoginUserCommand : IRequest<Response<UserForListDto>>
     {
         public UserForLoginDto UserForLoginDto { get; }
         public LoginUserCommand(UserForLoginDto userForLoginDto)
@@ -15,7 +16,7 @@ namespace FinanceTracker.Application.Commands.Users
             UserForLoginDto = userForLoginDto;
         }
 
-        public class LoginUserHandler : IRequestHandler<LoginUserCommand, UserForListDto>
+        public class LoginUserHandler : IRequestHandler<LoginUserCommand, Response<UserForListDto>>
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
@@ -26,16 +27,16 @@ namespace FinanceTracker.Application.Commands.Users
                 _userRepository = userRepository;
             }
 
-            public async Task<UserForListDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+            public async Task<Response<UserForListDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
             {
                 var userFromRepo = await _userRepository.Login(request.UserForLoginDto.UserName.ToLower(), request.UserForLoginDto.Password);
 
-                if (userFromRepo != null)
+                if (userFromRepo.Ok)
                 {
-                    return _mapper.Map<UserForListDto>(userFromRepo);
+                    return Response.Success(_mapper.Map<UserForListDto>(userFromRepo.Data));
                 }
 
-                return null;
+                return Response.Fail<UserForListDto>(userFromRepo.Message);
             }
         }
     }

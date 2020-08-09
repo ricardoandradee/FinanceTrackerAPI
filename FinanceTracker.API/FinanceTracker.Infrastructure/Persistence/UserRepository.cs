@@ -1,4 +1,5 @@
 ﻿using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Common.Models;
 using FinanceTracker.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -31,20 +32,17 @@ namespace FinanceTracker.Infrastructure.Persistence
             return false;
         }
 
-        public async Task<User> Login(string userName, string password)
+        public async Task<Response<User>> Login(string userName, string password)
         {
             var user = await _unitOfWork.Context.Users
                                 .Include(u => u.StateTimeZone)
                                 .Include(u => u.Currency)
                                 .FirstOrDefaultAsync(x => x.UserName == userName);
 
-            if (user == null)
-                return null;
+            if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+                return Response.Fail<User>("User name or Password is incorrect");
 
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                return null;
-
-            return user;
+            return Response.Success(user);
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)

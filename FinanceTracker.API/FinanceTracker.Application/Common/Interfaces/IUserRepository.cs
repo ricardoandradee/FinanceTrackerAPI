@@ -1,4 +1,5 @@
-﻿using FinanceTracker.Domain.Entities;
+﻿using FinanceTracker.Application.Common.Models;
+using FinanceTracker.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,6 +10,6 @@ namespace FinanceTracker.Application.Common.Interfaces
         Task<bool> UserExists(string userName);
         Task<List<User>> GetExistingUsersDetails();
         Task<User> Register(User user, string password);
-        Task<User> Login(string userName, string password);
+        Task<Response<User>> Login(string userName, string password);
     }
 }

@@ -62,7 +62,7 @@ namespace FinanceTracker.API.Controllers
             {
                 return Ok(new LoginResponseDto
                 {
-                    Token = GenerateToken(userForLoginDto.UserName, result.Id),
+                    Token = result.Ok ? GenerateToken(userForLoginDto.UserName, result.Data.Id) : "",
                     User = result
                 });
             }
