@@ -14,7 +14,7 @@ export class AuthService {
   private baseUrl = environment.apiUrl + 'auth/';
   private jwtHelper = new JwtHelperService();
   private isAuth$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private existingUserNames$: BehaviorSubject<string[]> = new BehaviorSubject([]);
+  private existingUsersDetails$: BehaviorSubject<[]> = new BehaviorSubject([]);
   
   currentUser: User;
   decodedToken: any;
@@ -24,10 +24,10 @@ export class AuthService {
                 private currencyService: CurrencyService,
                 private router: Router) {
                   
-                  this.getAllUserNames().subscribe((response) => {
-                    if(response.ok) {
-                      const allUserNames = response.body as string[];
-                      this.existingUserNames$.next(allUserNames);
+                  this.getExistingUsersDetails().subscribe((response) => {
+                    if (response.ok) {
+                      const allUserNames = response.body as [];
+                      this.existingUsersDetails$.next(allUserNames);
                     }
                   });
                 }
@@ -40,8 +40,8 @@ export class AuthService {
     return this.isAuth$.asObservable();
   }
 
-  get userNames(): Observable<string[]> {
-    return this.existingUserNames$.asObservable();
+  get allExistingUsersDetails(): Observable<[]> {
+    return this.existingUsersDetails$.asObservable();
   }
 
   set setIsAuthenticated(isAuth: boolean) {
@@ -58,8 +58,8 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  private getAllUserNames(): Observable<HttpResponse<Object>> {
-    const url = `${this.baseUrl}GetAllUserNames`;    
+  private getExistingUsersDetails(): Observable<HttpResponse<Object>> {
+    const url = `${this.baseUrl}GetExistingUsersDetails`;
     return this.http.get(url, { observe: 'response' });
   }
 

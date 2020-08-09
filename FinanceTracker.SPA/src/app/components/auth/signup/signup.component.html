@@ -2,12 +2,12 @@
     <form fxLayout="column" fxLayoutAlign="center center" #f="ngForm" fxLayoutGap="10px" (ngSubmit)="onSubmit(f)">
         <mat-form-field>
             <input type="text" matInput placeholder="User Name" #userNameInput="ngModel"
-                name="userName" id="userName" [errorStateMatcher]="matcher" ngModel minlength="6">
+                name="userName" id="userName" [errorStateMatcher]="userNameMatcher" ngModel minlength="6">
                 <mat-hint align="end">{{ userNameInput.value?.length }} / 6 </mat-hint>
-                <mat-error *ngIf="userNameInput.hasError('userNameAlreadyTaken')">
+                <mat-error *ngIf="userNameInput.hasError('alreadyTaken')">
                     User Name was already taken.
                 </mat-error>
-                <mat-error *ngIf="!userNameInput.hasError('userNameAlreadyTaken')">
+                <mat-error *ngIf="!userNameInput.hasError('alreadyTaken')">
                     User Name should be 6 characters long.
                 </mat-error>
         </mat-form-field>
@@ -18,8 +18,11 @@
         </mat-form-field>
         <mat-form-field>
         <input type="text" matInput placeholder="Email" maxlength="100"
-            #emailInput="ngModel" name="email" id="email" 
+            #emailInput="ngModel" name="email" id="email" [errorStateMatcher]="emailMatcher"
             ngModel required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" />
+        <mat-error *ngIf="emailInput.hasError('alreadyTaken')">
+            This E-mail is already registered in our system.
+        </mat-error>
         <mat-error *ngIf="emailInput.hasError('required')">
             Email is required
         </mat-error>

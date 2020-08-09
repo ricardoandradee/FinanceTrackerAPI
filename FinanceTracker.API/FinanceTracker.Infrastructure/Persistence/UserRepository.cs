@@ -14,9 +14,13 @@ namespace FinanceTracker.Infrastructure.Persistence
         {
         }
 
-        public async Task<List<string>> GetAllUserNames()
+        public async Task<List<User>> GetExistingUsersDetails()
         {
-            return await _unitOfWork.Context.Users.Select(x => x.UserName).ToListAsync();
+            return await _unitOfWork.Context.Users.Select(x => new User
+            {
+                UserName = x.UserName,
+                Email = x.Email
+            }).ToListAsync();
         }
 
         public async Task<bool> UserExists(string userName)

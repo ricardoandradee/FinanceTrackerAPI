@@ -24,10 +24,10 @@ namespace FinanceTracker.API.Controllers
 
 
         [HttpGet]
-        [Route("GetAllUserNames")]
-        public async Task<IActionResult> GetAllUserNames()
+        [Route("GetExistingUsersDetails")]
+        public async Task<IActionResult> GetExistingUsersDetails()
         {
-            var query = new GetAllUserNamesQuery();
+            var query = new GetExistingUsersDetailsQuery();
             var result = await Mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }

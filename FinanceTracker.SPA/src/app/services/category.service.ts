@@ -19,12 +19,12 @@ export class CategoryService {
                 private datePipe: DatePipe) {
 
                 this.expenseService.getExpenses.subscribe((p) => {
-                    let allcategories = this.dataSource$.value;
+                    const allcategories = this.dataSource$.value;
                     allcategories.forEach(c => {
                       c.canBeDeleted = !p.some(b => b.category.id === c.id);
                     });
                     this.setCategories = allcategories;
-                })
+                });
     }
 
     get getCategories(): Observable<Category[]> {

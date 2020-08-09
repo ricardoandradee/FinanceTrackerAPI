@@ -4,7 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { UiService } from 'src/app/services/ui.service';
 import { Subscription } from 'rxjs';
-import { ErrorUserNameAlreadyTakenMatcher } from 'src/app/errorMatchers/error-username-already-taken.matcher';
+import { ErrorAlreadyTakenMatcher } from 'src/app/errorMatchers/error-already-taken.matcher';
 import { TimeZone } from 'src/app/models/timezone.model';
 import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
@@ -16,8 +16,10 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class SignupComponent implements OnInit, OnDestroy {
   private userNames = [];
+  private emails = [];
   isUserNameTaken = false;
-  matcher = new ErrorUserNameAlreadyTakenMatcher(this.userNames);
+  userNameMatcher = new ErrorAlreadyTakenMatcher(this.userNames);
+  emailMatcher = new ErrorAlreadyTakenMatcher(this.emails);
   private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
   countries = [];
@@ -40,8 +42,11 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.countries = this.getCountries();
     });
 
-    this.authService.userNames.subscribe((un) => {
-      un.forEach((i) => { this.userNames.push(i); });
+    this.authService.allExistingUsersDetails.subscribe((un) => {
+      un.forEach((i: any) => {
+          this.userNames.push(i.userName);
+          this.emails.push(i.email);
+      });
     });
 
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
