@@ -24,7 +24,7 @@ export class AccountTransactionsComponent implements OnInit {
 
   ngOnInit() {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.timeZoneUtc;
+    this.userTimeZone = user.stateTimeZone.utc;
   }
 
 }

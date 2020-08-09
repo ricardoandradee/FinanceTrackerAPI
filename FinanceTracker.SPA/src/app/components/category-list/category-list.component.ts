@@ -37,7 +37,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.timeZoneUtc;
+    this.userTimeZone = user.stateTimeZone.utc;
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
 

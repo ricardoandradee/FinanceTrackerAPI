@@ -17,18 +17,8 @@ namespace FinanceTracker.Application.Common.Mappings
         {
             #region User related mappings
 
-            CreateMap<User, UserForListDto>()
-                 .ForMember(dest => dest.TimeZoneUtc, opt =>
-                 {
-                     opt.MapFrom((s, d) => s?.StateTimeZone?.UTC);
-                 })
-                .ReverseMap();
-            CreateMap<User, UserForDetailedDto>()
-                 .ForMember(dest => dest.TimeZoneUtc, opt =>
-                 {
-                     opt.MapFrom((s, d) => s?.StateTimeZone?.UTC);
-                 })
-                .ReverseMap();
+            CreateMap<User, UserForListDto>().ReverseMap();
+            CreateMap<User, UserForDetailedDto>().ReverseMap();
             CreateMap<User, UserForRegisterDto>().ReverseMap();
 
             #endregion
