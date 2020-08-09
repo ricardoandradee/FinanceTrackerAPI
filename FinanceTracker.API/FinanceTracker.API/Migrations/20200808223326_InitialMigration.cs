@@ -184,7 +184,11 @@ namespace FinanceTracker.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+<<<<<<< HEAD:FinanceTracker.API/FinanceTracker.API/Migrations/20200808223326_InitialMigration.cs
                 name: "Transactions",
+=======
+                name: "Expenses",
+>>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3:FinanceTracker.API/FinanceTracker.API/Migrations/20200807162936_InitialMigration.cs
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -199,6 +203,7 @@ namespace FinanceTracker.API.Migrations
                 },
                 constraints: table =>
                 {
+<<<<<<< HEAD:FinanceTracker.API/FinanceTracker.API/Migrations/20200808223326_InitialMigration.cs
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Transactions_Accounts_AccountId",
@@ -210,6 +215,19 @@ namespace FinanceTracker.API.Migrations
                         name: "FK_Transactions_Expenses_ExpenseId",
                         column: x => x.ExpenseId,
                         principalTable: "Expenses",
+=======
+                    table.PrimaryKey("PK_Expenses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Expenses_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Expenses_Transactions_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transactions",
+>>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3:FinanceTracker.API/FinanceTracker.API/Migrations/20200807162936_InitialMigration.cs
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -235,6 +253,14 @@ namespace FinanceTracker.API.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+<<<<<<< HEAD:FinanceTracker.API/FinanceTracker.API/Migrations/20200808223326_InitialMigration.cs
+=======
+                name: "IX_Expenses_TransactionId",
+                table: "Expenses",
+                column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
+>>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3:FinanceTracker.API/FinanceTracker.API/Migrations/20200807162936_InitialMigration.cs
                 name: "IX_Transactions_AccountId",
                 table: "Transactions",
                 column: "AccountId");
@@ -258,7 +284,11 @@ namespace FinanceTracker.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+<<<<<<< HEAD:FinanceTracker.API/FinanceTracker.API/Migrations/20200808223326_InitialMigration.cs
                 name: "Currencies");
+=======
+                name: "Expenses");
+>>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3:FinanceTracker.API/FinanceTracker.API/Migrations/20200807162936_InitialMigration.cs
 
             migrationBuilder.DropTable(
                 name: "Transactions");

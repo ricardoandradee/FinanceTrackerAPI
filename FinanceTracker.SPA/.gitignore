@@ -19,6 +19,8 @@
 
 # IDE - VSCode
 .vscode/*
+.vs/*
+FinanceTracker.API/vs/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
