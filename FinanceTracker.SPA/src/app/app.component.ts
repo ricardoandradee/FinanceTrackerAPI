@@ -10,6 +10,7 @@ import { CurrencyService } from './services/currency.service';
 import { User } from './models/user.model';
 import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
 import { Subscription } from 'rxjs';
+import { CommonService } from './services/common.service';
 
 @Component({
   selector: 'app-root',
@@ -30,8 +31,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private categoryService: CategoryService,
               private expenseService: ExpenseService,
+              private commonService: CommonService,
               private authService: AuthService,
               private currencyService: CurrencyService) {
+                if (!localStorage.getItem('currencyList')) {
+                  this.commonService.loadCurrencies();
+                }
+                if (!localStorage.getItem('timezoneList')) {
+                  this.commonService.loadTimeZones();
+                }
 
                 const token = localStorage.getItem('token');
                 if (token) {

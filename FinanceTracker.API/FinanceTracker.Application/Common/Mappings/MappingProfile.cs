@@ -3,7 +3,9 @@ using FinanceTracker.Application.Common.Extensions;
 using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Application.Dtos.Banks;
 using FinanceTracker.Application.Dtos.Categories;
+using FinanceTracker.Application.Dtos.Currencies;
 using FinanceTracker.Application.Dtos.Expenses;
+using FinanceTracker.Application.Dtos.TimeZones;
 using FinanceTracker.Application.Dtos.Transactions;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
@@ -21,11 +23,19 @@ namespace FinanceTracker.Application.Common.Mappings
                  {
                      opt.MapFrom((s, d) => s.DateOfBirth.CalculateAge());
                  })
+                 .ForMember(dest => dest.TimeZoneUtc, opt =>
+                 {
+                     opt.MapFrom((s, d) => s?.StateTimeZone?.UTC);
+                 })
                 .ReverseMap();
             CreateMap<User, UserForDetailedDto>()
                  .ForMember(dest => dest.Age, opt =>
                  {
                      opt.MapFrom((s, d) => s.DateOfBirth.CalculateAge());
+                 })
+                 .ForMember(dest => dest.TimeZoneUtc, opt =>
+                 {
+                     opt.MapFrom((s, d) => s?.StateTimeZone?.UTC);
                  })
                 .ReverseMap();
             CreateMap<User, UserForRegisterDto>().ReverseMap();
@@ -86,6 +96,18 @@ namespace FinanceTracker.Application.Common.Mappings
             CreateMap<Transaction, TransactionToReturnDto>().ReverseMap();
             CreateMap<Transaction, TransactionForCreationDto>().ReverseMap();
             CreateMap<Transaction, TransactionToReturnWithoutAccountDto>().ReverseMap();
+
+            #endregion
+
+            #region Currency related mappings
+
+            CreateMap<Currency, CurrencyToReturnDto>().ReverseMap();
+
+            #endregion
+
+            #region TimeZone related mappings
+
+            CreateMap<StateTimeZone, StateTimeZoneToReturnDto>().ReverseMap();
 
             #endregion
         }

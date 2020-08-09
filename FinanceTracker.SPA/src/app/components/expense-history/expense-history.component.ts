@@ -52,7 +52,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.timeZone.trim().substring(5, 11);
+    this.userTimeZone = user.timeZoneUtc;
     
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categoryList: Category[]) => {

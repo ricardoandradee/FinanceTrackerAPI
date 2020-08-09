@@ -123,6 +123,21 @@ namespace FinanceTracker.API.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Currencies");
+                });
+
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Expense", b =>
                 {
                     b.Property<int>("Id")
@@ -150,12 +165,10 @@ namespace FinanceTracker.API.Migrations
                         .HasMaxLength(3);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Establishment")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -167,6 +180,27 @@ namespace FinanceTracker.API.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.StateTimeZone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UTC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StateTimeZones");
                 });
 
             modelBuilder.Entity("FinanceTracker.Domain.Entities.Transaction", b =>
@@ -242,10 +276,8 @@ namespace FinanceTracker.API.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("TimeZone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
+                    b.Property<int>("StateTimeZoneId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -256,6 +288,8 @@ namespace FinanceTracker.API.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StateTimeZoneId");
 
                     b.ToTable("Users");
                 });
@@ -343,6 +377,15 @@ namespace FinanceTracker.API.Migrations
                     b.HasOne("FinanceTracker.Domain.Entities.Expense", "Expense")
                         .WithMany("Transactions")
                         .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FinanceTracker.Domain.Entities.User", b =>
+                {
+                    b.HasOne("FinanceTracker.Domain.Entities.StateTimeZone", "StateTimeZone")
+                        .WithMany()
+                        .HasForeignKey("StateTimeZoneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

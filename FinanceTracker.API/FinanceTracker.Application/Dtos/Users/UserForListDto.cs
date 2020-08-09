@@ -11,7 +11,7 @@ namespace FinanceTracker.Application.Dtos.Users
         public int Age { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset LastActive { get; set; }
-        public string TimeZone { get; set; }
+        public string TimeZoneUtc { get; set; }
         public string Country { get; set; }
     }
 }

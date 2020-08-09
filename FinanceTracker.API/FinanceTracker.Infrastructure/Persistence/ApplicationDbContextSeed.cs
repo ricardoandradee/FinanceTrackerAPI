@@ -1,48 +1,39 @@
-﻿using FinanceTracker.Domain.Entities;
-using System;
-using System.Collections.Generic;
+﻿using FinanceTracker.Infrastructure.Persistence.Data;
 using System.Linq;
+using FinanceTracker.Application.Common.Extensions;
 
 namespace FinanceTracker.Infrastructure.Persistence
 {
     public class ApplicationDbContextSeed
     {
-        public static void SeedUsers(ApplicationDbContext context)
+        public static void SeedDataBase(ApplicationDbContext context)
         {
-            // Seed, if necessary
+            if (!context.Currencies.Any())
+            {
+                var currencies = CurrencyData.GetCurrencyList();
+                foreach (var currency in currencies)
+                {
+                    context.Currencies.Add(currency);
+                }
+                context.SaveChanges();
+            }
+
+            if (!context.StateTimeZones.Any())
+            {
+                var timeZonesSplited = TimeZoneData.GetTimeZoneList().SplitList(100);
+                foreach (var tzSplited in timeZonesSplited)
+                {
+                    foreach (var timeZone in tzSplited)
+                    {
+                        context.StateTimeZones.Add(timeZone);
+                    }
+                    context.SaveChanges();
+                }
+            }
+
             if (!context.Users.Any())
             {
-                var users = new List<User>()
-                {
-                    new User {
-                        UserName = "Lauren",
-                        DateOfBirth = DateTime.Parse("1990-03-04"),
-                        CreatedDate = DateTime.Parse("2020-06-08"),
-                        LastActive = DateTime.Parse("2020-06-08"),
-                        BaseCurrency = "EUR",
-                        TimeZone = "(UTC +10:00) Sydney, Melbourne",
-                        Country = "Viet Nam"
-                     },
-                    new User {
-                        UserName = "Cameron",
-                        DateOfBirth = DateTime.Parse("1994-08-03"),
-                        CreatedDate = DateTime.Parse("2020-01-06"),
-                        LastActive = DateTime.Parse("2020-01-06"),
-                        BaseCurrency = "AUD",
-                        TimeZone = "(UTC +10:00) Sydney, Melbourne",
-                        Country = "French Polynesia"
-                     },
-                    new User {
-                        UserName = "Joshwa",
-                        DateOfBirth = DateTime.Parse("1986-03-16"),
-                        CreatedDate = DateTime.Parse("2020-07-02"),
-                        LastActive = DateTime.Parse("2017-08-09"),
-                        BaseCurrency = "CAD",
-                        TimeZone = "(UTC +10:00) Sydney, Melbourne",
-                        Country = "Pakistan"
-                     }
-                };
-                
+                var users = UserData.GetUserList();
                 foreach (var user in users)
                 {
                     byte[] passwordHash, passwordSalt;
@@ -54,7 +45,6 @@ namespace FinanceTracker.Infrastructure.Persistence
 
                     context.Users.Add(user);
                 }
-
                 context.SaveChanges();
             }
         }

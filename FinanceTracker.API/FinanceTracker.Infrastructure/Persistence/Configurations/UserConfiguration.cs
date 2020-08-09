@@ -16,10 +16,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .HasMaxLength(3)
                 .IsRequired();
 
-            builder.Property(t => t.TimeZone)
-                .HasMaxLength(150)
-                .IsRequired();
-
             builder.Property(t => t.Country)
                 .HasMaxLength(50)
                 .IsRequired();

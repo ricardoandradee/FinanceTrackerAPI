@@ -13,7 +13,8 @@ namespace FinanceTracker.Domain.Entities
         public decimal Wallet { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset LastActive { get; set; }
-        public string TimeZone { get; set; }
+        public virtual StateTimeZone StateTimeZone { get; set; }
+        public int StateTimeZoneId { get; set; }
         public string Country { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace FinanceTracker.API
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     context.Database.Migrate();
-                    ApplicationDbContextSeed.SeedUsers(context);
+                    ApplicationDbContextSeed.SeedDataBase(context);
                 }
                 catch (Exception ex)
                 {

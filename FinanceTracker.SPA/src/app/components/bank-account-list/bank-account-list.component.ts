@@ -64,7 +64,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.timeZone.trim().substring(5, 11);
+    this.userTimeZone = user.timeZoneUtc;
 
     this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
       this.userBaseCurrency = userBaseCurrency;

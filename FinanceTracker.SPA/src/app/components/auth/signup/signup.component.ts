@@ -3,10 +3,10 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { UiService } from 'src/app/services/ui.service';
-import { TimeZoneList } from 'src/app/data/timezone.data';
 import { CurrencyList } from 'src/app/data/currency.data';
 import { Subscription } from 'rxjs';
 import { ErrorUserNameAlreadyTakenMatcher } from 'src/app/errorMatchers/error-username-already-taken.matcher';
+import { TimeZone } from 'src/app/models/timezone.model';
 
 @Component({
   selector: 'app-signup',
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
   countries = [];
-  timeZones = [];
+  timeZones: TimeZone[];
   currencies = [];
 
   constructor(private authService: AuthService,
@@ -42,18 +42,18 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.timeZones = this.getTimezoneByCountry(country);
   }
 
-  private getTimezoneByCountry(countryName: string): string[] {
-    return TimeZoneList.filter((tz) => {
-      return ( tz.countryName === countryName );
-    }).map((tz) => {
-      return ( tz.timeZoneDescription);
-    }).sort();
+  private getTimezoneByCountry(countryName: string): TimeZone[] {
+    const timeZones: TimeZone[] = JSON.parse(localStorage.getItem('timezoneList'));
+    return timeZones.filter((tz) => {
+      return ( tz.country === countryName );
+    });
   }
 
   private getCountries(): string[] {
-    const allCountries = TimeZoneList.map((tz) => {
+    const timeZones: TimeZone[] = JSON.parse(localStorage.getItem('timezoneList'));
+    const allCountries = timeZones.map((tz) => {
       return (
-        tz.countryName
+        tz.country
       );
     }).sort();
     return Array.from(new Set(allCountries.map(item => item)));
@@ -62,7 +62,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
-            timeZone: user.timeZone, dateOfBirth: user.birthdayPicker,
+            stateTimeZoneId: user.timeZone, dateOfBirth: user.birthdayPicker,
             baseCurrency: user.currency, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {

@@ -7,7 +7,8 @@ export interface User {
     createdDate: Date;
     wallet: number;
     lastActive: Date;
-    timeZone: string;
+    timeZoneUtc: string;
+    stateTimeZoneId: string;
     password: string;
     country: string;
 }

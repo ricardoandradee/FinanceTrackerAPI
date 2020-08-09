@@ -41,7 +41,7 @@ export class CurrencyService implements OnDestroy {
     }
     
     private loadProdCurrencies() {
-        const url = `${this.baseUrl}currency/GetListOfCurrencies`;
+        const url = `${this.baseUrl}currency/GetListOfRates`;
         return this.http.get(url, { observe: 'response' })
         .pipe(map(response => {
             return response.body;

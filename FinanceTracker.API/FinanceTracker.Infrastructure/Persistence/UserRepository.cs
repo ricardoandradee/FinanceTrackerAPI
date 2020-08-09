@@ -29,7 +29,8 @@ namespace FinanceTracker.Infrastructure.Persistence
 
         public async Task<User> Login(string userName, string password)
         {
-            var user = await _unitOfWork.Context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+            var user = await _unitOfWork.Context.Users.Include(u => u.StateTimeZone)
+                                .FirstOrDefaultAsync(x => x.UserName == userName);
 
             if (user == null)
                 return null;

@@ -17,12 +17,10 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(t => t.Establishment)
-                .HasMaxLength(50)
-                .IsRequired();
+                .HasMaxLength(50);
 
             builder.Property(t => t.Description)
-                .HasMaxLength(255)
-                .IsRequired();
+                .HasMaxLength(255);
 
             builder.Property(t => t.Currency)
                 .HasMaxLength(3)
@@ -33,8 +31,7 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(t => t.AmountPaid)
-                .HasColumnType("decimal(18,2)")
-                .IsRequired();
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

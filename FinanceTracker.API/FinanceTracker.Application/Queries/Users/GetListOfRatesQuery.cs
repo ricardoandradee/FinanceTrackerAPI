@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Queries.Users
 {
-    public class GetListOfCurrenciesQuery : IRequest<string>
+    public class GetListOfRatesQuery : IRequest<string>
     {
-        public GetListOfCurrenciesQuery()
+        public GetListOfRatesQuery()
         {
         }
 
-        public class GetListOfCurrenciesHandler : IRequestHandler<GetListOfCurrenciesQuery, string>
+        public class GetListOfCurrenciesHandler : IRequestHandler<GetListOfRatesQuery, string>
         {
-            public async Task<string> Handle(GetListOfCurrenciesQuery request, CancellationToken cancellationToken)
+            public async Task<string> Handle(GetListOfRatesQuery request, CancellationToken cancellationToken)
             {
                 using (HttpClient client = new HttpClient())
                 {

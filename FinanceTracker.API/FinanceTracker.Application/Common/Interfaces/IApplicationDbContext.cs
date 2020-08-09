@@ -15,6 +15,8 @@ namespace FinanceTracker.Application.Common.Interfaces
         DbSet<Account> Accounts { get; set; }
         DbSet<Wallet> Wallets { get; set; }
         DbSet<Transaction> Transactions { get; set; }
+        DbSet<Currency> Currencies { get; set; }
+        DbSet<StateTimeZone> StateTimeZones { get; set; }
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

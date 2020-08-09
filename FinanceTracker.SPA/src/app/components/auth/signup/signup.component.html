@@ -7,7 +7,7 @@
                 <mat-error *ngIf="userNameInput.hasError('userNameAlreadyTaken')">
                     User Name was already taken.
                 </mat-error>
-                <mat-error *ngIf="userNameInput.hasError('required')">User Name should be 6 characters long.</mat-error>
+                <mat-error *ngIf="userNameInput.hasError('minlength')">User Name should be 6 characters long.</mat-error>
         </mat-form-field>
         <mat-form-field hintLabel="Password should be at least 6 characters long.">
             <input type="password" matInput placeholder="Password" #pwInput="ngModel"
@@ -44,8 +44,8 @@
                 <mat-label> Time Zone </mat-label>
                 <mat-select #timeZoneInput="ngModel" name="timeZone" id="timeZone" ngModel required>
                     <mat-option value=""> - Select - </mat-option>
-                    <mat-option *ngFor="let timeZone of timeZones" [value]="timeZone">
-                        {{timeZone}}
+                    <mat-option *ngFor="let timeZone of timeZones" [value]="timeZone.id">
+                        {{timeZone.description}}
                     </mat-option>
                 </mat-select>
                 <mat-error>Time Zone is required.</mat-error>

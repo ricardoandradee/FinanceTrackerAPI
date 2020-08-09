@@ -9,11 +9,11 @@ namespace FinanceTracker.API.Controllers
     [Route("api/currency")]
     public class CurrencyController : ApiController
     {
-        [HttpGet("GetListOfCurrencies")]
+        [HttpGet("GetListOfRates")]
         [ResponseCache(VaryByHeader = "User-Agent", Duration = 1440)]
-        public async Task<IActionResult> GetListOfCurrencies()
+        public async Task<IActionResult> GetListOfRates()
         {
-            var query = new GetListOfCurrenciesQuery();
+            var query = new GetListOfRatesQuery();
             var result = await Mediator.Send(query);
             return string.IsNullOrWhiteSpace(result) ? (IActionResult) NotFound() : Ok(result);
         }
