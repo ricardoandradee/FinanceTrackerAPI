@@ -31,10 +31,10 @@
     <ng-container matColumnDef="Category">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Category </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            <span *ngIf="!editExpense?.id || element.id!==editExpense.id">{{ element.categoryName }}</span>
+            <span *ngIf="!editExpense?.id || element.id!==editExpense.id">{{ element.category.name }}</span>
             <mat-form-field *ngIf="editExpense?.id && element.id===editExpense?.id">
                 <mat-label> Categories </mat-label>
-                <mat-select name="category" id="category" [(ngModel)]="element.categoryId">
+                <mat-select name="category" id="category" [(ngModel)]="element.category.id">
                     <mat-option *ngFor="let cat of allCategories" [value]="cat.id">
                         {{cat.name}}
                     </mat-option>
@@ -67,12 +67,12 @@
     <ng-container matColumnDef="Price">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>       
         <mat-cell *matCellDef="let element" fxLayoutGap="15px">
-            <span *ngIf="!editExpense?.id || element.id!==editExpense.id">{{ element.price | currency: element.currency }}</span>
+            <span *ngIf="!editExpense?.id || element.id!==editExpense.id">{{ element.price | currency: element.currency.code }}</span>
             <mat-form-field *ngIf="editExpense?.id && element.id===editExpense?.id" [style.width.px]=60>
                 <mat-label> Currency </mat-label>
-                <mat-select name="currency" id="currency" [(ngModel)]="element.currency">
-                    <mat-option *ngFor="let currency of currencies" [value]="currency">
-                        {{currency}}
+                <mat-select name="currency" id="currency" [(ngModel)]="element.currency.id">
+                    <mat-option *ngFor="let currency of currencies" [value]="currency.id">
+                        {{currency.code}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

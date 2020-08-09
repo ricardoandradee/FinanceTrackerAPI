@@ -3,7 +3,8 @@ import { MatDialogRef } from '@angular/material';
 import { BankAccount } from 'src/app/models/bank-account.model';
 import { Account } from 'src/app/models/account.model';
 import { NgForm } from '@angular/forms';
-import { CurrencyList } from 'src/app/data/currency.data';
+import { CommonService } from 'src/app/services/common.service';
+import { Currency } from 'src/app/models/currency.model';
 
 @Component({
   selector: 'app-bank-account-add',
@@ -11,17 +12,20 @@ import { CurrencyList } from 'src/app/data/currency.data';
   styleUrls: ['./bank-account-add.component.scss']
 })
 export class BankAccountAddComponent implements OnInit {
-  currencies = [];
+  currencies: Currency[];
 
-  constructor(private dialogRef: MatDialogRef<BankAccountAddComponent>) {
+  constructor(private dialogRef: MatDialogRef<BankAccountAddComponent>,
+              private commonService: CommonService) {
   }
   ngOnInit(): void {
-    this.currencies = CurrencyList;
+    this.commonService.getAllCurrencies.subscribe(x => {
+      this.currencies = x;
+    });
   }
   
   onSave(form: NgForm) {
     const account = { name: 'Checking Account', description: `Checking Account linked to ${form.value.name}`,
-      currentBalance: form.value.currentBalance, currency: form.value.currency,
+      currentBalance: form.value.currentBalance, currency: { id: form.value.currency } as Currency,
       number: form.value.accountNumber, isActive: true, transactions: [] } as Account;
       
     const bankInfo = { name: form.value.name, branch: form.value.branch,

@@ -1,4 +1,5 @@
 import { Transaction } from './transaction.model';
+import { Currency } from './currency.model';
 export interface Account {
     id?: number;
     bankId?: number;
@@ -6,7 +7,7 @@ export interface Account {
     isActive: boolean;
     number: string;
     currentBalance: number;
-    currency: string;
+    currency: Currency;
     createdDate?: Date;
     transactions: Transaction[];
 }

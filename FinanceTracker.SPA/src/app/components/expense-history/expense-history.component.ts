@@ -17,6 +17,7 @@ import { Observable, Subscription } from 'rxjs';
 import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.model';
 import { User } from 'src/app/models/user.model';
 import { Currency } from 'src/app/models/currency.model';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-expense-history',
@@ -32,7 +33,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   editExpense: Expense;
   oldExpense: Expense;
   rowInEditMode = false;
-  private currencies: string[];
+  currencies: Currency[];
   private allCategories: Category[];
 
   private datesKeyValue: KeyValuePair<string, string>[];
@@ -47,11 +48,16 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   constructor(private uiService: UiService, private expenseService: ExpenseService,
               private currencyService: CurrencyService, private dialog: MatDialog,
               private categoryService: CategoryService,
+              private commonService: CommonService, 
               private store: Store<{ui: fromRoot.State}>) {
-                this.currencies = CurrencyList;
               }
 
   ngOnInit() {
+
+    this.commonService.getAllCurrencies.subscribe(x => {
+      this.currencies = x;
+    });
+
     const user: User = JSON.parse(localStorage.getItem('user'));
     this.userTimeZone = user.stateTimeZone.utc;
     
@@ -88,7 +94,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   populateDropDownLists(expenses: Expense[]) {
     this.categoriesKeyValue  = getUniquePairs(expenses.map((expense: Expense) =>
     {
-        return { key: expense.categoryId, value: expense.categoryName } as KeyValuePair<number, string>;
+        return { key: expense.category.id, value: expense.category.name } as KeyValuePair<number, string>;
     }));
     
     this.datesKeyValue = getUniquePairs(expenses.map((expense: Expense) =>
@@ -134,8 +140,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
         const expenseCreated = response.body as Expense;
         this.pushExpenseToDataSource(expenseCreated);
         this.uiService.showSnackBar('Expense was sucessfully created.', 3000);
-      }
-      else {
+      } else {
         this.uiService.showSnackBar('An error occured while adding expense details, please, try again later.', 3000);
       }
     }, (err) => {
@@ -148,11 +153,19 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(subscription);
   }
+
+  private getCurrencyById(id: number): Currency {
+    return this.currencies.find(x => x.id === id);
+  }
   
   private updateExpense() {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.expenseService.updateExpense(this.editExpense).subscribe(response => {
       if (response.ok) {
+        this.editExpense.currency = this.getCurrencyById(this.editExpense.currency.id);
+        const targetIdx = this.dataSource.data.map(i => i.id).indexOf(this.editExpense.id);
+        this.dataSource[targetIdx] = this.editExpense;
+
         this.expenseService.setExpenses = this.dataSource.data;
         this.uiService.showSnackBar('Expense successfully updated.', 3000);
         } else {
@@ -163,7 +176,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     });
 
     subscription.add(() => {
-      this.store.dispatch(new UI.StopLoading());      
+      this.store.dispatch(new UI.StopLoading());
       this.onCancelEdit();
     });
 
@@ -223,7 +236,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
 
   categoryFilterMatches(expense: Expense): boolean {
     const filter = '[FilterByCategory]' + this.category;
-    const value = '[FilterByCategory]' + expense.categoryId;
+    const value = '[FilterByCategory]' + expense.category.id;
     return filter.indexOf('[FilterByCategory]') === -1 || (filter === '[FilterByCategory]All' || value.indexOf(filter) >= 0);
   }
 

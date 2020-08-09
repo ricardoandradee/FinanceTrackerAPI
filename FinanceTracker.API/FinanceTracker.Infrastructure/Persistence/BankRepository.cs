@@ -20,8 +20,8 @@ namespace FinanceTracker.Infrastructure.Persistence
         public async Task<IEnumerable<Bank>> GetBanksByUserId(int userId)
         {
             var banks = await _unitOfWork.Context.Banks.Where(b => b.User.Id == userId)
-            .Include(a => a.Accounts)
-            .ThenInclude(t => t.Transactions)
+                .Include(bank => bank.Accounts).ThenInclude(account => account.Transactions)
+                .Include(bank => bank.Accounts).ThenInclude(account => account.Currency)
             .ToListAsync();
             
             return banks;
@@ -50,7 +50,7 @@ namespace FinanceTracker.Infrastructure.Persistence
             var branchParam = new SqlParameter("branch", bank.Branch);
             var accountNameParam = new SqlParameter("accountName", account.Name);
             var accountNumberParam = new SqlParameter("accountNumber", account.Number);
-            var accountCurrencyParam = new SqlParameter("accountCurrency", account.Currency);
+            var accountCurrencyParam = new SqlParameter("accountCurrency", account.Currency.Id);
             var currentBalanceParam = new SqlParameter("currentBalance", account.CurrentBalance);
             var createdDateParam = new SqlParameter("createdDate", bank.CreatedDate);
             var bankIdParam = new SqlParameter("bankId", DbType.Int32) { Direction = ParameterDirection.Output };
@@ -61,8 +61,10 @@ namespace FinanceTracker.Infrastructure.Persistence
                   , new[] { userIdParam, bankNameParam, branchParam, accountNameParam, accountNumberParam, accountCurrencyParam,
                     currentBalanceParam, createdDateParam, bankIdParam });
 
-            return await _unitOfWork.Context.Banks.Include(a => a.Accounts).ThenInclude(t => t.Transactions)
-                           .FirstAsync(a => a.Id == Convert.ToInt32(bankIdParam.Value));
+            return await _unitOfWork.Context.Banks
+                .Include(b => b.Accounts).ThenInclude(a => a.Transactions)
+                .Include(b => b.Accounts).ThenInclude(a => a.Currency)
+            .FirstAsync(a => a.Id == Convert.ToInt32(bankIdParam.Value));
         }
     }
 }

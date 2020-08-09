@@ -1,4 +1,5 @@
 ﻿using System;
+using FinanceTracker.Application.Dtos.Categories;
 using FinanceTracker.Application.Dtos.Currencies;
 
 namespace FinanceTracker.Application.Dtos.Expenses
@@ -6,8 +7,7 @@ namespace FinanceTracker.Application.Dtos.Expenses
     public class ExpenseToReturnDto
     {
         public int Id { get; set; }
-        public String CategoryName { get; set; }
-        public int CategoryId { get; set; }
+        public CategoryToReturnDto Category { get; set; }
         public string Address { get; set; }
         public string Establishment { get; set; }
         public string Description { get; set; }

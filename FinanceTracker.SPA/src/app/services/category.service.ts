@@ -21,7 +21,7 @@ export class CategoryService {
                 this.expenseService.getExpenses.subscribe((p) => {
                     let allcategories = this.dataSource$.value;
                     allcategories.forEach(c => {
-                      c.canBeDeleted = !p.some(b => b.categoryId === c.id);
+                      c.canBeDeleted = !p.some(b => b.category.id === c.id);
                     });
                     this.setCategories = allcategories;
                 })

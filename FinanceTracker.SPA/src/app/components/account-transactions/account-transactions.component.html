@@ -27,13 +27,13 @@
                 <ng-container matColumnDef="Amount">
                     <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
                     <mat-cell *matCellDef="let element" [ngStyle]="{'color': element.action == 'Withdraw' ? 'red' : 'green' }">
-                        {{ element.action == 'Withdraw' ? '-' : '' }} {{ element.amount | currency: account.currency }}
+                        {{ element.action == 'Withdraw' ? '-' : '' }} {{ element.amount | currency: account.currency.code }}
                     </mat-cell>
                 </ng-container>
       
                 <ng-container matColumnDef="Balance">
                     <mat-header-cell *matHeaderCellDef> Balance </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{ element.balanceAfterTransaction | currency: account.currency }} </mat-cell>
+                    <mat-cell *matCellDef="let element"> {{ element.balanceAfterTransaction | currency: account.currency.code }} </mat-cell>
                 </ng-container>
                 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

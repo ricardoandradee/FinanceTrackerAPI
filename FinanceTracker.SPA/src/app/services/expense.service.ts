@@ -37,7 +37,14 @@ export class ExpenseService {
 
     createExpense(expense: Expense) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const newExpense = { ...expense, createdDate: this.datePipe.transform(expense.createdDate, 'yyyy-MM-ddTHH:mm:ss') };
+        const newExpense = {
+            description: expense.description,
+            address: expense.address,
+            establishment: expense.establishment,
+            categoryId: expense.category.id,
+            currencyId: expense.currency.id,
+            price: expense.price
+        };
         const url = `${this.baseUrl}${user.id}/Expense/CreateExpense`;
         const httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'
@@ -48,11 +55,11 @@ export class ExpenseService {
     updateExpense(expense: Expense) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
         const newExpense = {
-            categoryId: expense.categoryId,
+            categoryId: expense.category.id,
             address: expense.address,
             establishment: expense.establishment,
             description: expense.description,
-            currency: expense.currency,
+            currencyId: expense.currency.id,
             price: expense.price
         };
         

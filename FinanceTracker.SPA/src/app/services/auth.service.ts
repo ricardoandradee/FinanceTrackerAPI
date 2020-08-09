@@ -80,6 +80,7 @@ export class AuthService {
         if (responseBody.user) {
           localStorage.setItem('user', JSON.stringify(responseBody.user));
           this.currentUser = responseBody.user;
+          console.log(this.currentUser);
           this.currencyService.fetchListOfCurrencies();
           this.currencyService.setUserBaseCurrency = this.currentUser.currency;
         }

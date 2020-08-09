@@ -19,15 +19,13 @@ namespace FinanceTracker.Application.Commands.Expenses
         public class CreateExpenseHandler : IRequestHandler<CreateExpenseCommand, ExpenseToReturnDto>
         {
             private readonly IExpenseRepository _expenseRepository;
-            private readonly ICategoryRepository _categoryRepository;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly IMapper _mapper;
 
             public CreateExpenseHandler(IExpenseRepository expenseRepository,
-                ICategoryRepository categoryRepository, IMapper mapper, IUnitOfWorkRepository unitOfWorkRepository)
+                IMapper mapper, IUnitOfWorkRepository unitOfWorkRepository)
             {
                 _mapper = mapper;
-                _categoryRepository = categoryRepository;
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _expenseRepository = expenseRepository;
             }
@@ -39,7 +37,8 @@ namespace FinanceTracker.Application.Commands.Expenses
 
                 if (await _unitOfWorkRepository.SaveChanges() > 0)
                 {
-                    expense.Category = await _categoryRepository.RetrieveById(expense.CategoryId);
+                    expense.Category = await _unitOfWorkRepository.Context.Categories.FindAsync(expense.CategoryId);
+                    expense.Currency = await _unitOfWorkRepository.Context.Currencies.FindAsync(expense.CurrencyId);
                     return _mapper.Map<ExpenseToReturnDto>(expense);
                 }
 

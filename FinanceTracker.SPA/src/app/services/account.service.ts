@@ -47,7 +47,7 @@ export class AccountService {
         const accountToUpdate = {
             name: account.name,
             number: account.number,
-            currency: account.currency,
+            currencyId: account.currency.id,
             isActive: account.isActive
         };
         const httpHeaders = new HttpHeaders({

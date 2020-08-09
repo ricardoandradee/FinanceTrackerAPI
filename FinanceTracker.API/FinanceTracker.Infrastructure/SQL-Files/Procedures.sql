@@ -90,7 +90,7 @@ Create Procedure CreateBankWithAccount
 	@branch Varchar(50),
 	@accountName Varchar(100),
 	@accountNumber Varchar(25),
-	@accountCurrency Varchar(3),
+	@accountCurrency Int,
 	@currentBalance Decimal(18, 2),
 	@createdDate DateTimeOffset(7),
     @bankId Int Output
@@ -120,7 +120,7 @@ Begin
 					[Name],
 					[Number],
 					IsActive,
-					Currency,
+					CurrencyId,
 					CurrentBalance,
 					CreatedDate) 
 		Values     (@bankId,
@@ -182,7 +182,7 @@ Create Procedure CreateAccount
 	@bankId Int,
 	@accountName Varchar(100),
 	@accountNumber Varchar(25),
-	@accountCurrency Varchar(3),
+	@accountCurrency Int,
 	@currentBalance Decimal(18, 2),
 	@createdDate DateTimeOffset(7),
     @accountId Int Output
@@ -198,7 +198,7 @@ Begin
 					[Name],
 					[Number],
 					IsActive,
-					Currency,
+					CurrencyId,
 					CurrentBalance,
 					CreatedDate) 
 		Values     (@bankId,

@@ -34,10 +34,6 @@ namespace FinanceTracker.Application.Common.Mappings
             #region Expense related mappings
 
             CreateMap<Expense, ExpenseToReturnDto>()
-            .ForMember(dest => dest.CategoryName, opt =>
-            {
-                opt.MapFrom((s, d) => s.Category?.Name);
-            })
             .ForMember(dest => dest.CreatedDateString, opt =>
             {
                 opt.MapFrom((s, d) => s.CreatedDate.ToString("MMM/yyyy"));

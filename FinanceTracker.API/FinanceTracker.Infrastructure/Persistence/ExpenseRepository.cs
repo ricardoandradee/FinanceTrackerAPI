@@ -18,6 +18,7 @@ namespace FinanceTracker.Infrastructure.Persistence
         {
             var expenses = await _unitOfWork.Context.Expenses.Where(b => b.Category.User.Id == userId)
                 .Include(c => c.Category)
+                .Include(c => c.Currency)
                 .ToListAsync();
 
             return expenses;

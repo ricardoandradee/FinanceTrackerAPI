@@ -21,7 +21,7 @@ export class CommonService {
         const url = `${this.baseUrl}financetracker/GetListOfCurrency`;
         return this.http.get(url, { observe: 'response' })
         .pipe(map(response => {
-            return response.body as Currency[];
+            return (response.body as Currency[]).sort((a, b) => (a.code > b.code) ? 1 : -1);
         })).subscribe((currencies: Currency[]) => {
             this.currencyDataSource$.next(currencies);
         });
