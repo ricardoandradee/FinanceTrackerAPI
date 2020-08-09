@@ -1,4 +1,5 @@
 ﻿using System;
+using FinanceTracker.Application.Dtos.Currencies;
 
 namespace FinanceTracker.Application.Dtos.Expenses
 {
@@ -14,7 +15,7 @@ namespace FinanceTracker.Application.Dtos.Expenses
         public string Establishment { get; set; }
         public decimal AmountPaid { get; set; }
         public string Description { get; set; }
-        public string Currency { get; set; }
+        public CurrencyDto Currency { get; set; }
         public decimal Price { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
     }

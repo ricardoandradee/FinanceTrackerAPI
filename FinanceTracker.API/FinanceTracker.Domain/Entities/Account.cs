@@ -9,7 +9,8 @@ namespace FinanceTracker.Domain.Entities
         public string Name { get; set; }
         public string Number { get; set; }
         public bool IsActive { get; set; }
-        public string Currency { get; set; }
+        public int CurrencyId { get; set; }
+        public virtual Currency Currency { get; set; }
         public decimal CurrentBalance { get; set; }
         public virtual Bank Bank { get; set; }
         public int BankId { get; set; }

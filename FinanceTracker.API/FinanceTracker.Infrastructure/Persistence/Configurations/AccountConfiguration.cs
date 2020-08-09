@@ -21,9 +21,7 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .HasMaxLength(30)
                 .IsRequired();
 
-            builder.Property(t => t.Currency)
-                .HasMaxLength(3)
-                .IsRequired();
+            builder.HasOne(t => t.Currency);
         }
     }
 }

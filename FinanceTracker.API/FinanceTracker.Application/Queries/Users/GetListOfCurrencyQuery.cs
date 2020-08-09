@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Queries.Users
 {
-    public class GetListOfCurrencyQuery : IRequest<List<CurrencyToReturnDto>>
+    public class GetListOfCurrencyQuery : IRequest<List<CurrencyDto>>
     {
         public GetListOfCurrencyQuery()
         {
         }
 
-        public class GetListOfCurrenciesHandler : IRequestHandler<GetListOfCurrencyQuery, List<CurrencyToReturnDto>>
+        public class GetListOfCurrenciesHandler : IRequestHandler<GetListOfCurrencyQuery, List<CurrencyDto>>
         {
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly IMapper _mapper;
@@ -26,10 +26,10 @@ namespace FinanceTracker.Application.Queries.Users
                 _unitOfWorkRepository = unitOfWorkRepository;
             }
 
-            public async Task<List<CurrencyToReturnDto>> Handle(GetListOfCurrencyQuery request, CancellationToken cancellationToken)
+            public async Task<List<CurrencyDto>> Handle(GetListOfCurrencyQuery request, CancellationToken cancellationToken)
             {
                 var currencies = await _unitOfWorkRepository.Context.Currencies.ToListAsync();
-                return _mapper.Map<List<CurrencyToReturnDto>>(currencies);
+                return _mapper.Map<List<CurrencyDto>>(currencies);
             }
         }
     }

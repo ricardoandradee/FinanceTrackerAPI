@@ -12,7 +12,7 @@ namespace FinanceTracker.Application.Dtos.Users
 
         public string UserName { get; set; }
         public string Email { get; set; }
-        public string CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
         public decimal Wallet { get; set; }
         public string Password { get; set; }
         public int StateTimeZoneId { get; set; }

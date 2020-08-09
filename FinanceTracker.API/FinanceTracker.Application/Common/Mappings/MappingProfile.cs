@@ -82,7 +82,7 @@ namespace FinanceTracker.Application.Common.Mappings
 
             #region Currency related mappings
 
-            CreateMap<Currency, CurrencyToReturnDto>().ReverseMap();
+            CreateMap<Currency, CurrencyDto>().ReverseMap();
 
             #endregion
 

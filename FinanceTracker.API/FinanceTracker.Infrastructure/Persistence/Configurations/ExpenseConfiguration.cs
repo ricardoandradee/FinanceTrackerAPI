@@ -9,8 +9,11 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Expense> builder)
         {
             builder.HasOne(t => t.Category);
-
             builder.HasMany(t => t.Transactions);
+
+            builder.HasOne(u => u.Currency)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(t => t.Address)
                 .HasMaxLength(255)
@@ -21,10 +24,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
 
             builder.Property(t => t.Description)
                 .HasMaxLength(255);
-
-            builder.Property(t => t.Currency)
-                .HasMaxLength(3)
-                .IsRequired();
 
             builder.Property(t => t.Price)
                 .HasColumnType("decimal(18,2)")

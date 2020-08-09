@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinanceTracker.Application.Dtos.Currencies
 {
-    public class CurrencyToReturnDto
+    public class CurrencyDto
     {
         public int Id { get; set; }
         public string Code { get; set; }

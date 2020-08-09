@@ -1,3 +1,4 @@
+using FinanceTracker.Application.Dtos.Currencies;
 using FinanceTracker.Application.Dtos.Transactions;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace FinanceTracker.Application.Dtos.Accounts
         public int Id { get; set; }
         public string Name { get; set; }
         public string Number { get; set; }
-        public string Currency { get; set; }
+        public CurrencyDto Currency { get; set; }
         public decimal CurrentBalance { get; set; }
         public bool IsActive { get; set; }
         public ICollection<TransactionToReturnWithoutAccountDto> Transactions { get; set; }

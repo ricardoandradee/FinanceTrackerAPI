@@ -7,7 +7,7 @@ namespace FinanceTracker.Application.Dtos.Users
     public class UserForListDto
     {
         public int Id { get; set; }
-        public CurrencyToReturnDto Currency { get; set; }
+        public CurrencyDto Currency { get; set; }
         public StateTimeZoneToReturnDto StateTimeZone { get; set; }
         public decimal Wallet { get; set; }
         public string UserName { get; set; }

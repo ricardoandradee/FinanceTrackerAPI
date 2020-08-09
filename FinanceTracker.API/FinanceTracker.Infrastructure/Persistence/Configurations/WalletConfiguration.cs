@@ -8,12 +8,14 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Wallet> builder)
         {
+
+            builder.HasOne(u => u.User)
+                .WithMany(u => u.Wallets)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Property(t => t.Name)
                 .HasMaxLength(30)
-                .IsRequired();
-
-            builder.Property(t => t.Currency)
-                .HasMaxLength(3)
                 .IsRequired();
         }
     }
