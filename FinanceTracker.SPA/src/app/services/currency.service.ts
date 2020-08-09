@@ -7,28 +7,29 @@ import { KeyValuePair } from '../models/key-value-pair.model';
 import { User } from '../models/user.model';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Rates } from '../data/rates.mock.data';
+import { Currency } from '../models/currency.model';
 
 @Injectable()
 export class CurrencyService implements OnDestroy {
     private subscription: Subscription;
     private baseUrl = environment.apiUrl;
-    private dataSource$: BehaviorSubject<string> = new BehaviorSubject('');
+    private dataSource$: BehaviorSubject<Currency> = new BehaviorSubject(null);
 
     constructor(private http: HttpClient) { }
 
     checkIfCurrenciesAreLoaded(currencies: string[]): boolean {
-        if (!this.getCurrencyRates || this.getCurrencyRates.length == 0) {
+        if (!this.getCurrencyRates || this.getCurrencyRates.length === 0) {
             return false;
         }
 
         return currencies.filter(c => this.getCurrencyRates.some(r => r.key === c)).length === currencies.length;
     }
 
-    get getUserBaseCurrency(): Observable<string> {
+    get getUserBaseCurrency(): Observable<Currency> {
         return this.dataSource$.asObservable();
     }
 
-    set setUserBaseCurrency(baseCurrency: string) {
+    set setUserBaseCurrency(baseCurrency: Currency) {
         this.dataSource$.next(baseCurrency);
     }
 
@@ -83,9 +84,9 @@ export class CurrencyService implements OnDestroy {
         return mapperList.map(m => this.convertCurrency(m)).reduce((a, b) => a + b, 0);
     }
 
-    updateUserBaseCurrency(baseCurrency: string) {
+    updateUserBaseCurrency(currencyId: number) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
-        const url = `${this.baseUrl}user/${user.id}/UpdateUserBaseCurrency/${baseCurrency}`;
+        const url = `${this.baseUrl}user/${user.id}/UpdateUserBaseCurrency/${currencyId}`;
         
         let httpHeaders = new HttpHeaders({
             'Content-Type' : 'application/json'

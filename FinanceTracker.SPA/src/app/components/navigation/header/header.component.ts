@@ -1,11 +1,11 @@
 import { Component, OnInit,  EventEmitter, Output, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { CurrencyList } from 'src/app/data/currency.data';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
 import { Observable, Subscription } from 'rxjs';
 import { BankAccountService } from 'src/app/services/bank-account.service';
 import { Account } from 'src/app/models/account.model';
+import { Currency } from 'src/app/models/currency.model';
 
 @Component({
   selector: 'app-header',
@@ -15,8 +15,8 @@ import { Account } from 'src/app/models/account.model';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() sidenavToggle = new EventEmitter<void>();
   private allSubscriptions: Subscription[] = [];
-  currencies = [];
-  userBaseCurrency = '';
+  currencies: Currency[];
+  userBaseCurrency: Currency;
   openSideNav = false;
   disableBaseCurrency = true;
   allAccounts: Account[];
@@ -25,14 +25,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService,
               private bankAccountService: BankAccountService,
               private currencyService: CurrencyService) {
-    this.currencies = CurrencyList;
+    this.currencies = this.getCurrency();
    }
 
   ngOnInit() {
     this.isAuth$ = this.authService.getIsAuthenticated;
     
     const currencySubscription = this.currencyService.getUserBaseCurrency.subscribe(currency => {
-      this.userBaseCurrency = currency ? currency : 'EUR';
+      this.userBaseCurrency = currency;
     });
 
     const bankSubscription = this.bankAccountService.getBankAccountInfos.subscribe(bank => {
@@ -42,17 +42,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(currencySubscription);
     this.allSubscriptions.push(bankSubscription);
-
-
   }
 
+  private getCurrency(): Currency[] {
+    const currencies: Currency[] = JSON.parse(localStorage.getItem('currencyList'));
+    return currencies;
+  }
+
+  private getCurrencyById(id: number): Currency {
+    const currency = this.getCurrency().find(x => x.id === id);
+    return currency;
+  }
+  
   saveUserBaseCurrency() {
     if (!this.disableBaseCurrency) {
-      const subscription = this.currencyService.updateUserBaseCurrency(this.userBaseCurrency)
+      const subscription = this.currencyService.updateUserBaseCurrency(this.userBaseCurrency.id)
       .subscribe(response => {
+        const newCurrency = this.getCurrencyById(this.userBaseCurrency.id);
         const user = this.getUserBaseCurrencyFromLocalStorage();
-        this.currencyService.setUserBaseCurrency = this.userBaseCurrency;
-        user.baseCurrency = this.userBaseCurrency;
+        this.currencyService.setUserBaseCurrency = newCurrency;
+        user.currency = newCurrency;
         localStorage.setItem('user', JSON.stringify(user));
       });
       this.allSubscriptions.push(subscription);

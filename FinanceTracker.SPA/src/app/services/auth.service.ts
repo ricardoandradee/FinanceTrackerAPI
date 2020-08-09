@@ -33,7 +33,7 @@ export class AuthService {
                 }
 
   registerUser(user: User) {
-    return this.http.post(this.baseUrl + 'register', user);
+    return this.http.post(this.baseUrl + 'register', {...user, currencyId: user.currency.id});
   }
 
   get getIsAuthenticated(): Observable<boolean> {
@@ -81,7 +81,7 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(responseBody.user));
           this.currentUser = responseBody.user;
           this.currencyService.fetchListOfCurrencies();
-          this.currencyService.setUserBaseCurrency = this.currentUser.baseCurrency;
+          this.currencyService.setUserBaseCurrency = this.currentUser.currency;
         }
         this.uiService.showSnackBar('Successfully logged in.', 3000);
         this.setIsAuthenticated = true;

@@ -16,6 +16,7 @@ import * as UI from 'src/app/actions/ui.actions';
 import { Observable, Subscription } from 'rxjs';
 import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.model';
 import { User } from 'src/app/models/user.model';
+import { Currency } from 'src/app/models/currency.model';
 
 @Component({
   selector: 'app-expense-history',
@@ -59,8 +60,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
       this.allCategories = categoryList;
     }));
 
-    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
-      this.userBaseCurrency = userBaseCurrency;
+    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((currency: Currency) => {
+      this.userBaseCurrency = currency.code;
     }));
     
     this.allSubscriptions.push(this.isLoading$.subscribe(loading => {

@@ -1,3 +1,4 @@
+using FinanceTracker.Application.Dtos.Currencies;
 using System;
 
 namespace FinanceTracker.Application.Dtos.Users
@@ -5,7 +6,7 @@ namespace FinanceTracker.Application.Dtos.Users
     public class UserForListDto
     {
         public int Id { get; set; }
-        public string BaseCurrency { get; set; }
+        public CurrencyToReturnDto Currency { get; set; }
         public decimal Wallet { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

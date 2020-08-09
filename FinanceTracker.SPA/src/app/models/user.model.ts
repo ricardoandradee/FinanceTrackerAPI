@@ -1,8 +1,10 @@
+import { Currency } from './currency.model';
+
 export interface User {
     id: number;
     userName: string;
     email: string;
-    baseCurrency: string;
+    currency: Currency;
     createdDate: Date;
     wallet: number;
     lastActive: Date;

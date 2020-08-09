@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
                 const user: User = JSON.parse(localStorage.getItem('user'));
                 if (user) {
-                  this.currencyService.setUserBaseCurrency = user.baseCurrency ? user.baseCurrency : 'EUR';
+                  this.currencyService.setUserBaseCurrency = user.currency;
                 }
               }
 

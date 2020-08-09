@@ -12,9 +12,7 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .HasMaxLength(30)
                 .IsRequired();
 
-            builder.Property(t => t.BaseCurrency)
-                .HasMaxLength(3)
-                .IsRequired();
+            builder.HasOne(t => t.Currency);
 
             builder.Property(t => t.Country)
                 .HasMaxLength(50)

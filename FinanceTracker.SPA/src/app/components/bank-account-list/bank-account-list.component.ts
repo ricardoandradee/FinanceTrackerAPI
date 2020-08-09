@@ -20,6 +20,7 @@ import { Transaction } from 'src/app/models/transaction.model';
 import { AccountTransactionsComponent } from '../account-transactions/account-transactions.component';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
+import { Currency } from 'src/app/models/currency.model';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -66,8 +67,8 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     const user: User = JSON.parse(localStorage.getItem('user'));
     this.userTimeZone = user.timeZoneUtc;
 
-    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((userBaseCurrency: string) => {
-      this.userBaseCurrency = userBaseCurrency;
+    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((currency: Currency) => {
+      this.userBaseCurrency = currency.code;
     }));
 
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);

@@ -3,10 +3,10 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { UiService } from 'src/app/services/ui.service';
-import { CurrencyList } from 'src/app/data/currency.data';
 import { Subscription } from 'rxjs';
 import { ErrorUserNameAlreadyTakenMatcher } from 'src/app/errorMatchers/error-username-already-taken.matcher';
 import { TimeZone } from 'src/app/models/timezone.model';
+import { Currency } from 'src/app/models/currency.model';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +21,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   maxDate = new Date();
   countries = [];
   timeZones: TimeZone[];
-  currencies = [];
+  currencies: Currency[];
 
   constructor(private authService: AuthService,
               private uiService: UiService) {
@@ -33,7 +33,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     });
 
     this.countries = this.getCountries();
-    this.currencies = CurrencyList;
+    this.currencies = this.getCurrency();
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
@@ -47,6 +47,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     return timeZones.filter((tz) => {
       return ( tz.country === countryName );
     });
+  }
+
+  private getCurrency(): Currency[] {
+    const currencies: Currency[] = JSON.parse(localStorage.getItem('currencyList'));
+    return currencies;
   }
 
   private getCountries(): string[] {
@@ -63,7 +68,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
             stateTimeZoneId: user.timeZone, email: user.email,
-            baseCurrency: user.currency, country: user.country } as User).subscribe(() => {
+            currency: { id: user.currency } as Currency, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
             this.uiService.showSnackBar(error, 3000);

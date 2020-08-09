@@ -19,10 +19,10 @@ namespace FinanceTracker.API.Controllers
 
         [HttpPut]
         [UserAuthorization]
-        [Route("UpdateUserBaseCurrency/{baseCurrency}")]
-        public async Task<IActionResult> UpdateUserBaseCurrency(int userId, string baseCurrency)
+        [Route("UpdateUserBaseCurrency/{currencyId}")]
+        public async Task<IActionResult> UpdateUserBaseCurrency(int userId, int currencyId)
         {
-            var command = new UpdateUserBaseCurrencyCommand(userId, baseCurrency);
+            var command = new UpdateUserBaseCurrencyCommand(userId, currencyId);
             var result = await Mediator.Send(command);
 
             if (result != null)

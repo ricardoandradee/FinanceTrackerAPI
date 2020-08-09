@@ -7,7 +7,8 @@ namespace FinanceTracker.Domain.Entities
         public int Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public string BaseCurrency { get; set; }
+        public int CurrencyId { get; set; }
+        public Currency Currency { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public decimal Wallet { get; set; }
