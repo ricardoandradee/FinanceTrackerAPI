@@ -12,6 +12,7 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
             {
                 new User {
                     UserName = "Lauren",
+                    Email = "lauren@gmail.com",
                     CreatedDate = DateTime.Parse("2020-06-08"),
                     LastActive = DateTime.Parse("2020-06-08"),
                     BaseCurrency = "EUR",
@@ -20,6 +21,7 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
                     },
                 new User {
                     UserName = "Cameron",
+                    Email = "cameron@gmail.com",
                     CreatedDate = DateTime.Parse("2020-01-06"),
                     LastActive = DateTime.Parse("2020-01-06"),
                     BaseCurrency = "AUD",
@@ -28,6 +30,7 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
                     },
                 new User {
                     UserName = "Joshwa",
+                    Email = "joshwa@gmail.com",
                     CreatedDate = DateTime.Parse("2020-07-02"),
                     LastActive = DateTime.Parse("2017-08-09"),
                     BaseCurrency = "CAD",

@@ -19,6 +19,10 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
             builder.Property(t => t.Country)
                 .HasMaxLength(50)
                 .IsRequired();
+
+            builder.Property(t => t.Email)
+                .HasMaxLength(100)
+                .IsRequired();
         }
     }
 }

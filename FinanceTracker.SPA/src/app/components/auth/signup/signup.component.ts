@@ -62,7 +62,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
-            stateTimeZoneId: user.timeZone,
+            stateTimeZoneId: user.timeZone, email: user.email,
             baseCurrency: user.currency, country: user.country } as User).subscribe(() => {
             this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
@@ -82,6 +82,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.allSubscriptions.forEach(s => { s.unsubscribe()});
+    this.allSubscriptions.forEach(s => { s.unsubscribe() });
   }
 }
