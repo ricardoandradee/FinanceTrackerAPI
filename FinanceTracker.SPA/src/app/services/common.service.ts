@@ -1,33 +1,47 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { Currency } from '../models/currency.model';
 import { TimeZone } from '../models/timezone.model';
 
 @Injectable()
 export class CommonService {
     private baseUrl = environment.apiUrl;
+    private currencyDataSource$: BehaviorSubject<Currency[]> = new BehaviorSubject([]);
+    private timeZoneDataSource$: BehaviorSubject<TimeZone[]> = new BehaviorSubject([]);
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.loadCurrencies();
+        this.loadTimeZones();
+    }
     
-    public loadCurrencies() {
+    private loadCurrencies() {
         const url = `${this.baseUrl}financetracker/GetListOfCurrency`;
         return this.http.get(url, { observe: 'response' })
         .pipe(map(response => {
             return response.body as Currency[];
         })).subscribe((currencies: Currency[]) => {
-            localStorage.setItem('currencyList', JSON.stringify(currencies));
+            this.currencyDataSource$.next(currencies);
         });
     }
+    
+    get getAllCurrencies(): Observable<Currency[]> {
+        return this.currencyDataSource$.asObservable();
+    }
 
-    public loadTimeZones() {
+    get getAllTimezones(): Observable<TimeZone[]> {
+        return this.timeZoneDataSource$.asObservable();
+    }
+
+    private loadTimeZones() {
         const url = `${this.baseUrl}financetracker/GetListOfTimeZone`;
         return this.http.get(url, { observe: 'response' })
         .pipe(map(response => {
             return response.body as TimeZone[];
         })).subscribe((timezones: TimeZone[]) => {
-            localStorage.setItem('timezoneList', JSON.stringify(timezones));
+            this.timeZoneDataSource$.next(timezones);
         });
     }
 }

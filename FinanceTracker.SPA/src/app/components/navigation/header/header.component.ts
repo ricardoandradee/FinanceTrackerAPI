@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { BankAccountService } from 'src/app/services/bank-account.service';
 import { Account } from 'src/app/models/account.model';
 import { Currency } from 'src/app/models/currency.model';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-header',
@@ -24,11 +25,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private bankAccountService: BankAccountService,
+              private commonService: CommonService,
               private currencyService: CurrencyService) {
-    this.currencies = this.getCurrency();
    }
 
   ngOnInit() {
+    this.commonService.getAllCurrencies.subscribe(c => {
+      this.currencies = c;
+    });
+
     this.isAuth$ = this.authService.getIsAuthenticated;
     
     const currencySubscription = this.currencyService.getUserBaseCurrency.subscribe(currency => {
@@ -44,14 +49,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(bankSubscription);
   }
 
-  private getCurrency(): Currency[] {
-    const currencies: Currency[] = JSON.parse(localStorage.getItem('currencyList'));
-    return currencies;
-  }
-
   private getCurrencyById(id: number): Currency {
-    const currency = this.getCurrency().find(x => x.id === id);
-    return currency;
+    return this.currencies.find(x => x.id === id);
   }
   
   saveUserBaseCurrency() {

@@ -247,7 +247,6 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   }
 
   private pushTransactionIntoDataSource(transactionCreated: Transaction) {
-    console.log(transactionCreated);
     var bank = this.dataSource.data.find(b => b.accounts.some(a => a.id === transactionCreated.account.id));
     var account = bank.accounts.find(a => a.id === transactionCreated.account.id);
     account.currentBalance = transactionCreated.balanceAfterTransaction;

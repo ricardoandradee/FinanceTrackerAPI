@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { ErrorUserNameAlreadyTakenMatcher } from 'src/app/errorMatchers/error-username-already-taken.matcher';
 import { TimeZone } from 'src/app/models/timezone.model';
 import { Currency } from 'src/app/models/currency.model';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-signup',
@@ -21,42 +22,43 @@ export class SignupComponent implements OnInit, OnDestroy {
   maxDate = new Date();
   countries = [];
   timeZones: TimeZone[];
+  timeZoneCompleteList: TimeZone[];
   currencies: Currency[];
 
   constructor(private authService: AuthService,
-              private uiService: UiService) {
+              private uiService: UiService,
+              private commonService: CommonService,) {
               }
 
   ngOnInit() {
+    this.commonService.getAllCurrencies.subscribe(c => {
+      this.currencies = c;
+    });
+
+    this.commonService.getAllTimezones.subscribe(t => {
+      this.timeZoneCompleteList = t;
+      this.countries = this.getCountries();
+    });
+
     this.authService.userNames.subscribe((un) => {
       un.forEach((i) => { this.userNames.push(i); });
     });
 
-    this.countries = this.getCountries();
-    this.currencies = this.getCurrency();
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
   filterCity(form: NgForm) {
-    const country = form.value.country;
-    this.timeZones = this.getTimezoneByCountry(country);
+    this.timeZones = this.getTimezoneByCountry(form.value.country);
   }
 
   private getTimezoneByCountry(countryName: string): TimeZone[] {
-    const timeZones: TimeZone[] = JSON.parse(localStorage.getItem('timezoneList'));
-    return timeZones.filter((tz) => {
+    return this.timeZoneCompleteList.filter((tz) => {
       return ( tz.country === countryName );
     });
   }
 
-  private getCurrency(): Currency[] {
-    const currencies: Currency[] = JSON.parse(localStorage.getItem('currencyList'));
-    return currencies;
-  }
-
   private getCountries(): string[] {
-    const timeZones: TimeZone[] = JSON.parse(localStorage.getItem('timezoneList'));
-    const allCountries = timeZones.map((tz) => {
+    const allCountries = this.timeZoneCompleteList.map((tz) => {
       return (
         tz.country
       );

@@ -31,16 +31,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private categoryService: CategoryService,
               private expenseService: ExpenseService,
-              private commonService: CommonService,
               private authService: AuthService,
               private currencyService: CurrencyService) {
-                if (!localStorage.getItem('currencyList')) {
-                  this.commonService.loadCurrencies();
-                }
-                if (!localStorage.getItem('timezoneList')) {
-                  this.commonService.loadTimeZones();
-                }
-
                 const token = localStorage.getItem('token');
                 if (token) {
                   this.authService.setIsAuthenticated = !this.jwtHelper.isTokenExpired(token);
