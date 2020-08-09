@@ -28,7 +28,7 @@ namespace FinanceTracker.Application.Commands.Banks
             public async Task<bool> Handle(DeleteBankInfoCommand request, CancellationToken cancellationToken)
             {
                 var bankFromRepo = await _bankRepository.RetrieveById(request.BankId);
-                _bankRepository.Delete(bankFromRepo);
+                bankFromRepo.IsDeleted = true;
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }
         }

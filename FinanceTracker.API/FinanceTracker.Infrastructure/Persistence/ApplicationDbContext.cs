@@ -97,7 +97,7 @@ namespace FinanceTracker.Infrastructure.Persistence
             base.OnModelCreating(builder);
 
             builder.Entity<Bank>()
-            .HasQueryFilter(bank => bank.UserId == _currentUserId);
+            .HasQueryFilter(bank => bank.UserId == _currentUserId && !bank.IsDeleted);
 
             builder.Entity<Account>()
             .HasQueryFilter(account => account.Bank.UserId == _currentUserId);
