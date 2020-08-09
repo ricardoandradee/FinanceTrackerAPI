@@ -31,10 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private categoryService: CategoryService,
               private expenseService: ExpenseService,
-<<<<<<< HEAD
               private commonService: CommonService,
-=======
->>>>>>> a5256650cc5dd70832a59c021e39a1b453ffaba3
               private authService: AuthService,
               private currencyService: CurrencyService) {
                 if (!localStorage.getItem('currencyList')) {
