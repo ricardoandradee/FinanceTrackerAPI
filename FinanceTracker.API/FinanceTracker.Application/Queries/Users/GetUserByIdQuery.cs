@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Queries.Users
 {
-    public class GetUserByIdQuery : IRequest<UserForDetailedDto>
+    public class GetUserByIdQuery : IRequest<UserForDetailDto>
     {
         public int UserId { get; }
         public GetUserByIdQuery(int userId)
@@ -15,7 +15,7 @@ namespace FinanceTracker.Application.Queries.Users
             UserId = userId;
         }
 
-        public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserForDetailedDto>
+        public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserForDetailDto>
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
@@ -26,10 +26,10 @@ namespace FinanceTracker.Application.Queries.Users
                 _userRepository = userRepository;
             }
 
-            public async Task<UserForDetailedDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+            public async Task<UserForDetailDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
                 var user = await _userRepository.RetrieveById(request.UserId);
-                return _mapper.Map<UserForDetailedDto>(user);
+                return _mapper.Map<UserForDetailDto>(user);
             }
         }
     }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Commands.Users
 {
-    public class RegisterUserCommand : IRequest<Response<UserForDetailedDto>>
+    public class RegisterUserCommand : IRequest<Response<UserForDetailDto>>
     {
         public UserForRegisterDto UserForRegisterDto { get; }
         public RegisterUserCommand(UserForRegisterDto userForRegisterDto)
@@ -18,7 +18,7 @@ namespace FinanceTracker.Application.Commands.Users
             UserForRegisterDto = userForRegisterDto;
         }
 
-        public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Response<UserForDetailedDto>>
+        public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Response<UserForDetailDto>>
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
@@ -29,20 +29,20 @@ namespace FinanceTracker.Application.Commands.Users
                 _userRepository = userRepository;
             }
 
-            public async Task<Response<UserForDetailedDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+            public async Task<Response<UserForDetailDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
                 request.UserForRegisterDto.UserName = request.UserForRegisterDto.UserName.ToLower();
 
                 if (await _userRepository.UserExists(request.UserForRegisterDto.UserName))
                 {
-                    return Response.Fail<UserForDetailedDto>("User name is already registed in our database.");
+                    return Response.Fail<UserForDetailDto>("User name is already registed in our database.");
                 }
 
                 var UserToCreate = _mapper.Map<User>(request.UserForRegisterDto);
 
                 var createdUser = await _userRepository.Register(UserToCreate, request.UserForRegisterDto.Password);
 
-                return Response.Success(_mapper.Map<UserForDetailedDto>(createdUser));
+                return Response.Success(_mapper.Map<UserForDetailDto>(createdUser));
             }
         }
     }

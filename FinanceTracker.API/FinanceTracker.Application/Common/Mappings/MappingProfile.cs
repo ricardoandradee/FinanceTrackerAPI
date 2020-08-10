@@ -20,7 +20,7 @@ namespace FinanceTracker.Application.Common.Mappings
             
             CreateMap<User, UserForListDto>().ReverseMap();
             CreateMap<User, UserInfoForSignupDto>().ReverseMap();
-            CreateMap<User, UserForDetailedDto>().ReverseMap();
+            CreateMap<User, UserForDetailDto>().ReverseMap();
             CreateMap<User, UserForRegisterDto>().ReverseMap();
 
             #endregion

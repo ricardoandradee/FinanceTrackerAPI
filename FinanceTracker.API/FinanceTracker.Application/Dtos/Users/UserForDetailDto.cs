@@ -2,7 +2,7 @@ using System;
 
 namespace FinanceTracker.Application.Dtos.Users
 {
-    public class UserForDetailedDto
+    public class UserForDetailDto
     {
         public int Id { get; set; }
         public string UserName { get; set; }
