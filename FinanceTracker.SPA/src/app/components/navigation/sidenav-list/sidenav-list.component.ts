@@ -21,7 +21,7 @@ export class SidenavListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isAuth$ = this.authService.getIsAuthenticated;
-  }  
+  }
 
   isActive(url: string): boolean {
     return this.router.isActive(url, false);
