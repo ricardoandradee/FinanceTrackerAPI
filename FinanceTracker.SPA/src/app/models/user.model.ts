@@ -9,7 +9,6 @@ export interface User {
     stateTimeZone: TimeZone;
     createdDate: Date;
     wallet: number;
-    lastActive: Date;
     stateTimeZoneId: string;
     password: string;
     country: string;

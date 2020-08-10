@@ -31,6 +31,7 @@ namespace FinanceTracker.Infrastructure.Persistence
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<StateTimeZone> StateTimeZones { get; set; }
+        public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
 
         public async Task BeginTransactionAsync()
         {

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Accounts;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +36,12 @@ namespace FinanceTracker.Application.Commands.Accounts
             public async Task<bool> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
             {
                 var accountFromRepo = await _accountRepository.RetrieveById(request.AccountId);
+
+                if (accountFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Account), request.AccountId);
+                }
+
                 _mapper.Map(request.AccountForUpdateDto, accountFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }

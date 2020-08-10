@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { UiService } from 'src/app/services/ui.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/models/user.model';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-login',
@@ -13,9 +14,9 @@ import { Subscription } from 'rxjs';
 
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
-  private subscription: Subscription;
+  private allSubscriptions: Subscription[] = [];
 
-  constructor(private authService: AuthService, private uiService: UiService, private router: Router) { }
+  constructor(private authService: AuthService, private commonService: CommonService, private router: Router) { }
 
   ngOnInit() {
     this.loginForm = this.createFormGroup();
@@ -36,14 +37,24 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogin() {
-    // Make sure to create a deep copy of the form-model
     const result: any = Object.assign({}, this.loginForm.value);
-    this.subscription = this.authService.login({ Username: result.userName, Password: result.password});
+    var loginSubscription = this.authService.login({ Username: result.userName, Password: result.password});
+    
+    loginSubscription.add(() => {
+      const user: User = JSON.parse(localStorage.getItem('user'));
+      var loginHistorySubscription = this.commonService.createUserLoginHistory(
+        {
+          UserName: result.userName,
+          UserId: user != null ? user.id : null,
+          IsSuccessful: user != null ? true : false
+        }).subscribe((response) => { console.log('User login history successfully created.'); });
+      this.allSubscriptions.push(loginHistorySubscription);
+    })
+
+    this.allSubscriptions.push(loginSubscription);
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }
 }

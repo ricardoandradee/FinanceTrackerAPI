@@ -14,7 +14,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
                     UserName = "Lauren",
                     Email = "lauren@gmail.com",
                     CreatedDate = DateTime.Parse("2020-06-08"),
-                    LastActive = DateTime.Parse("2020-06-08"),
                     CurrencyId = 12,
                     StateTimeZoneId = 48,
                     Country = "Viet Nam"
@@ -23,7 +22,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
                     UserName = "Cameron",
                     Email = "cameron@gmail.com",
                     CreatedDate = DateTime.Parse("2020-01-06"),
-                    LastActive = DateTime.Parse("2020-01-06"),
                     CurrencyId = 12,
                     StateTimeZoneId = 47,
                     Country = "French Polynesia"
@@ -32,7 +30,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
                     UserName = "Joshwa",
                     Email = "joshwa@gmail.com",
                     CreatedDate = DateTime.Parse("2020-07-02"),
-                    LastActive = DateTime.Parse("2017-08-09"),
                     CurrencyId = 12,
                     StateTimeZoneId = 27,
                     Country = "Pakistan"

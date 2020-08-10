@@ -13,7 +13,6 @@ namespace FinanceTracker.Domain.Entities
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset LastActive { get; set; }
         public virtual ICollection<Wallet> Wallets { get; set; }
         public virtual StateTimeZone StateTimeZone { get; set; }
         public int StateTimeZoneId { get; set; }

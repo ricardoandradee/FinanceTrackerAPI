@@ -39,16 +39,16 @@ namespace FinanceTracker.API.Controllers
             var command = new RegisterUserCommand(userForRegisterDto);
             var result = await Mediator.Send(command);
 
-            if (result != null)
+            if (result.Ok)
             {
                 return CreatedAtRoute("GetUser", new
                 {
                     controller = "Users",
-                    id = result.Id
-                }, result);
+                    id = result.Data.Id
+                }, result.Data);
             }
 
-            return BadRequest();
+            return BadRequest(result.Message);
         }
 
         [HttpPost]

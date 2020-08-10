@@ -1,4 +1,6 @@
-﻿using FinanceTracker.Application.Common.Interfaces;
+﻿using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +29,12 @@ namespace FinanceTracker.Application.Commands.Expenses
             public async Task<bool> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
             {
                 var expenseFromRepo = await _expenseRepository.RetrieveById(request.ExpenseId);
+
+                if (expenseFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Expense), request.ExpenseId);
+                }
+
                 _expenseRepository.Delete(expenseFromRepo);
 
                 return await _unitOfWorkRepository.SaveChanges() > 0;

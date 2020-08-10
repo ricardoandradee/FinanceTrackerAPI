@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Domain.Entities;
 
 namespace FinanceTracker.Application.Commands.Accounts
 {
@@ -27,6 +29,12 @@ namespace FinanceTracker.Application.Commands.Accounts
             public async Task<bool> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
             {
                 var accountFromRepo = await _accountRepository.RetrieveById(request.AccountId);
+
+                if (accountFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Account), request.AccountId);
+                }
+
                 _accountRepository.Delete(accountFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }

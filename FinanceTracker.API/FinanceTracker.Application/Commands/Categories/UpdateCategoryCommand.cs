@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Categories;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,8 +36,13 @@ namespace FinanceTracker.Application.Commands.Categories
             public async Task<bool> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
             {
                 var categoryFromRepo = await _categoryRepository.RetrieveById(request.CategoryId);
-                _mapper.Map(request.CategoryForUpdateDto, categoryFromRepo);
 
+                if (categoryFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Category), request.CategoryId);
+                }
+
+                _mapper.Map(request.CategoryForUpdateDto, categoryFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }
         }

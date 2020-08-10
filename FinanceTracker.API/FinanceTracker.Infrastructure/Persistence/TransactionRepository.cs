@@ -1,4 +1,5 @@
-﻿using FinanceTracker.Application.Common.Interfaces;
+﻿using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -36,9 +37,15 @@ namespace FinanceTracker.Infrastructure.Persistence
                        .ExecuteSqlRawAsync(@"Exec PerformAccountTransaction @action, @amount, @description, @createdDate, @accountId, @transactionId Out"
                   , new[] { actionParam, amountParam, descriptionParam, createdDateParam, accountIdParam, transactionIdParam });
 
+            var transactionId = Convert.ToInt32(transactionIdParam.Value);
+            if (transactionId == 0)
+            {
+                throw new NotFoundException($"Error while executing PerformAccountTransaction procedure for " +
+                    $"Account Id: {transaction.AccountId}, Action: {transaction.Action}, Amount {transaction.Amount}.");
+            }
 
             return await _unitOfWork.Context.Transactions.Include(a => a.Account)
-                           .FirstAsync(t => t.Id == Convert.ToInt32(transactionIdParam.Value));
+                           .FirstAsync(t => t.Id == transactionId);
         }
     }
 }

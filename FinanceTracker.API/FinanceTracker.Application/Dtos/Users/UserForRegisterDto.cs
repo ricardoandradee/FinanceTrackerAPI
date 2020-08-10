@@ -7,7 +7,6 @@ namespace FinanceTracker.Application.Dtos.Users
         public UserForRegisterDto()
         {
             CreatedDate = DateTimeOffset.UtcNow;
-            LastActive = DateTime.UtcNow;
         }
 
         public string UserName { get; set; }
@@ -18,7 +17,5 @@ namespace FinanceTracker.Application.Dtos.Users
         public int StateTimeZoneId { get; set; }
         public string Country { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset LastActive { get; set; }
-
     }
 }

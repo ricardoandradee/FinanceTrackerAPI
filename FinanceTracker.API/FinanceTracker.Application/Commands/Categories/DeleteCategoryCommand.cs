@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Domain.Entities;
 
 namespace FinanceTracker.Application.Commands.Categories
 {
@@ -33,6 +35,12 @@ namespace FinanceTracker.Application.Commands.Categories
                 }
 
                 var categoryFromRepo = await _categoryRepository.RetrieveById(request.CategoryId);
+
+                if (categoryFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Category), request.CategoryId);
+                }
+
                 _categoryRepository.Delete(categoryFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }

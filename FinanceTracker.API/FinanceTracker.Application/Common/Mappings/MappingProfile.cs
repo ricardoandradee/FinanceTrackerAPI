@@ -6,6 +6,7 @@ using FinanceTracker.Application.Dtos.Currencies;
 using FinanceTracker.Application.Dtos.Expenses;
 using FinanceTracker.Application.Dtos.TimeZones;
 using FinanceTracker.Application.Dtos.Transactions;
+using FinanceTracker.Application.Dtos.UserLoginHistories;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
 
@@ -88,6 +89,12 @@ namespace FinanceTracker.Application.Common.Mappings
             CreateMap<StateTimeZone, StateTimeZoneToReturnDto>().ReverseMap();
 
             #endregion
+
+            #region UserLoginHistory related mappings
+
+            CreateMap<UserLoginHistory, UserLoginHistoryForCreationDto>().ReverseMap();
+
+            #endregion            
         }
     }
 }

@@ -37,14 +37,14 @@ namespace FinanceTracker.API.Controllers
             var command = new PerformAccountTransactionCommand(transactionForCreationDto);
             var result = await Mediator.Send(command);
 
-            if (result != null)
+            if (result.Ok)
             {
                 return CreatedAtAction(nameof(GetTransactionById),
-                    new { transactionId = result.Id, accountId, userId },
-                    result);
+                    new { transactionId = result.Data.Id, accountId, userId },
+                    result.Data);
             }
 
-            return NotFound();
+            return BadRequest(result.Message);
         }
     }
 }

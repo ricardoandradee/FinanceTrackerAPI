@@ -10,6 +10,7 @@ namespace FinanceTracker.Infrastructure.Persistence
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
+
         public UserRepository(IUnitOfWorkRepository unitOfWork)
             : base(unitOfWork)
         {
@@ -39,8 +40,12 @@ namespace FinanceTracker.Infrastructure.Persistence
                                 .Include(u => u.Currency)
                                 .FirstOrDefaultAsync(x => x.UserName == userName);
 
-            if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            var successfullyLoggedIn = user != null ? VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt) : false;
+
+            if (!successfullyLoggedIn)
+            {
                 return Response.Fail<User>("User name or Password is incorrect");
+            }
 
             return Response.Success(user);
         }

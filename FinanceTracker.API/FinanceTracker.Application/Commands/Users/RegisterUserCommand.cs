@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Common.Models;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
 using MediatR;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Commands.Users
 {
-    public class RegisterUserCommand : IRequest<UserForDetailedDto>
+    public class RegisterUserCommand : IRequest<Response<UserForDetailedDto>>
     {
         public UserForRegisterDto UserForRegisterDto { get; }
         public RegisterUserCommand(UserForRegisterDto userForRegisterDto)
@@ -16,7 +18,7 @@ namespace FinanceTracker.Application.Commands.Users
             UserForRegisterDto = userForRegisterDto;
         }
 
-        public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, UserForDetailedDto>
+        public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Response<UserForDetailedDto>>
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
@@ -27,20 +29,20 @@ namespace FinanceTracker.Application.Commands.Users
                 _userRepository = userRepository;
             }
 
-            public async Task<UserForDetailedDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+            public async Task<Response<UserForDetailedDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
                 request.UserForRegisterDto.UserName = request.UserForRegisterDto.UserName.ToLower();
 
                 if (await _userRepository.UserExists(request.UserForRegisterDto.UserName))
                 {
-                    return null;
+                    return Response.Fail<UserForDetailedDto>("User name is already registed in our database.");
                 }
 
                 var UserToCreate = _mapper.Map<User>(request.UserForRegisterDto);
 
                 var createdUser = await _userRepository.Register(UserToCreate, request.UserForRegisterDto.Password);
 
-                return _mapper.Map<UserForDetailedDto>(createdUser);
+                return Response.Success(_mapper.Map<UserForDetailedDto>(createdUser));
             }
         }
     }

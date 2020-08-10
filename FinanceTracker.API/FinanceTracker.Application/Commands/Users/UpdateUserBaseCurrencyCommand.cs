@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Users;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +36,11 @@ namespace FinanceTracker.Application.Commands.Users
             public async Task<UserForDetailedDto> Handle(UpdateUserBaseCurrencyCommand request, CancellationToken cancellationToken)
             {
                 var userFromRepo = await _userUepository.RetrieveById(request.UserId);
+
+                if (userFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(User), request.UserId);
+                }
 
                 if (userFromRepo.CurrencyId != request.CurrencyId)
                 {

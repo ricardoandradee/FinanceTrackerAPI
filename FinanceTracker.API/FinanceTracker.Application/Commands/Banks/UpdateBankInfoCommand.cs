@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Banks;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +36,12 @@ namespace FinanceTracker.Application.Commands.Banks
             public async Task<bool> Handle(UpdateBankInfoCommand request, CancellationToken cancellationToken)
             {
                 var bankFromRepo = await _bankRepository.RetrieveById(request.BankId);
+
+                if (bankFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Bank), request.BankId);
+                }
+
                 _mapper.Map(request.BankForUpdateDto, bankFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }

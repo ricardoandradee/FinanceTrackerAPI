@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Expenses;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,8 +36,13 @@ namespace FinanceTracker.Application.Commands.Expenses
             public async Task<bool> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
             {
                 var expenseFromRepo = await _expenseRepository.RetrieveById(request.ExpenseId);
-                _mapper.Map(request.ExpenseForUpdateDto, expenseFromRepo);
 
+                if (expenseFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Expense), request.ExpenseId);
+                }
+
+                _mapper.Map(request.ExpenseForUpdateDto, expenseFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }
         }

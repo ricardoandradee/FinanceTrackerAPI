@@ -50,13 +50,16 @@ Begin
 					 @accountId, 
 					 @createdDate);
 
+		Select @transactionId = SCOPE_IDENTITY();
+
         Commit Transaction;  
     End Try
     Begin Catch
         
         -- Test if the transaction is uncommittable.  
         If (XACT_STATE()) = -1  
-        Begin  
+        Begin
+			Set @transactionId = 0;
             Print  N'The transaction is in an uncommittable state.' +  
                     'Rolling back transaction.'  
 			Rollback Transaction;  
@@ -70,8 +73,6 @@ Begin
             Commit Transaction;    
         End;  
     End Catch
-
-	Select @transactionId = SCOPE_IDENTITY();
 End
 
 Go

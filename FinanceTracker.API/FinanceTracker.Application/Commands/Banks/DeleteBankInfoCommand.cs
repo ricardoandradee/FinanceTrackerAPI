@@ -1,4 +1,6 @@
-﻿using FinanceTracker.Application.Common.Interfaces;
+﻿using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +30,13 @@ namespace FinanceTracker.Application.Commands.Banks
             public async Task<bool> Handle(DeleteBankInfoCommand request, CancellationToken cancellationToken)
             {
                 var bankFromRepo = await _bankRepository.RetrieveById(request.BankId);
-                bankFromRepo.IsDeleted = true;
+
+                if (bankFromRepo == null)
+                {
+                    throw new NotFoundException(nameof(Bank), request.BankId);
+                }
+
+                _bankRepository.Delete(bankFromRepo);
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }
         }

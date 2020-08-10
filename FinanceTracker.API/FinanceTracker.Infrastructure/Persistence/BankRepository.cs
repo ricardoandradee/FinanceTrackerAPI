@@ -1,4 +1,5 @@
-﻿using FinanceTracker.Application.Common.Interfaces;
+﻿using FinanceTracker.Application.Common.Exceptions;
+using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -61,10 +62,17 @@ namespace FinanceTracker.Infrastructure.Persistence
                   , new[] { userIdParam, bankNameParam, branchParam, accountNameParam, accountNumberParam, accountCurrencyParam,
                     currentBalanceParam, createdDateParam, bankIdParam });
 
+            var bankId = Convert.ToInt32(bankIdParam.Value);
+            if (bankId == 0)
+            {
+                throw new NotFoundException($"Error while executing CreateBankWithAccount procedure for " +
+                    $"User Id: {bank.UserId}.");
+            }
+
             return await _unitOfWork.Context.Banks
                 .Include(b => b.Accounts).ThenInclude(a => a.Transactions)
                 .Include(b => b.Accounts).ThenInclude(a => a.Currency)
-            .FirstAsync(a => a.Id == Convert.ToInt32(bankIdParam.Value));
+            .FirstAsync(a => a.Id == bankId);
         }
     }
 }
