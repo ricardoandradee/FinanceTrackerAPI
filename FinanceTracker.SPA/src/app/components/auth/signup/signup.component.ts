@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private uiService: UiService,
-              private commonService: CommonService,) {
+              private commonService: CommonService) {
               }
 
   ngOnInit() {
@@ -37,8 +37,8 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.currencies = c;
     });
 
-    this.commonService.getAllTimezones.subscribe(t => {
-      this.timeZoneCompleteList = t;
+    this.commonService.getAllTimezones.subscribe(tz => {
+      this.timeZoneCompleteList = tz;
       this.countries = this.getCountries();
     });
 

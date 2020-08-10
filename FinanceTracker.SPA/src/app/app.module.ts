@@ -32,6 +32,7 @@ import { AccountActionsComponent } from './components/account-actions/account-ac
 import { AccountTransactionsComponent } from './components/account-transactions/account-transactions.component';
 import { TransactionService } from './services/transaction.service';
 import { CommonService } from './services/common.service';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -47,6 +48,7 @@ export function tokenGetter() {
     ExpenseAddComponent,
     CategoryAddComponent,
     BankAccountAddComponent,
+    UserSettingsComponent,
     AccountAddEditComponent,
     AccountActionsComponent,
     AccountTransactionsComponent
@@ -87,6 +89,7 @@ export function tokenGetter() {
     ExpenseAddComponent,
     CategoryAddComponent,
     BankAccountAddComponent,
+    UserSettingsComponent,
     AccountAddEditComponent,
     AccountActionsComponent,
     AccountTransactionsComponent
