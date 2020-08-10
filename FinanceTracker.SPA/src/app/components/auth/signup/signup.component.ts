@@ -75,14 +75,13 @@ export class SignupComponent implements OnInit, OnDestroy {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
             stateTimeZoneId: user.timeZone, email: user.email,
-            currency: { id: user.currency } as Currency, country: user.country } as User).subscribe(() => {
-            this.uiService.showSnackBar('User successfully registered.', 3000);
+            currency: { id: user.currency } as Currency, country: user.country } as User).subscribe((response) => {
+              if (response) {
+                this.login(form);
+              }
+              this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
             this.uiService.showSnackBar(error, 3000);
-      });
-
-      subscription.add(() => {
-        this.login(form);
       });
   
       this.allSubscriptions.push(subscription);

@@ -41,11 +41,7 @@ namespace FinanceTracker.API.Controllers
 
             if (result.Ok)
             {
-                return CreatedAtRoute("GetUserById", new
-                {
-                    controller = "User",
-                    id = result.Data.Id
-                }, result.Data);
+                return Ok(result.Data.Id);
             }
 
             return BadRequest(result.Message);
