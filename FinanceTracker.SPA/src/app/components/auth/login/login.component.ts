@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           IsSuccessful: user != null ? true : false
         }).subscribe((response) => { console.log('User login history successfully created.'); });
       this.allSubscriptions.push(loginHistorySubscription);
-    })
+    });
 
     this.allSubscriptions.push(loginSubscription);
   }

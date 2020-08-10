@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private categories: Category[];
   private allSubscriptions: Subscription[] = [];
 
-  title = 'Spend wise';
+  title = 'SpendWise';
   openSideNav = false;
   sidenavWidth = 4;
 
