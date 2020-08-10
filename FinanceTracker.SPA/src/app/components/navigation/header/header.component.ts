@@ -7,6 +7,8 @@ import { BankAccountService } from 'src/app/services/bank-account.service';
 import { Account } from 'src/app/models/account.model';
 import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
+import { MatDialog } from '@angular/material';
+import { UserSettingsComponent } from '../../user-settings/user-settings.component';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuth$: Observable<boolean>;
 
   constructor(private authService: AuthService,
+              private dialog: MatDialog,
               private bankAccountService: BankAccountService,
               private commonService: CommonService,
               private currencyService: CurrencyService) {
@@ -83,6 +86,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.onToggleSidenav();
     }
     this.authService.logout();
+  }
+  
+  openUserSettingsDialog() {
+      const dialogRef = this.dialog.open(UserSettingsComponent);
+      this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
+        console.log({settings: result});
+      }));
   }
 
   ngOnDestroy(): void {

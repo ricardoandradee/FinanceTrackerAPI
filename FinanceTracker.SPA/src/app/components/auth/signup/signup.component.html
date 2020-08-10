@@ -45,7 +45,7 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label> Country </mat-label>
-                    <mat-select #countryInput="ngModel" name="country" id="country" (selectionChange)="filterCity(f)" ngModel required>
+                    <mat-select #countryInput="ngModel" name="country" id="country" ngModel required>
                         <mat-option value=""> - Select - </mat-option>
                         <mat-option *ngFor="let country of countries" [value]="country">
                             {{country}}
