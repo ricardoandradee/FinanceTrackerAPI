@@ -83,13 +83,22 @@ export class SignupComponent implements OnInit, OnDestroy {
       }, error => {
             this.uiService.showSnackBar(error, 3000);
       });
-  
       this.allSubscriptions.push(subscription);
   }
-  
+
   login(form: NgForm) {
-    const subscription = this.authService.login({userName: form.value.userName, password: form.value.password});
-    this.allSubscriptions.push(subscription);
+    const loginSubscription = this.authService.login({userName: form.value.userName, password: form.value.password});
+    loginSubscription.add(() => {
+        const user: User = JSON.parse(localStorage.getItem('user'));
+        const loginHistorySubscription = this.commonService.createUserLoginHistory(
+        {
+          UserName: form.value.userName,
+          UserId: user != null ? user.id : null,
+          IsSuccessful: user != null ? true : false
+        }).subscribe((response) => { console.log('User login history successfully created.'); });
+        this.allSubscriptions.push(loginHistorySubscription);
+    });
+    this.allSubscriptions.push(loginSubscription);
   }
 
   ngOnDestroy(): void {

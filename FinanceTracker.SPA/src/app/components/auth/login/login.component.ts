@@ -38,11 +38,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLogin() {
     const result: any = Object.assign({}, this.loginForm.value);
-    var loginSubscription = this.authService.login({ Username: result.userName, Password: result.password});
-    
+    const loginSubscription = this.authService.login({ Username: result.userName, Password: result.password});
     loginSubscription.add(() => {
       const user: User = JSON.parse(localStorage.getItem('user'));
-      var loginHistorySubscription = this.commonService.createUserLoginHistory(
+      const loginHistorySubscription = this.commonService.createUserLoginHistory(
         {
           UserName: result.userName,
           UserId: user != null ? user.id : null,
@@ -50,7 +49,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }).subscribe((response) => { console.log('User login history successfully created.'); });
       this.allSubscriptions.push(loginHistorySubscription);
     });
-
     this.allSubscriptions.push(loginSubscription);
   }
 
