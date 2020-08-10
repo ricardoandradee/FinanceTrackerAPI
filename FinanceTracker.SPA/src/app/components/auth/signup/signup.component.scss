@@ -1,7 +1,37 @@
-mat-form-field {
-    width: 300px;
-}
+  :host {
+    display: flex;
+    justify-content: center;
+    margin: 100px 0px;
+  }
+
+  .mat-form-field {
+    width: 100%;
+    min-width: 300px;
+  }
+
+  mat-card-content {
+      margin-top: 30px;
+  }
+
+  mat-card-title,
+  mat-card-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .button {
+    display: flex;
+    justify-content: flex-end;
+  }
 
 .signup-section {
     margin: 20px;
 }
+
+  .mat-card {
+    margin-bottom: 20px;
+  }
+
+  .already-on-span {
+    padding-right: 5px;
+  }
