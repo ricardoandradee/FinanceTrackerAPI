@@ -28,7 +28,7 @@ namespace FinanceTracker.Application.Queries.Users
 
             public async Task<UserForDetailDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
-                var user = await _userRepository.RetrieveById(request.UserId);
+                var user = await _userRepository.GetUserWithDependenciesById(request.UserId);
                 return _mapper.Map<UserForDetailDto>(user);
             }
         }

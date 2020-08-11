@@ -49,6 +49,16 @@ namespace FinanceTracker.Infrastructure.Persistence
 
             return Response.Success(user);
         }
+        
+        public async Task<User> GetUserWithDependenciesById(int userId)
+        {
+            var user = await _unitOfWork.Context.Users
+                                .Include(u => u.StateTimeZone)
+                                .Include(u => u.Currency)
+                                .FirstOrDefaultAsync(x => x.Id == userId);
+
+            return user;
+        }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
