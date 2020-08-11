@@ -14,6 +14,7 @@ namespace FinanceTracker.Domain.Entities
         public decimal CurrentBalance { get; set; }
         public virtual Bank Bank { get; set; }
         public int BankId { get; set; }
+        public bool IsDeleted { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
     }

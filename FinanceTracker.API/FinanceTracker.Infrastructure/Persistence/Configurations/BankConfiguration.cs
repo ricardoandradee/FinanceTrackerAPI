@@ -12,6 +12,10 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.Property(t => t.IsDeleted)
+                .HasDefaultValue(false)
+                .IsRequired();
+
             builder.Property(t => t.Branch)
                 .HasMaxLength(50)
                 .IsRequired();

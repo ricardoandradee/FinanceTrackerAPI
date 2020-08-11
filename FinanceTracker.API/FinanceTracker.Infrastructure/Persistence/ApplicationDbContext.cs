@@ -101,7 +101,7 @@ namespace FinanceTracker.Infrastructure.Persistence
             .HasQueryFilter(bank => bank.UserId == _currentUserId && !bank.IsDeleted);
 
             builder.Entity<Account>()
-            .HasQueryFilter(account => account.Bank.UserId == _currentUserId);
+            .HasQueryFilter(account => account.Bank.UserId == _currentUserId && !account.IsDeleted);
 
             builder.Entity<Transaction>()
             .HasQueryFilter(transaction => transaction.Account.Bank.UserId == _currentUserId);
