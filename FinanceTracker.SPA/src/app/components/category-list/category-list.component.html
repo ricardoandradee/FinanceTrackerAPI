@@ -1,6 +1,6 @@
 <div fxLayoutAlign="center center" class="header-div">
     <mat-spinner *ngIf="(isLoading$ | async)"></mat-spinner>
-    <mat-form-field fxFlex="20%" *ngIf="!(isLoading$ | async)">
+    <mat-form-field fxFlex="35%" class="mat-text-search" *ngIf="!(isLoading$ | async)">
         <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter" name="txtFilter" id="txtFilter">
     </mat-form-field>
 </div>
