@@ -1,8 +1,8 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-$finance-app-primary: mat-palette($mat-teal, 400, 300, 700);
-$finance-app-accent:  mat-palette($mat-deep-purple, A200, A100, A400);
+$finance-app-primary: mat-palette($mat-blue-grey, 400, 300, 700);
+$finance-app-accent:  mat-palette($mat-indigo, A200, A100, A400);
 
 $finance-app-warn: mat-palette($mat-red);
 $background-color: map_get($mat-cyan, 50);
