@@ -16,6 +16,5 @@ namespace FinanceTracker.Domain.Entities
         public virtual ICollection<Wallet> Wallets { get; set; }
         public virtual StateTimeZone StateTimeZone { get; set; }
         public int StateTimeZoneId { get; set; }
-        public string Country { get; set; }
     }
 }

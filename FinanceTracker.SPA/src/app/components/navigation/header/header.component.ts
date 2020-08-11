@@ -59,17 +59,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   openUserSettingsDialog() {
     const dialogRef = this.dialog.open(UserSettingsComponent);
-    var dialogSubscription = dialogRef.afterClosed().subscribe(result => {
+    let dialogSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result.data && this.hasUserSettingsChanged(result.data)) {
-        var updateSubscription = this.userService.updateUserSettings(result.data).subscribe((response) => {
+        let updateSubscription = this.userService.updateUserSettings(result.data).subscribe((response) => {
           if (response.ok) {
-            this.currentUser = 
-            {
+            this.currentUser = {
               ...this.currentUser,
               currency: result.data.currency,
               country: result.data.country,
               stateTimeZone: result.data.stateTimeZone
-            }
+            };
         
             this.userService.setUserSettings = this.currentUser;
             localStorage.setItem('user', JSON.stringify(this.currentUser));

@@ -32,7 +32,7 @@ export class UserService {
       currencyId: user.currency.id,
       stateTimeZoneid: user.stateTimeZone.id,
       country: user.country
-    }
+    };
 
     return this.http.put(url, model, { headers: httpHeaders, observe: 'response' });
   }

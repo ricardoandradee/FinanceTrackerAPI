@@ -15,24 +15,21 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
                     Email = "lauren@gmail.com",
                     CreatedDate = DateTime.Parse("2020-06-08"),
                     CurrencyId = 12,
-                    StateTimeZoneId = 48,
-                    Country = "Viet Nam"
+                    StateTimeZoneId = 48
                     },
                 new User {
                     UserName = "Cameron",
                     Email = "cameron@gmail.com",
                     CreatedDate = DateTime.Parse("2020-01-06"),
                     CurrencyId = 12,
-                    StateTimeZoneId = 47,
-                    Country = "French Polynesia"
+                    StateTimeZoneId = 47
                     },
                 new User {
                     UserName = "Joshwa",
                     Email = "joshwa@gmail.com",
                     CreatedDate = DateTime.Parse("2020-07-02"),
                     CurrencyId = 12,
-                    StateTimeZoneId = 27,
-                    Country = "Pakistan"
+                    StateTimeZoneId = 27
                     }
             };
             return users;
