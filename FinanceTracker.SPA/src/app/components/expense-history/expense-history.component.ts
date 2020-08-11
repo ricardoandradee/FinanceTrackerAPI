@@ -5,9 +5,7 @@ import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
 import { ExpenseAddComponent } from '../expense-add/expense-add.component';
 import { Category } from '../../models/category.model';
 import { ExpenseService } from 'src/app/services/expense.service';
-import { CurrencyService } from 'src/app/services/currency.service';
 import { UiService } from 'src/app/services/ui.service';
-import { CurrencyList } from 'src/app/data/currency.data';
 import { CategoryService } from 'src/app/services/category.service';
 
 import { Store } from '@ngrx/store';
@@ -18,6 +16,7 @@ import { KeyValuePair, getUniquePairs } from 'src/app/models/key-value-pair.mode
 import { User } from 'src/app/models/user.model';
 import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-expense-history',
@@ -46,7 +45,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   constructor(private uiService: UiService, private expenseService: ExpenseService,
-              private currencyService: CurrencyService, private dialog: MatDialog,
+              private userService: UserService, private dialog: MatDialog,
               private categoryService: CategoryService,
               private commonService: CommonService, 
               private store: Store<{ui: fromRoot.State}>) {
@@ -57,17 +56,15 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     this.commonService.getAllCurrencies.subscribe(x => {
       this.currencies = x;
     });
-
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.stateTimeZone.utc;
     
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.allSubscriptions.push(this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.allCategories = categoryList;
     }));
 
-    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((currency: Currency) => {
-      this.userBaseCurrency = currency.code;
+    this.allSubscriptions.push(this.userService.getUserSettings.subscribe((user: User) => {
+      this.userBaseCurrency = user.currency.code;
+      this.userTimeZone = user.stateTimeZone.utc;
     }));
     
     this.allSubscriptions.push(this.isLoading$.subscribe(loading => {

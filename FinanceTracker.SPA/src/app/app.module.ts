@@ -33,6 +33,7 @@ import { AccountTransactionsComponent } from './components/account-transactions/
 import { TransactionService } from './services/transaction.service';
 import { CommonService } from './services/common.service';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
+import { UserService } from './services/user.service';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -80,6 +81,7 @@ export function tokenGetter() {
     TransactionService,
     AccountService,
     ExpenseService,
+    UserService,
     UiService,
     DatePipe
   ],

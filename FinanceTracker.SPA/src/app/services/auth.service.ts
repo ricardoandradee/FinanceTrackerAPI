@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrencyService } from './currency.service';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -18,11 +19,11 @@ export class AuthService {
   
   currentUser: User;
   decodedToken: any;
-
-    constructor(private http: HttpClient,
-                private uiService: UiService,
-                private currencyService: CurrencyService,
-                private router: Router) {
+  constructor(private http: HttpClient,
+              private uiService: UiService,
+              private currencyService: CurrencyService,
+              private userService: UserService,
+              private router: Router) {
                   
                   this.getExistingUsersDetails().subscribe((response) => {
                     if (response.ok) {
@@ -85,7 +86,7 @@ export class AuthService {
             localStorage.setItem('user', JSON.stringify(user));
             this.currentUser = user;
             this.currencyService.fetchListOfCurrencies();
-            this.currencyService.setUserBaseCurrency = this.currentUser.currency;
+            this.userService.setUserSettings = this.currentUser;
           }
 
           this.uiService.showSnackBar('Successfully logged in.', 3000);

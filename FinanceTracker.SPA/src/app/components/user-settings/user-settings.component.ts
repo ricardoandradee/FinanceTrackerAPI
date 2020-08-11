@@ -55,8 +55,12 @@ export class UserSettingsComponent implements OnInit {
   }
 
   onSave() {
-    const user = { currencyId: this.userSettings.currency.id, country: this.userSettings.country,
-      stateTimeZoneId: this.userSettings.stateTimeZone.id };
+    const user = {
+      id: this.userSettings.id,
+      currency: this.currencies.find(x => x.id === this.userSettings.currency.id),
+      country: this.userSettings.country,
+      stateTimeZone: this.timeZoneCompleteList.find(x => x.id === this.userSettings.stateTimeZone.id)
+    };
     this.dialogRef.close({ data: user });
   }
 }

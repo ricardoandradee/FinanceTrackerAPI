@@ -11,6 +11,7 @@ import { User } from './models/user.model';
 import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
 import { Subscription } from 'rxjs';
 import { CommonService } from './services/common.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -31,8 +32,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private categoryService: CategoryService,
               private expenseService: ExpenseService,
-              private authService: AuthService,
-              private currencyService: CurrencyService) {
+              private userService: UserService,
+              private authService: AuthService) {
                 const token = localStorage.getItem('token');
                 if (token) {
                   this.authService.setIsAuthenticated = !this.jwtHelper.isTokenExpired(token);
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
                 const user: User = JSON.parse(localStorage.getItem('user'));
                 if (user) {
-                  this.currencyService.setUserBaseCurrency = user.currency;
+                  this.userService.setUserSettings = user;
                 }
               }
 

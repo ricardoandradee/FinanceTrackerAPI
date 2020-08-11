@@ -18,9 +18,9 @@ import { AccountActionsComponent } from '../account-actions/account-actions.comp
 import { TransactionService } from 'src/app/services/transaction.service';
 import { Transaction } from 'src/app/models/transaction.model';
 import { AccountTransactionsComponent } from '../account-transactions/account-transactions.component';
-import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
 import { Currency } from 'src/app/models/currency.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -56,7 +56,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   userBaseCurrency: string;
   
   constructor(private dialog: MatDialog, private uiService: UiService,
-              private currencyService: CurrencyService,
+              private userService: UserService,
               private bankAccountService: BankAccountService,
               private accountService: AccountService,
               private transactionService: TransactionService,
@@ -64,16 +64,24 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
               }
 
   ngOnInit() {
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.stateTimeZone.utc;
-
-    this.allSubscriptions.push(this.currencyService.getUserBaseCurrency.subscribe((currency: Currency) => {
-      this.userBaseCurrency = currency.code;
+    this.allSubscriptions.push(this.userService.getUserSettings.subscribe((user: User) => {
+      this.userTimeZone = user.stateTimeZone.utc;
+      this.userBaseCurrency = user.currency.code;
     }));
 
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.allSubscriptions.push(this.bankAccountService.getBanksByUserId().subscribe((bankInfos: BankAccount[]) => {
       this.bankAccountService.setBankAccountInfos = bankInfos;
+    }));
+    
+    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
+      if (loading) {
+        setTimeout(() => {
+          this.refreshBankInfoDataSource();
+        }, 500);
+      } else {
+        this.refreshBankInfoDataSource();
+      }
     }));
   }
 
@@ -394,18 +402,6 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     this.rowInEditMode = false;
     this.editBankInfo = {} as BankAccount;
     this.oldBankInfo = {} as BankAccount;
-  }
-
-  ngAfterViewInit() {
-    this.allSubscriptions.push(this.isLoading$.subscribe(loading => {
-      if (loading) {
-        setTimeout(() => {
-          this.refreshBankInfoDataSource();
-        }, 500);
-      } else {
-        this.refreshBankInfoDataSource();
-      }
-    }));
   }
 
   ngOnDestroy(): void {

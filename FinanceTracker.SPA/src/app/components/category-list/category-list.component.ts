@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'src/app/reducers/app.reducer';
 import * as UI from 'src/app/actions/ui.actions';
 import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-category-list',
@@ -33,12 +34,14 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   
   constructor(private dialog: MatDialog, private uiService: UiService,
               private categoryService: CategoryService,
+              private userService: UserService,
               private store: Store<{ui: fromRoot.State}>) { }
 
   ngOnInit() {
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    this.userTimeZone = user.stateTimeZone.utc;
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    this.allSubscriptions.push(this.userService.getUserSettings.subscribe((user: User) => {
+      this.userTimeZone = user.stateTimeZone.utc;
+    }));
   }
 
   private createCategory(category: Category) {
