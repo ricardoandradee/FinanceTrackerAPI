@@ -7,26 +7,6 @@
         </button>
         <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/expensehistory'] : ['/']">SpendWise</a></h1>
         <div fxLayoutGap="20px" fxFlex fxLayout fxLayoutAlign="end">
-            <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
-                <li>
-                    <span>
-                        {{ allAccounts | bankAccountsBalance: userBaseCurrency.code | currency: userBaseCurrency.code }}
-                    </span>
-                    <mat-icon class="small" [matTooltip]="'User current balance'">info_outline</mat-icon>
-                </li>
-            </ul>
-            <mat-form-field *ngIf="(isAuth$ | async)" class="currency">
-                <mat-label> Base Currency </mat-label>
-                <mat-select #currencyInput="ngModel" [disabled]="disableBaseCurrency"
-                    name="currency" id="currency" [(ngModel)]="userBaseCurrency.id">
-                    <mat-option *ngFor="let currency of currencies" [value]="currency.id">
-                        {{currency.code}}
-                    </mat-option>
-                </mat-select>
-                <a style="cursor: pointer;" (click)="saveUserBaseCurrency()">
-                    <mat-icon>{{ disableBaseCurrency ? 'edit' : 'save' }} </mat-icon>
-                </a>
-            </mat-form-field>
             <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">
                 <li>
                     <button mat-stroked-button [routerLink]="'/login'">
@@ -41,12 +21,30 @@
                     </button>
                 </li>
             </ul>
-            <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)" fxHide.xs>
+            <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
                 <li>
-                    <button mat-stroked-button (click)="onLogout()" class="cursor-pointer">
-                        <mat-icon>power_settings_new</mat-icon>
-                        Sign out
-                    </button>
+                    <span class="logout">
+                       <button mat-mini-fab [matTooltip]="currentUser.userName" [matMenuTriggerFor]="menu"
+                       [matTooltipPosition]="position.value" color="warn">
+                        <mat-icon>perm_identity</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <div class="header-nav-current-user css-truncate">
+                            <a role="menuitem" class="menu-item">
+                                Signed in as <strong class="css-truncate-target">{{currentUser.userName}}</strong>
+                            </a>
+                        </div>
+                        <mat-divider style="margin: 10px;"></mat-divider>
+                          <button mat-menu-item (click)="openUserSettingsDialog()" class="cursor-pointer">
+                              <mat-icon>face_outline</mat-icon>
+                              <span>Profile</span>
+                        </button>
+                        <button mat-menu-item (click)="onLogout()" class="cursor-pointer">
+                            <mat-icon>power_settings_new</mat-icon>
+                            <span>Logout</span>
+                        </button>
+                      </mat-menu>
+                    </span>
                 </li>
             </ul>
         </div>

@@ -21,7 +21,8 @@ import {
     MatSnackBarModule,
     MatNativeDateModule,
     MatSlideToggleModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatMenuModule
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';
@@ -52,7 +53,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         MatFormFieldModule,
         MatRadioModule,
         CdkTableModule,
-        CdkTreeModule
+        CdkTreeModule,
+        MatMenuModule
     ],
     exports: [
         MatCardModule,
@@ -78,7 +80,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
         MatFormFieldModule,
         MatRadioModule,
         CdkTableModule,
-        CdkTreeModule
+        CdkTreeModule,
+        MatMenuModule
     ]
 })
 

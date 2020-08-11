@@ -39,14 +39,6 @@
             <span class="nav-caption">Expenses</span>
         </div>
     </a>
-    <a *ngIf="isAuth$ | async" mat-list-item
-        (click)="openUserSettingsDialog()">
-        <mat-icon>settings</mat-icon>
-        <div fxFlex="10"></div>
-        <div *ngIf="sidenavWidth > 6" class="sidenav-item">
-            <span class="nav-caption">Settings</span>
-        </div>
-    </a>
     <mat-list-item *ngIf="isAuth$ | async" fxHide.gt-xs>
         <button mat-icon-button (click)="onSignOut()">
             <mat-icon>power_settings_new</mat-icon>

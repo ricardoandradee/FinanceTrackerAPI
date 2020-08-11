@@ -1,4 +1,4 @@
-<form #userSettingsForm="ngForm">
+<form #userSettingsForm="ngForm" (ngSubmit)="onSave()">
     <h2 mat-dialog-title>User Settings</h2>
     <section class="bank-account-add-section">
         <div mat-dialog-content>
@@ -56,8 +56,7 @@
         </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
-            <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="userSettingsForm.invalid"
-                (click)="onSave()" mat-raised-button color="primary">Save</button>
+            <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="userSettingsForm.invalid" mat-raised-button color="primary">Save</button>
         </mat-dialog-actions>
     </section>
 </form>

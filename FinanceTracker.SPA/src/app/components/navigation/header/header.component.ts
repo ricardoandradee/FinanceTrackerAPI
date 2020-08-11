@@ -7,6 +7,10 @@ import { BankAccountService } from 'src/app/services/bank-account.service';
 import { Account } from 'src/app/models/account.model';
 import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
+import { UserSettingsComponent } from '../../user-settings/user-settings.component';
+import { MatDialog, TooltipPosition } from '@angular/material';
+import { UserService } from 'src/app/services/user.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +20,9 @@ import { CommonService } from 'src/app/services/common.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() sidenavToggle = new EventEmitter<void>();
   private allSubscriptions: Subscription[] = [];
+  public positionOptions: TooltipPosition[] = ['left'];
+  public position = new FormControl(this.positionOptions[0]); 
+  currentUser: User;
   currencies: Currency[];
   userBaseCurrency: Currency;
   openSideNav = false;
@@ -24,53 +31,61 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuth$: Observable<boolean>;
 
   constructor(private authService: AuthService,
+              private dialog: MatDialog,
+              private userService: UserService,
               private bankAccountService: BankAccountService,
-              private commonService: CommonService,
-              private currencyService: CurrencyService) {
-   }
+              private commonService: CommonService) { }
 
-  ngOnInit() {
+  ngOnInit() {   
+    const userSettingsSubscription = this.userService.getUserSettings.subscribe((user: User) => {
+      this.userBaseCurrency = user.currency;
+      this.currentUser = user;
+    });
+
     this.commonService.getAllCurrencies.subscribe(c => {
       this.currencies = c;
     });
 
-    this.isAuth$ = this.authService.getIsAuthenticated;
-    
-    const currencySubscription = this.currencyService.getUserBaseCurrency.subscribe(currency => {
-      this.userBaseCurrency = currency;
-    });
+    this.isAuth$ = this.authService.getIsAuthenticated; 
 
     const bankSubscription = this.bankAccountService.getBankAccountInfos.subscribe(bank => {
       const accounts = ([] as Account[]).concat(...bank.map(x => ( x.accounts )));
       this.allAccounts = [...accounts];
     });
 
-    this.allSubscriptions.push(currencySubscription);
+    this.allSubscriptions.push(userSettingsSubscription);
     this.allSubscriptions.push(bankSubscription);
   }
-
-  private getCurrencyById(id: number): Currency {
-    return this.currencies.find(x => x.id === id);
-  }
   
-  saveUserBaseCurrency() {
-    if (!this.disableBaseCurrency) {
-      const subscription = this.currencyService.updateUserBaseCurrency(this.userBaseCurrency.id)
-      .subscribe(response => {
-        const newCurrency = this.getCurrencyById(this.userBaseCurrency.id);
-        const user = this.getUserBaseCurrencyFromLocalStorage();
-        this.currencyService.setUserBaseCurrency = newCurrency;
-        user.currency = newCurrency;
-        localStorage.setItem('user', JSON.stringify(user));
-      });
-      this.allSubscriptions.push(subscription);
-    }
-    this.disableBaseCurrency = !this.disableBaseCurrency;
+  openUserSettingsDialog() {
+    const dialogRef = this.dialog.open(UserSettingsComponent);
+    var dialogSubscription = dialogRef.afterClosed().subscribe(result => {
+      if (result.data && this.hasUserSettingsChanged(result.data)) {
+        var updateSubscription = this.userService.updateUserSettings(result.data).subscribe((response) => {
+          if (response.ok) {
+            this.currentUser = 
+            {
+              ...this.currentUser,
+              currency: result.data.currency,
+              country: result.data.country,
+              stateTimeZone: result.data.stateTimeZone
+            }
+        
+            this.userService.setUserSettings = this.currentUser;
+            localStorage.setItem('user', JSON.stringify(this.currentUser));
+          }
+        });
+        this.allSubscriptions.push(updateSubscription);
+      }
+    });
+    this.allSubscriptions.push(dialogSubscription);
   }
 
-  private getUserBaseCurrencyFromLocalStorage(): User {
-      const user: User = JSON.parse(localStorage.getItem('user'));
-      return user;
+  private hasUserSettingsChanged(model: any) {
+    const userJson = JSON.stringify({ currency: this.currentUser.currency, stateTimeZone:  this.currentUser.stateTimeZone });
+    const modifiedUserJson = JSON.stringify({ currency: model.currency, stateTimeZone:  model.stateTimeZone });
+
+    return userJson.toLowerCase() !== modifiedUserJson.toLowerCase();
   }
 
   onToggleSidenav() {
