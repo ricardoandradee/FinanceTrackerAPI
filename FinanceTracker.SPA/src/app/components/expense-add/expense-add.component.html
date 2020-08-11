@@ -6,8 +6,8 @@
                 maxlength="50" name="establishment" id="establishment" ngModel>
             </mat-form-field>
         </div>
-        <div mat-dialog-content fxLayoutGap="10px">
-            <mat-form-field [style.width.px]=60>
+        <div mat-dialog-content fxLayoutGap="30px">
+            <mat-form-field [style.width.px]=70>
                 <mat-label> Currency </mat-label>
                 <mat-select #currencyInput="ngModel" name="currency" id="currency" ngModel required>
                     <mat-option value=""> - Select - </mat-option>
@@ -17,7 +17,7 @@
                 </mat-select>
                 <mat-error>Currency is required.</mat-error>
             </mat-form-field>
-            <mat-form-field [style.width.px]=110>
+            <mat-form-field [style.width.px]=200>
                 <input type="number" matInput placeholder="Price" #priceInput="ngModel" name="price" id="price" ngModel required>
                 <mat-error>Price is required.</mat-error>
             </mat-form-field>
