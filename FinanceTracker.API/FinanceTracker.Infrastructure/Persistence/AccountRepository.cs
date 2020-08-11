@@ -33,7 +33,7 @@ namespace FinanceTracker.Infrastructure.Persistence
             var bankIdParam = new SqlParameter("bankId", account.BankId);
             var accountNameParam = new SqlParameter("accountName", account.Name);
             var accountNumberParam = new SqlParameter("accountNumber", account.Number);
-            var accountCurrencyParam = new SqlParameter("accountCurrency", account.Currency);
+            var accountCurrencyParam = new SqlParameter("accountCurrency", account.Currency.Id);
             var currentBalanceParam = new SqlParameter("currentBalance", account.CurrentBalance);
             var createdDateParam = new SqlParameter("createdDate", account.CreatedDate);
             var accountIdParam = new SqlParameter("accountId", DbType.Int32) { Direction = ParameterDirection.Output };
@@ -44,7 +44,9 @@ namespace FinanceTracker.Infrastructure.Persistence
                   , new[] { bankIdParam, accountNameParam, accountNumberParam, accountCurrencyParam,
                     currentBalanceParam, createdDateParam, accountIdParam });
 
-            return await _unitOfWork.Context.Accounts.Include(a => a.Transactions)
+            return await _unitOfWork.Context.Accounts
+                            .Include(a => a.Transactions)
+                            .Include(a => a.Currency)
                             .FirstAsync(a => a.Id == Convert.ToInt32(accountIdParam.Value));
         }
     }
