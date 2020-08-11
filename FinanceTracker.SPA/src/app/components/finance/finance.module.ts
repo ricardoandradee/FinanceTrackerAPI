@@ -7,6 +7,7 @@ import { CategoryListComponent } from '../category-list/category-list.component'
 import { BankAccountListComponent } from '../bank-account-list/bank-account-list.component';
 import { CdkDetailRowDirective } from '../../directives/detail-row.directive';
 import { ExpenseTotalPricePipe } from 'src/app/pipes/expense-total-price.pipe';
+import { AccountsTotalPricePipe } from 'src/app/pipes/accounts-total-price.pipe';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { ExpenseTotalPricePipe } from 'src/app/pipes/expense-total-price.pipe';
         BankAccountListComponent,
         ExpenseHistoryComponent,
         CdkDetailRowDirective,
-        ExpenseTotalPricePipe
+        ExpenseTotalPricePipe,
+        AccountsTotalPricePipe
     ],
     entryComponents: [BankAccountListComponent],
     bootstrap: [BankAccountListComponent],
