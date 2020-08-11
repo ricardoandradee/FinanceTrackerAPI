@@ -1,10 +1,17 @@
-
 .mat-table {
-    margin: 15px 30px;
+  width: -webkit-calc(100% - 60px);
+  margin: 15px 30px;
 }
 
 .mat-paginator {
-    margin: 15px 30px;
+  width: -webkit-calc(100% - 60px);
+  margin: 15px 30px;
+}
+
+.mat-row {
+  &:hover {
+    background-color: #689ddf;
+  }
 }
 
 .add-button {
@@ -17,8 +24,81 @@
   margin-top: 30px;
 }
 
-@media only screen and (max-width: 599px) {
-    .mat-icon-button {
-        width: 25px;
+@media (max-width: 768px) {
+
+  .mat-header-row {
+    display: none;
+  }
+
+  tbody {
+    display: block;
+    width: 100%;
+  }
+  
+  .mat-table {
+    background: transparent;
+    * {
+      box-sizing: border-box;
     }
+
+    tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .mat-row {
+      word-break: break-word;
+      display: block;
+      overflow: hidden;
+      height: auto;
+      position: relative;
+      clear: both;
+      box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+      background-color: #fff;
+      border-radius: 3px;
+      + .mat-row {
+        margin-top: 24px;
+      }
+      
+      td.mat-column-Actions {
+        display: flex;
+        justify-content: center;
+      }
+
+      &:last-of-type td:last-of-type {
+        border: none;
+      }
+      &:not(:last-of-type) td:last-of-type {
+        border-bottom: 1px solid #fafafa;
+      }
+    }
+
+    .mat-cell:not(.mat-column-Actions) {
+      display: block;
+      padding: 5px 16px;
+      margin: 16px 0;
+        &.show-text-before:before {
+            font-weight: bold;
+            content: attr(data-label);
+            display: inline;
+        }
+        
+        &.mat-form-field {
+            width: 50px  !important;
+        }
+    }
+
+    .mat-column-star {
+      width: auto;
+      padding: 8px 0 0 !important;
+      margin: 0;
+      position: absolute;
+      top: 0;
+      right: 0;
+      &:before {
+        display: none;
+      }
+    }
+  }
 }
+
