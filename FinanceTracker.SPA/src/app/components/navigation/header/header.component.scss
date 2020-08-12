@@ -112,3 +112,17 @@ a.toolbar-link:active {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.mat-toolbar-row.second-toolbar {
+    color: black;
+    background-color: #f5f5f5;
+    display: inline-block;
+    margin: 0px auto;
+    font-size: 25px;
+    font-weight: 90;
+    text-align: center;
+    width: 100%;
+    max-height: 35px;
+    vertical-align: middle;
+    text-shadow: 0 2px 2px #999;
+}

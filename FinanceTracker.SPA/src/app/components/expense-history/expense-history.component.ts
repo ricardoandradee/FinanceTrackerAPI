@@ -103,7 +103,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   onOpenAddExpenseDialog() {
     const dialogRef = this.dialog.open(ExpenseAddComponent);
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
-      if (result.data) {
+      if (result && result.data) {
         this.createExpense(result.data as Expense);
       }
     }));

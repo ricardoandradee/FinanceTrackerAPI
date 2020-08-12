@@ -5,8 +5,8 @@
   }
 
   .mat-form-field {
-    width: 100%;
-    min-width: 300px;
+    width: 95%;
+    min-width: 220px;
   }
 
   mat-card-content {
@@ -15,6 +15,7 @@
 
   mat-card-title,
   mat-card-content {
+    max-width: 350px;
     display: flex;
     justify-content: center;
   }
@@ -25,7 +26,8 @@
   }
 
 .signup-section {
-    margin: 20px;
+  margin: 20px;
+  max-width: 95%;
 }
 
   .mat-card {
@@ -34,4 +36,18 @@
 
   .already-on-span {
     padding-right: 5px;
+  }  
+
+  @media (max-width: 599px) {
+    .mat-form-field {
+        width: 95%;
+    }
+    .mat-card {
+      max-width: 90%;
+      overflow: hidden;
+    }
+    mat-card-title,
+    mat-card-content {
+        max-width: 100%;
+    }
   }

@@ -1,9 +1,10 @@
-.account-transactions-section {
-    margin: 10px 5px;
-}
-
 .mat-table {
-    margin: 7px 15px;
+    max-width: 100%;
+    word-break: break-word;
+    display: block;
+    overflow: hidden;
+    height: auto;
+    position: relative;
 }
 
 .mat-icon-action {
@@ -18,16 +19,8 @@
     border-style: dashed;
 }
 
-
-
-@media only screen and (min-width : 600px) {
-    .mat-table {
-        width: 550px;
-    }
-}
-
-@media (min-width: 300px) and (max-width: 599px) {
-    .mat-table {
-        width: 450px;
+@media (max-width: 499px) {
+    .mat-dialog-content {
+        padding: 0px 10px;
     }
 }

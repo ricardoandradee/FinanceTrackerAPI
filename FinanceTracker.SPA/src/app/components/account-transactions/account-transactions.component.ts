@@ -15,7 +15,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   account: Account;
   userTimeZone = '';
-  displayedColumns = ['Transaction', 'CreatedDate', 'Description', 'Amount', 'Balance'];
+  displayedColumns = ['CreatedDate', 'Description', 'Amount', 'Balance'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   dataSource = new MatTableDataSource<Transaction>();
 

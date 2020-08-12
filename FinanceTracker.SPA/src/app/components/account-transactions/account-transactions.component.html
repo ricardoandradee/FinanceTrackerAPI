@@ -5,18 +5,15 @@
     <section class="account-transactions-section">
         <div mat-dialog-content>
             <mat-table [dataSource]="dataSource" matSortActive="createdDate" matSortDirection="desc" matSort>
-                <ng-container matColumnDef="Transaction">
-                    <mat-header-cell *matHeaderCellDef> Transaction </mat-header-cell>
+                <ng-container matColumnDef="CreatedDate">
+                    <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <mat-icon class="mat-icon-action" [ngStyle]="{'color': element.action == 'Withdraw' ? 'red' : 'green' }"
                             [matTooltip]="element.action">
                             {{ element.action == 'Withdraw' ? 'arrow_downward' : 'arrow_upward' }}
                         </mat-icon>
+                        {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }}
                     </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="CreatedDate">
-                    <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }} </mat-cell>
                 </ng-container>
       
                 <ng-container matColumnDef="Description">

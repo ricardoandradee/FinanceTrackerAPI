@@ -88,7 +88,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   openDialog() {
       const dialogRef = this.dialog.open(CategoryAddComponent);
       this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
-        if (result.data) {
+        if (result && result.data) {
           this.createCategory(result.data as Category);
         }
       }));

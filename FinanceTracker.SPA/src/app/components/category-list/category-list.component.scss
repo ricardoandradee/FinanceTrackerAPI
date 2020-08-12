@@ -10,18 +10,23 @@
 
 .mat-row {
   &:hover {
-    background-color: #689ddf;
+    background-color: #e9f3ff;
   }
+}
+
+.mat-elevation-z8 {
+  background: transparent;
+  box-shadow: none;
+}
+
+.header-div {
+  margin-top: 30px;
 }
 
 .add-button {
     position: absolute;
     right: 30px;
     top: 40px;
-}
-
-.header-div {
-  margin-top: 30px;
 }
 
 @media (max-width: 599px) {
@@ -35,7 +40,14 @@
     width: 100%;
   }
   
+  .mat-paginator {
+    width: -webkit-calc(100% - 6px);
+    margin: 15px 03px;
+  }
+
   .mat-table {
+    width: -webkit-calc(100% - 6px);
+    margin: 15px 03px;
     background: transparent;
     * {
       box-sizing: border-box;
@@ -44,6 +56,10 @@
     tbody {
         display: block;
         width: 100%;
+    }
+
+    .mat-form-field {
+      max-width: 180px;
     }
 
     .mat-row {
@@ -58,6 +74,22 @@
       border-radius: 3px;
       + .mat-row {
         margin-top: 24px;
+      }
+
+      td.mat-cell:not(.mat-column-Actions) {
+        display: grid;
+        grid-template-columns: 75px -webkit-calc(100% - 75px);
+        padding: 0.5rem;
+        text-align: right;
+        word-break: break-word;
+
+        & > * {
+          grid-column: 2;
+        }
+
+        &:before {
+          text-align: left;
+        }
       }
       
       td.mat-column-Actions {
@@ -76,15 +108,11 @@
     .mat-cell:not(.mat-column-Actions) {
       display: block;
       padding: 5px 16px;
-      margin: 16px 0;
+      margin: 7px 0;
         &.show-text-before:before {
             font-weight: bold;
             content: attr(data-label);
             display: inline;
-        }
-        
-        &.mat-form-field {
-            width: 50px  !important;
         }
     }
 

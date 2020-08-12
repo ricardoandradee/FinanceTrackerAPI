@@ -40,7 +40,6 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
   userTimeZone = '';
-  accountAction = 'Withdraw';
 
   isExpansionDetailRow = (index, row) => row.hasOwnProperty('accounts');
   @Input() singleChildRowDetail: boolean;
@@ -96,7 +95,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   openDialog() {
       const dialogRef = this.dialog.open(BankAccountAddComponent);
       this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
-        if (result.data) {
+        if (result && result.data) {
           this.createBankWithAccount(result.data as BankAccount);
         }
       }));
@@ -187,7 +186,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
       });
 
       this.allSubscriptions.push(dialogRef.afterClosed().subscribe((result) => {
-        if (result.data) {
+        if (result && result.data) {
           this.transactionService.performAccountTransaction(result.data as Transaction).subscribe((response) => {
             if (response.ok) {
               const transactionCreated = response.body as Transaction;
@@ -201,6 +200,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   onShowTransactions(account: Account) {
     const dialogRef = this.dialog.open(AccountTransactionsComponent,
     {
+      maxWidth: '95%',
       data: { account }
     });
   }
@@ -314,6 +314,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   onAddAccout(bankInfo: BankAccount) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,
     {
+      maxWidth: '95%',
       data: { actionMode: 'Add', account: { bankId: bankInfo.id, name: '',
               isActive: true, currency: { code: '' } as Currency } as Account }
     });
@@ -344,6 +345,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
   onEditAccount(account: Account, isBankActive: boolean) {
     const dialogRef = this.dialog.open(AccountAddEditComponent,
     {
+      maxWidth: '95%',
       data: { actionMode: 'Edit', account, isBankActive }
     });
 

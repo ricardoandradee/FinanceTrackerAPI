@@ -16,3 +16,8 @@ body {
     word-wrap: break-word;
     margin-top: 10px;
 }
+
+.mat-form-field-wrapper,
+.mat-dialog-content {
+    overflow: hidden !important;
+}

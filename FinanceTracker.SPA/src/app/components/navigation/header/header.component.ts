@@ -11,6 +11,7 @@ import { UserSettingsComponent } from '../../user-settings/user-settings.compone
 import { MatDialog, TooltipPosition } from '@angular/material';
 import { UserService } from 'src/app/services/user.service';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -29,12 +30,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   disableBaseCurrency = true;
   allAccounts: Account[];
   isAuth$: Observable<boolean>;
+  pageTitle = '';
 
   constructor(private authService: AuthService,
               private dialog: MatDialog,
               private userService: UserService,
               private bankAccountService: BankAccountService,
-              private commonService: CommonService) { }
+              private router: Router,
+              private commonService: CommonService) {
+                this.router.events.subscribe((result: any) => {
+                  if (result.hasOwnProperty('url')) {
+                    this.pageTitle = result.url.indexOf('expensehistory') > -1  ? 'Expenses'
+                      : (result.url.indexOf('income') > -1 ? 'Income' : 'Categories');
+                  }
+                });
+              }
 
   ngOnInit() {   
     const userSettingsSubscription = this.userService.getUserSettings.subscribe((user: User) => {
@@ -60,7 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   openUserSettingsDialog() {
     const dialogRef = this.dialog.open(UserSettingsComponent);
     let dialogSubscription = dialogRef.afterClosed().subscribe(result => {
-      if (result.data && this.hasUserSettingsChanged(result.data)) {
+      if (result && result.data && this.hasUserSettingsChanged(result.data)) {
         let updateSubscription = this.userService.updateUserSettings(result.data).subscribe((response) => {
           if (response.ok) {
             this.currentUser = {
