@@ -47,8 +47,7 @@
             </ul>
         </div>
     </mat-toolbar-row>
-    <span class="example-spacer"></span>
-    <mat-toolbar-row class="second-toolbar">
+    <mat-toolbar-row *ngIf="(isAuth$ | async)" class="second-toolbar">
         <span>{{ pageTitle }}</span>
-      </mat-toolbar-row>
+    </mat-toolbar-row>
 </mat-toolbar>
