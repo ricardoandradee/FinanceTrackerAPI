@@ -30,9 +30,7 @@
                       </button>
                       <mat-menu #menu="matMenu">
                         <div class="header-nav-current-user css-truncate">
-                            <a role="menuitem" class="menu-item">
-                                Signed in as <strong class="css-truncate-target">{{currentUser.userName}}</strong>
-                            </a>
+                            <mat-label>Signed in as <strong class="css-truncate-target">{{currentUser.userName}}</strong></mat-label>
                         </div>
                         <mat-divider style="margin: 10px;"></mat-divider>
                           <button mat-menu-item (click)="openUserSettingsDialog()" class="cursor-pointer">

@@ -11,7 +11,6 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./user-settings.component.scss']
 })
 export class UserSettingsComponent implements OnInit {
-  timeZoneCompleteList: TimeZone[];
   timeZones: TimeZone[];
   currencies: Currency[];
   userSettings: User;
@@ -35,7 +34,7 @@ export class UserSettingsComponent implements OnInit {
     const user = {
       id: this.userSettings.id,
       currency: this.currencies.find(x => x.id === this.userSettings.currency.id),
-      stateTimeZone: this.timeZoneCompleteList.find(x => x.id === this.userSettings.stateTimeZone.id)
+      stateTimeZone: this.timeZones.find(x => x.id === this.userSettings.stateTimeZone.id)
     };
     this.dialogRef.close({ data: user });
   }
