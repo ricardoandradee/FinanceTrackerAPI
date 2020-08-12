@@ -36,7 +36,8 @@ namespace FinanceTracker.Application.Commands.Banks
                     throw new NotFoundException(nameof(Bank), request.BankId);
                 }
 
-                _bankRepository.Delete(bankFromRepo);
+                // Soft delete
+                bankFromRepo.IsDeleted = true;
                 return await _unitOfWorkRepository.SaveChanges() > 0;
             }
         }

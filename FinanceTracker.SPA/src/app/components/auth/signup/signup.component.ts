@@ -22,9 +22,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   emailMatcher = new ErrorAlreadyTakenMatcher(this.emails);
   private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
-  countries = [];
   timeZones: TimeZone[];
-  timeZoneCompleteList: TimeZone[];
   currencies: Currency[];
 
   constructor(private authService: AuthService,
@@ -38,8 +36,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     });
 
     this.commonService.getAllTimezones.subscribe(tz => {
-      this.timeZoneCompleteList = tz;
-      this.countries = this.getCountries();
+      this.timeZones = tz;
     });
 
     this.authService.allExistingUsersDetails.subscribe((un) => {
@@ -52,30 +49,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
-  filterCity(form: NgForm) {
-    this.timeZones = this.getTimezoneByCountry(form.value.country);
-  }
-
-  private getTimezoneByCountry(countryName: string): TimeZone[] {
-    return this.timeZoneCompleteList.filter((tz) => {
-      return ( tz.country === countryName );
-    });
-  }
-
-  private getCountries(): string[] {
-    const allCountries = this.timeZoneCompleteList.map((tz) => {
-      return (
-        tz.country
-      );
-    }).sort();
-    return Array.from(new Set(allCountries.map(item => item)));
-  }
-
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
             stateTimeZoneId: user.timeZone, email: user.email,
-            currency: { id: user.currency } as Currency, country: user.country } as User).subscribe((response) => {
+            currency: { id: user.currency } as Currency } as User).subscribe((response) => {
               if (response) {
                 this.login(form);
               }

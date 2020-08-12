@@ -11,7 +11,6 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./user-settings.component.scss']
 })
 export class UserSettingsComponent implements OnInit {
-  countries = [];
   timeZoneCompleteList: TimeZone[];
   timeZones: TimeZone[];
   currencies: Currency[];
@@ -28,29 +27,7 @@ export class UserSettingsComponent implements OnInit {
     });
 
     this.commonService.getAllTimezones.subscribe(tz => {
-      this.timeZoneCompleteList = tz;
-      this.countries = this.getCountries();
-      this.userSettings.country = tz.find(x => x.id === this.userSettings.stateTimeZone.id).country;
-      this.onCityFilterChange();
-    });
-  }
-
-  onCityFilterChange() {
-    this.timeZones = this.getTimezoneByCountry(this.userSettings.country);
-  }
-  
-  private getCountries(): string[] {
-    const allCountries = this.timeZoneCompleteList.map((tz) => {
-      return (
-        tz.country
-      );
-    }).sort();
-    return Array.from(new Set(allCountries.map(item => item)));
-  }
-
-  private getTimezoneByCountry(countryName: string): TimeZone[] {
-    return this.timeZoneCompleteList.filter((tz) => {
-      return ( tz.country === countryName );
+      this.timeZones = tz;
     });
   }
 
@@ -58,7 +35,6 @@ export class UserSettingsComponent implements OnInit {
     const user = {
       id: this.userSettings.id,
       currency: this.currencies.find(x => x.id === this.userSettings.currency.id),
-      country: this.userSettings.country,
       stateTimeZone: this.timeZoneCompleteList.find(x => x.id === this.userSettings.stateTimeZone.id)
     };
     this.dialogRef.close({ data: user });

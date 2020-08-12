@@ -5,6 +5,7 @@ using FinanceTracker.Application.Common.Models;
 using FinanceTracker.Application.Dtos.Transactions;
 using FinanceTracker.Domain.Entities;
 using MediatR;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,11 @@ namespace FinanceTracker.Application.Commands.Accounts
 
             public async Task<Response<TransactionToReturnDto>> Handle(PerformAccountTransactionCommand request, CancellationToken cancellationToken)
             {
+                // foreach (TimeZoneInfo z in TimeZoneInfo.GetSystemTimeZones())
+                // {
+
+                // }
+
                 var transactionOptions = new string[] { "Deposit", "Withdraw" };
                 if (request.TransactionForCreationDto.Amount <= 0)
                 {

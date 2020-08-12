@@ -24,14 +24,13 @@ export class UserService {
   }
 
   updateUserSettings(user: User) {
-    const url = `${this.baseUrl}${user.id}/UpdateUserSettings`;    
+    const url = `${this.baseUrl}${user.id}/UpdateUserSettings`;
     const httpHeaders = new HttpHeaders({
         'Content-Type' : 'application/json'
     });
     const model = {
       currencyId: user.currency.id,
-      stateTimeZoneid: user.stateTimeZone.id,
-      country: user.country
+      stateTimeZoneid: user.stateTimeZone.id
     };
 
     return this.http.put(url, model, { headers: httpHeaders, observe: 'response' });

@@ -44,16 +44,6 @@
                 <mat-error>Currency is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <mat-label> Country </mat-label>
-                    <mat-select #countryInput="ngModel" name="country" id="country" ngModel required>
-                        <mat-option value=""> - Select - </mat-option>
-                        <mat-option *ngFor="let country of countries" [value]="country">
-                            {{country}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error>Country is required.</mat-error>
-                </mat-form-field>
-                <mat-form-field>
                     <mat-label> Time Zone </mat-label>
                     <mat-select #timeZoneInput="ngModel" name="timeZone" id="timeZone" ngModel required>
                         <mat-option value=""> - Select - </mat-option>

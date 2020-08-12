@@ -76,7 +76,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.currentUser = {
               ...this.currentUser,
               currency: result.data.currency,
-              country: result.data.country,
               stateTimeZone: result.data.stateTimeZone
             };
         

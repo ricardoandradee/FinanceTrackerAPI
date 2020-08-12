@@ -11,5 +11,4 @@ export interface User {
     wallet: number;
     stateTimeZoneId: string;
     password: string;
-    country: string;
 }
