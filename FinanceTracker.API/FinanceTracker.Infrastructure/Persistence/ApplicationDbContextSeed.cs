@@ -17,10 +17,10 @@ namespace FinanceTracker.Infrastructure.Persistence
                 }
                 context.SaveChanges();
             }
-
             if (!context.StateTimeZones.Any())
             {
-                var timeZonesSplited = TimeZoneData.GetTimeZoneList().SplitList(100);
+                var timeZones = TimeZoneData.GetTimeZoneList();
+                var timeZonesSplited = timeZones.SplitList(100);
                 foreach (var tzSplited in timeZonesSplited)
                 {
                     foreach (var timeZone in tzSplited)

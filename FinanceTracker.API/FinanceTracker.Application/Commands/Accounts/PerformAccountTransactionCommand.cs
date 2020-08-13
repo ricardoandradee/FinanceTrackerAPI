@@ -33,11 +33,6 @@ namespace FinanceTracker.Application.Commands.Accounts
 
             public async Task<Response<TransactionToReturnDto>> Handle(PerformAccountTransactionCommand request, CancellationToken cancellationToken)
             {
-                // foreach (TimeZoneInfo z in TimeZoneInfo.GetSystemTimeZones())
-                // {
-
-                // }
-
                 var transactionOptions = new string[] { "Deposit", "Withdraw" };
                 if (request.TransactionForCreationDto.Amount <= 0)
                 {
