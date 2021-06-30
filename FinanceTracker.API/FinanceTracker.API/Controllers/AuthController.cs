@@ -71,9 +71,7 @@ namespace FinanceTracker.API.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, userName),
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddHours(1)).ToUnixTimeSeconds().ToString())
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8
@@ -84,8 +82,9 @@ namespace FinanceTracker.API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(40),
-                SigningCredentials = creds
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds,
+                Issuer = _config.GetSection("Jwt:Issuer").Value
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

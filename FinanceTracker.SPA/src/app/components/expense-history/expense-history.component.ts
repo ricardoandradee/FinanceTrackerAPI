@@ -33,12 +33,12 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   oldExpense: Expense;
   rowInEditMode = false;
   currencies: Currency[];
-  private allCategories: Category[];
+  allCategories: Category[];
 
-  private datesKeyValue: KeyValuePair<string, string>[];
-  private categoriesKeyValue: KeyValuePair<number, string>[];
-  private expenseDate = 'All';
-  private category = 'All';
+  datesKeyValue: KeyValuePair<string, string>[];
+  categoriesKeyValue: KeyValuePair<number, string>[];
+  expenseDate = 'All';
+  category = 'All';
   userBaseCurrency: string;
   userTimeZone = '';
 
