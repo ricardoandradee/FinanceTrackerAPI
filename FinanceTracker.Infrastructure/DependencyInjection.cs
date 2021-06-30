@@ -17,7 +17,7 @@ namespace FinanceTracker.Infrastructure
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionLocal"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionAzure"),
                         b => b.MigrationsAssembly("FinanceTracker.API"));
                 options.EnableSensitiveDataLogging();
             });
