@@ -5,6 +5,7 @@ import { Account } from 'src/app/models/account.model';
 import { NgForm } from '@angular/forms';
 import { CommonService } from 'src/app/services/common.service';
 import { Currency } from 'src/app/models/currency.model';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-bank-account-add',
@@ -13,23 +14,27 @@ import { Currency } from 'src/app/models/currency.model';
 })
 export class BankAccountAddComponent implements OnInit {
   currencies: Currency[];
+  account: Account;
+  bankAccount: BankAccount;
 
   constructor(private dialogRef: MatDialogRef<BankAccountAddComponent>,
               private commonService: CommonService) {
   }
   ngOnInit(): void {
+    let userSettings = JSON.parse(localStorage.getItem('user')) as User;
+    this.account = { name: 'Checking Account', description: '',
+      currency: userSettings.currency, number: '', isActive: true, transactions: [] } as Account;
+    this.bankAccount = { name: '', branch: '', accounts: [] } as BankAccount;
+
     this.commonService.getAllCurrencies.subscribe(x => {
       this.currencies = x;
     });
   }
   
-  onSave(form: NgForm) {
-    const account = { name: 'Checking Account', description: `Checking Account linked to ${form.value.name}`,
-      currentBalance: form.value.currentBalance, currency: { id: form.value.currency } as Currency,
-      number: form.value.accountNumber, isActive: true, transactions: [] } as Account;
-      
-    const bankInfo = { name: form.value.name, branch: form.value.branch,
-        isActive: true, accounts: [account] } as BankAccount;
+  onSave() {
+    this.account.description = `Checking Account linked to ${this.bankAccount.name}`;      
+    const bankInfo = { name: this.bankAccount.name, branch: this.bankAccount.branch,
+        isActive: true, accounts: [this.account] } as BankAccount;
     this.dialogRef.close({ data: bankInfo });
   }
 

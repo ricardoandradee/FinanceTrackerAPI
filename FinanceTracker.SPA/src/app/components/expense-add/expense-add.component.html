@@ -1,16 +1,16 @@
-    <form #addExpenseForm="ngForm" (ngSubmit)="onSave(addExpenseForm)">
+    <form #addExpenseForm="ngForm" (ngSubmit)="onSave()">
         <h2 mat-dialog-title>Add Expense</h2>
         <section class="expense-add-section">
             <div mat-dialog-content>
                 <mat-form-field>
-                    <input type="text" matInput placeholder="Establishment" #nameInput="ngModel"
-                    maxlength="50" name="establishment" id="establishment" ngModel>
+                    <input type="text" matInput placeholder="Establishment" #nameInput="ngModel" [(ngModel)]="expense.establishment"
+                    maxlength="50" name="establishment" id="establishment">
                 </mat-form-field>
             </div>
             <div mat-dialog-content fxLayoutGap="20px">
                 <mat-form-field [style.width.px]=70>
                     <mat-label> Currency </mat-label>
-                    <mat-select #currencyInput="ngModel" name="currency" id="currency" ngModel required>
+                    <mat-select #currencyInput="ngModel" name="currency" id="currency" [(ngModel)]="expense.currency.id" required>
                         <mat-option value=""> - Select - </mat-option>
                         <mat-option *ngFor="let currency of currencies" [value]="currency.id">
                             {{currency.code}}
@@ -19,14 +19,14 @@
                     <mat-error>Currency is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field [style.width.px]=90>
-                    <input type="number" matInput placeholder="Price" #priceInput="ngModel" name="price" id="price" ngModel required>
+                    <input type="number" matInput placeholder="Price" #priceInput="ngModel" [(ngModel)]="expense.price" name="price" id="price" ngModel required>
                     <mat-error>Price is required.</mat-error>
                 </mat-form-field>
             </div>
             <div mat-dialog-content>
                 <mat-form-field>
                     <mat-label> Categories </mat-label>
-                    <mat-select #categoryInput="ngModel" name="category" id="category" ngModel required>
+                    <mat-select #categoryInput="ngModel" name="category" id="category" [(ngModel)]="expense.category.id" required>
                         <mat-option value=""> - Select - </mat-option>
                         <mat-option *ngFor="let ctg of categories" [value]="ctg.id">
                             {{ctg.name}}
@@ -37,14 +37,14 @@
             </div>
             <div mat-dialog-content>
                 <mat-form-field>
-                    <input type="text" matInput placeholder="Address" #addressInput="ngModel"
-                    maxlength="255" name="address" id="address" ngModel>
+                    <input type="text" matInput placeholder="Address" #addressInput="ngModel" [(ngModel)]="expense.address"
+                    maxlength="255" name="address" id="address">
                 </mat-form-field>
             </div>
             <div mat-dialog-content>
                 <mat-form-field>
-                    <textarea matInput placeholder="Description" #descriptionInput="ngModel"
-                    maxlength="255" name="description" id="description" ngModel></textarea>
+                    <textarea matInput placeholder="Description" #descriptionInput="ngModel" [(ngModel)]="expense.description"
+                    maxlength="255" name="description" id="description"></textarea>
                 </mat-form-field>
             </div>
             <mat-dialog-actions align="end">
