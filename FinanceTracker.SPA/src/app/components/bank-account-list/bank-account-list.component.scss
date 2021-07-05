@@ -73,7 +73,10 @@
   max-width: 95%;
 }
 
-@media (max-width: 699px) {
+@media (max-width: 599px) {
+  .small-screen-margin-bottom {
+    margin-bottom: 120px;
+  }
 
   .mat-footer-row {
     display: none;
@@ -181,4 +184,3 @@
     }
   }
 }
-

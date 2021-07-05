@@ -23,7 +23,7 @@
     [matTooltip]="allCategories.length === 0 ? 'Please, add categories first.' : 'Add Expense'"
     (click)="allCategories.length > 0 && onOpenAddExpenseDialog()"><mat-icon>add</mat-icon></a>
 
-<div class="mat-elevation-z8" [ngClass]="{'mat-table-no-items': dataSource.data.length === 0 }">
+<div class="mat-elevation-z8 small-screen-margin-bottom" [ngClass]="{'mat-table-no-items': dataSource.data.length === 0 }">
     <table *ngIf="!(isLoading$ | async)" mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="CreatedDate">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>

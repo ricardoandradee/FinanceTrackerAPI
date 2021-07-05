@@ -6,7 +6,7 @@
 </div>
 <a mat-fab class="add-button" *ngIf="!(isLoading$ | async)" color="accent" (click)="openDialog()"><mat-icon>add</mat-icon></a>
 
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8 small-screen-margin-bottom">
     <table *ngIf="!(isLoading$ | async)" mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="CreatedDate">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Created at </th>

@@ -30,6 +30,9 @@
 }
 
 @media (max-width: 599px) {
+  .small-screen-margin-bottom {
+    margin-bottom: 120px;
+  }
 
   .mat-header-row {
     display: none;
@@ -129,4 +132,3 @@
     }
   }
 }
-
