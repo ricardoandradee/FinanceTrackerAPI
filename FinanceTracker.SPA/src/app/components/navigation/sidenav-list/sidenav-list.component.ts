@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 export class SidenavListComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter<void>();
   isAuth$: Observable<boolean>;
-  sidenavWidth = 4;
+  sidenavWidth = window.innerWidth > 599 ? 4 : 3;
+  screenSize = window.innerWidth;
   
   constructor(private authService: AuthService,
               private router: Router) { }

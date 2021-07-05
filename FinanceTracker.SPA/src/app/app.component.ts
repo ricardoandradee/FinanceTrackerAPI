@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'SpendWise';
   openSideNav = false;
-  sidenavWidth = 4;
+  sidenavWidth = window.innerWidth > 599 ? 4 : 3;
 
   constructor(private categoryService: CategoryService,
               private expenseService: ExpenseService,
@@ -46,13 +46,17 @@ export class AppComponent implements OnInit, OnDestroy {
               }
 
   increase() {
-    this.sidNav.sidenavWidth = 15;
-    this.sidenavWidth = 15;
+    let screenSize = window.innerWidth;
+    this.sidNav.screenSize = screenSize;
+    this.sidNav.sidenavWidth = screenSize > 599 ? 15 : 7;
+    this.sidenavWidth = screenSize > 599 ? 15 : 7;
   }
 
   decrease() {
-    this.sidNav.sidenavWidth = 4;
-    this.sidenavWidth = 4;
+    let screenSize = window.innerWidth;
+    this.sidNav.screenSize = screenSize;
+    this.sidNav.sidenavWidth = screenSize > 599 ? 4 : 3;
+    this.sidenavWidth = screenSize > 599 ? 4 : 3;
   }
   
   ngOnInit() {
