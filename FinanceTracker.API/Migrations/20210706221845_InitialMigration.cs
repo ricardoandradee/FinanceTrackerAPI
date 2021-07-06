@@ -26,9 +26,10 @@ namespace FinanceTracker.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Country = table.Column<string>(nullable: true),
-                    UTC = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    UTC = table.Column<string>(maxLength: 8, nullable: false),
+                    Description = table.Column<string>(maxLength: 100, nullable: false),
+                    TimeZoneInfoId = table.Column<string>(maxLength: 100, nullable: false),
+                    SupportsDaylightSavingTime = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,9 +48,7 @@ namespace FinanceTracker.API.Migrations
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(nullable: false),
-                    LastActive = table.Column<DateTimeOffset>(nullable: false),
-                    StateTimeZoneId = table.Column<int>(nullable: false),
-                    Country = table.Column<string>(maxLength: 50, nullable: false)
+                    StateTimeZoneId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,6 +77,7 @@ namespace FinanceTracker.API.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Branch = table.Column<string>(maxLength: 50, nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedDate = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
@@ -111,6 +111,30 @@ namespace FinanceTracker.API.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLoginHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(maxLength: 30, nullable: false),
+                    UserId = table.Column<int>(nullable: true),
+                    ActionDateTime = table.Column<DateTimeOffset>(nullable: false),
+                    IsSuccessful = table.Column<bool>(nullable: false),
+                    IPAddress = table.Column<string>(maxLength: 20, nullable: false),
+                    GeoLocation = table.Column<string>(maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLoginHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserLoginHistories_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,6 +179,7 @@ namespace FinanceTracker.API.Migrations
                     CurrencyId = table.Column<int>(nullable: false),
                     CurrentBalance = table.Column<decimal>(nullable: false),
                     BankId = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedDate = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
@@ -216,9 +241,9 @@ namespace FinanceTracker.API.Migrations
                     Amount = table.Column<decimal>(nullable: false),
                     BalanceAfterTransaction = table.Column<decimal>(nullable: false),
                     Action = table.Column<string>(maxLength: 10, nullable: false),
-                    ExpenseId = table.Column<int>(nullable: false),
                     AccountId = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ExpenseId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -234,7 +259,7 @@ namespace FinanceTracker.API.Migrations
                         column: x => x.ExpenseId,
                         principalTable: "Expenses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -278,6 +303,11 @@ namespace FinanceTracker.API.Migrations
                 column: "ExpenseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserLoginHistories_UserId",
+                table: "UserLoginHistories",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_CurrencyId",
                 table: "Users",
                 column: "CurrencyId");
@@ -302,6 +332,9 @@ namespace FinanceTracker.API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Transactions");
+
+            migrationBuilder.DropTable(
+                name: "UserLoginHistories");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

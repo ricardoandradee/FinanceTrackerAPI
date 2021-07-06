@@ -1,4 +1,4 @@
-import { Component, OnInit,  EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() sidenavToggle = new EventEmitter<void>();
   private allSubscriptions: Subscription[] = [];
   public positionOptions: TooltipPosition[] = ['left'];
-  public position = new FormControl(this.positionOptions[0]); 
+  public position = new FormControl(this.positionOptions[0]);
   currentUser: User;
   currencies: Currency[];
   userBaseCurrency: Currency;
@@ -33,20 +33,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   pageTitle = '';
 
   constructor(private authService: AuthService,
-              private dialog: MatDialog,
-              private userService: UserService,
-              private bankAccountService: BankAccountService,
-              private router: Router,
-              private commonService: CommonService) {
-                this.router.events.subscribe((result: any) => {
-                  if (result.hasOwnProperty('url')) {
-                    this.pageTitle = result.url.indexOf('expensehistory') > -1  ? 'Expenses'
-                      : (result.url.indexOf('income') > -1 ? 'Income' : 'Categories');
-                  }
-                });
-              }
+    private dialog: MatDialog,
+    private userService: UserService,
+    private bankAccountService: BankAccountService,
+    private router: Router,
+    private commonService: CommonService) {
+    this.router.events.subscribe((result: any) => {
+      if (result.hasOwnProperty('url')) {
+        this.pageTitle = result.url.indexOf('expensehistory') > -1 ? 'Expenses'
+          : (result.url.indexOf('income') > -1 ? 'Income' : 'Categories');
+      }
+    });
+  }
 
-  ngOnInit() {   
+  ngOnInit() {
     const userSettingsSubscription = this.userService.getUserSettings.subscribe((user: User) => {
       this.userBaseCurrency = user.currency;
       this.currentUser = user;
@@ -56,17 +56,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.currencies = c;
     });
 
-    this.isAuth$ = this.authService.getIsAuthenticated; 
+    this.isAuth$ = this.authService.getIsAuthenticated;
 
     const bankSubscription = this.bankAccountService.getBankAccountInfos.subscribe(bank => {
-      const accounts = ([] as Account[]).concat(...bank.map(x => ( x.accounts )));
+      const accounts = ([] as Account[]).concat(...bank.map(x => (x.accounts)));
       this.allAccounts = [...accounts];
     });
 
     this.allSubscriptions.push(userSettingsSubscription);
     this.allSubscriptions.push(bankSubscription);
   }
-  
+
   openUserSettingsDialog() {
     const dialogRef = this.dialog.open(UserSettingsComponent);
     let dialogSubscription = dialogRef.afterClosed().subscribe(result => {
@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               currency: result.data.currency,
               stateTimeZone: result.data.stateTimeZone
             };
-        
+
             this.userService.setUserSettings = this.currentUser;
             localStorage.setItem('user', JSON.stringify(this.currentUser));
           }
@@ -90,8 +90,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private hasUserSettingsChanged(model: any) {
-    const userJson = JSON.stringify({ currency: this.currentUser.currency, stateTimeZone:  this.currentUser.stateTimeZone });
-    const modifiedUserJson = JSON.stringify({ currency: model.currency, stateTimeZone:  model.stateTimeZone });
+    const userJson = JSON.stringify({ currency: this.currentUser.currency, stateTimeZone: this.currentUser.stateTimeZone });
+    const modifiedUserJson = JSON.stringify({ currency: model.currency, stateTimeZone: model.stateTimeZone });
 
     return userJson.toLowerCase() !== modifiedUserJson.toLowerCase();
   }
@@ -109,6 +109,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.allSubscriptions.forEach(s => { s.unsubscribe()});
+    this.allSubscriptions.forEach(s => { s.unsubscribe() });
   }
 }

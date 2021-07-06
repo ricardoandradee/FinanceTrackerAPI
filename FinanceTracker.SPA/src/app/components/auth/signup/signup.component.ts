@@ -73,7 +73,7 @@ export class SignupComponent implements OnInit, OnDestroy {
           UserName: form.value.userName,
           UserId: user != null ? user.id : null,
           IsSuccessful: user != null ? true : false
-        }).subscribe((response) => { console.log('User login history successfully created.'); });
+        }).subscribe((response) => { this.uiService.showSnackBar('User login history successfully created.', 3000); });
         this.allSubscriptions.push(loginHistorySubscription);
     });
     this.allSubscriptions.push(loginSubscription);
