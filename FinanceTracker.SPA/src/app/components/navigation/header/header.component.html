@@ -23,9 +23,9 @@
             {{currency.code}}
           </mat-option>
         </mat-select>
-        <a style="cursor: pointer;" (click)="saveUserBaseCurrency()">
+        <!-- <a style="cursor: pointer;" (click)="saveUserBaseCurrency()">
           <mat-icon>{{ disableBaseCurrency ? 'edit' : 'save' }} </mat-icon>
-        </a>
+        </a> -->
       </mat-form-field>
       <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">
         <li>
