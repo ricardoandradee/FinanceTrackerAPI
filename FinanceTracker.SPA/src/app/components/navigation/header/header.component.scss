@@ -11,6 +11,11 @@ a.toolbar-link:active {
     display:inline-flex;
     vertical-align:top;
 }
+.mat-icon.small {
+    margin-top: 7px;
+    color: red;
+    font-size: 18px;
+}
 
 .navigation-items {
     font-size:  14px;
@@ -55,6 +60,14 @@ a.toolbar-link:active {
     font-size: 12px;
 }
 
+::ng-deep .mat-tooltip {
+    text-transform: lowercase;
+}
+
+::ng-deep .mat-tooltip:first-letter {
+    text-transform: uppercase;
+  }
+
 @media only screen and (max-width: 599px) {
     .currency {
         padding-right: 20px;
@@ -64,6 +77,12 @@ a.toolbar-link:active {
         font-size:  10px;
     }
 }
+
+@media (max-width: 450px) {
+    a.toolbar-link {
+      font-size: 14px;
+    }
+  }
 
 .mat-toolbar {
     position: sticky;

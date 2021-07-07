@@ -132,3 +132,9 @@
     }
   }
 }
+
+@media (max-width: 450px) {
+  td.mat-cell {
+    font-size: 12px;
+  }
+}

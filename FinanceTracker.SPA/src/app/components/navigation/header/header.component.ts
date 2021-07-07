@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private allSubscriptions: Subscription[] = [];
   public positionOptions: TooltipPosition[] = ['left'];
   public position = new FormControl(this.positionOptions[0]);
+  profileTooltipLabel = '';
   currentUser: User;
   currencies: Currency[];
   userBaseCurrency: Currency;
@@ -50,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const userSettingsSubscription = this.userService.getUserSettings.subscribe((user: User) => {
       this.userBaseCurrency = user.currency;
       this.currentUser = user;
+      this.profileTooltipLabel = this.currentUser.userName + '\'s profile'; 
     });
 
     this.commonService.getAllCurrencies.subscribe(c => {
