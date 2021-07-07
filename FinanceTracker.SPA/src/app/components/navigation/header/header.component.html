@@ -7,20 +7,10 @@
     </button>
     <h1><a class="toolbar-link" [routerLink]="(isAuth$ | async) ? ['/finance/expensehistory'] : ['/']">Spend wise</a></h1>
     <div fxLayoutGap="10px" fxFlex fxLayout fxLayoutAlign="end">
-      <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
-        <li>
-          <mat-icon class="small" [matTooltip]="'Total balance'">info_outline</mat-icon>
-          <span>
-            {{ allAccounts | bankAccountsBalance: userBaseCurrency.code | currency: userBaseCurrency.code }}
-          </span>
-        </li>
-      </ul>
       <mat-form-field *ngIf="(isAuth$ | async)" class="currency">
-        <mat-label> Currency </mat-label>
-        <mat-select #currencyInput="ngModel" [disabled]="disableBaseCurrency"
-                    name="currency" id="currency" [(ngModel)]="userBaseCurrency.code">
-          <mat-option [value]="userBaseCurrency.code"> {{userBaseCurrency.code}} </mat-option>
-        </mat-select>
+        <mat-label> Total balance in</mat-label><mat-label style="font-weight: bold;"> {{ userBaseCurrency.code }} </mat-label>
+        <input type="text" matInput name="userBaseCurrency" id="userBaseCurrency" [disabled]="true"
+              [value]="allAccounts | bankAccountsBalance: userBaseCurrency.code | currency: userBaseCurrency.code">
       </mat-form-field>
       <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">
         <li>
@@ -36,7 +26,7 @@
           </button>
         </li>
       </ul>
-      <ul fxLayout fxHide.lt-sm class="navigation-items" *ngIf="(isAuth$ | async)">
+      <ul fxLayout class="navigation-items" *ngIf="(isAuth$ | async)">
         <li>
           <span class="users-profile">
             <button mat-mini-fab [matTooltip]="profileTooltipLabel" (click)="openUserSettingsDialog()"
