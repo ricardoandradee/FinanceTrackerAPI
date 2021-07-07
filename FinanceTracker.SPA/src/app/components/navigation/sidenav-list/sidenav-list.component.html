@@ -34,7 +34,7 @@
             <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Expenses</span>
         </div>
     </a>
-    <a *ngIf="isAuth$ | async" mat-list-item fxHide.gt-xs (click)="onSignOut()">
+    <a *ngIf="isAuth$ | async" mat-list-item (click)="onSignOut()" (notifyParent)="getNotification($event)">
         <mat-icon [ngStyle]="{'font-size': screenSize > 599 ? '22px' : '16px' }">power_settings_new</mat-icon>
         <div *ngIf="sidenavWidth > 4" class="sidenav-item">
             <span [ngStyle]="{'font-size': screenSize > 599 ? '16px' : '12px' }" class="nav-caption">Sign out</span>

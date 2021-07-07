@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class SidenavListComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter<void>();
+  @Output() sidenavLogout = new EventEmitter<void>();
   isAuth$: Observable<boolean>;
   sidenavWidth = window.innerWidth > 599 ? 4 : 3;
   screenSize = window.innerWidth;
@@ -26,6 +27,7 @@ export class SidenavListComponent implements OnInit {
   }
 
   onSignOut() {
+    this.sidenavLogout.emit();
     this.sidenavClose.emit();
     this.authService.logout();
   }

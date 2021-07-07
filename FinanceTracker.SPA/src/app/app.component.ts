@@ -6,12 +6,11 @@ import { Expense } from './models/expense.model';
 import { AuthService } from './services/auth.service';
 import { switchMap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { CurrencyService } from './services/currency.service';
 import { User } from './models/user.model';
 import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
 import { Subscription } from 'rxjs';
-import { CommonService } from './services/common.service';
 import { UserService } from './services/user.service';
+import { HeaderComponent } from './components/navigation/header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +19,7 @@ import { UserService } from './services/user.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(SidenavListComponent, { static: false }) sidNav: SidenavListComponent;
+  @ViewChild(HeaderComponent, { static: false }) header: HeaderComponent;
 
   private jwtHelper = new JwtHelperService();
   private expenses: Expense[];
@@ -93,6 +93,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.expenseService.setExpenses = this.expenses;
   }
   
+  onLogout () {
+    this.header.openSideNav = false;
+  }
+
   ngOnDestroy(): void {
     this.allSubscriptions.forEach(s => { s.unsubscribe()});
   }

@@ -1,6 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { CurrencyService } from 'src/app/services/currency.service';
 import { User } from 'src/app/models/user.model';
 import { Observable, Subscription } from 'rxjs';
 import { BankAccountService } from 'src/app/services/bank-account.service';
@@ -101,13 +100,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onToggleSidenav() {
     this.openSideNav = !this.openSideNav;
     this.sidenavToggle.emit();
-  }
-
-  onLogout() {
-    if (this.openSideNav) {
-      this.onToggleSidenav();
-    }
-    this.authService.logout();
   }
 
   ngOnDestroy(): void {
