@@ -9,7 +9,7 @@
     <div fxLayoutGap="10px" fxFlex fxLayout fxLayoutAlign="end">
       <mat-form-field *ngIf="(isAuth$ | async)" class="currency">
         <mat-label> Total balance in</mat-label><mat-label style="font-weight: bold;"> {{ userBaseCurrency.code }} </mat-label>
-        <input type="text" matInput name="userBaseCurrency" id="userBaseCurrency" [disabled]="true"
+        <input type="text" matInput name="userBaseCurrency" id="userBaseCurrency" readonly
               [value]="allAccounts | bankAccountsBalance: userBaseCurrency.code | currency: userBaseCurrency.code">
       </mat-form-field>
       <ul fxLayout class="navigation-items" *ngIf="!(isAuth$ | async)">
