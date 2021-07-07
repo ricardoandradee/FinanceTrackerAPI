@@ -39,7 +39,6 @@ export class ExpenseService {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const newExpense = {
             description: expense.description,
-            address: expense.address,
             establishment: expense.establishment,
             categoryId: expense.category.id,
             currencyId: expense.currency.id,
@@ -56,7 +55,6 @@ export class ExpenseService {
         const user: User = JSON.parse(localStorage.getItem('user')); 
         const newExpense = {
             categoryId: expense.category.id,
-            address: expense.address,
             establishment: expense.establishment,
             description: expense.description,
             currencyId: expense.currency.id,

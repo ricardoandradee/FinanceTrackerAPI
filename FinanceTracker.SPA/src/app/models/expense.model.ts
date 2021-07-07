@@ -4,7 +4,6 @@ import { Category } from './category.model';
 export interface Expense {
     id: number;
     description?: string;
-    address: string;
     establishment: string;
     category?: Category;
     currency: Currency;

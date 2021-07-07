@@ -37,12 +37,6 @@
             </div>
             <div mat-dialog-content>
                 <mat-form-field>
-                    <input type="text" matInput placeholder="Address" #addressInput="ngModel" [(ngModel)]="expense.address"
-                    maxlength="255" name="address" id="address">
-                </mat-form-field>
-            </div>
-            <div mat-dialog-content>
-                <mat-form-field>
                     <textarea matInput placeholder="Description" #descriptionInput="ngModel" [(ngModel)]="expense.description"
                     maxlength="255" name="description" id="description"></textarea>
                 </mat-form-field>

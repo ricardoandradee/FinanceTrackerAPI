@@ -36,7 +36,6 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
   ngOnInit() {
     let userSettings = JSON.parse(localStorage.getItem('user')) as User;
     this.expense = {
-      address: "",
       establishment: "",
       category: { id: 0 } as Category,
       currency: userSettings.currency

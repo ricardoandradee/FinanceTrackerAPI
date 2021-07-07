@@ -15,10 +15,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(t => t.Address)
-                .HasMaxLength(255)
-                .IsRequired();
-
             builder.Property(t => t.Establishment)
                 .HasMaxLength(50);
 
