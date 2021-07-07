@@ -68,6 +68,10 @@ a.toolbar-link:active {
     text-transform: uppercase;
   }
 
+  .currency input[type="text"] {
+    color: black;
+}
+
 @media only screen and (max-width: 599px) {
     .currency {
         width: 90px;
