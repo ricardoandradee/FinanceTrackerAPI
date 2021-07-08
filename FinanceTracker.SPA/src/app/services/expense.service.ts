@@ -5,15 +5,13 @@ import { Expense } from '../models/expense.model';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user.model';
-import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class ExpenseService {
     private baseUrl = environment.apiUrl + 'user/';
     private dataSource$: BehaviorSubject<Expense[]> = new BehaviorSubject([]);
 
-    constructor(private http: HttpClient,
-                private datePipe: DatePipe) {
+    constructor(private http: HttpClient) {
     }
 
     get getExpenses(): Observable<Expense[]> {

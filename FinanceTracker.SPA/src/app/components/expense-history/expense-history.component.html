@@ -83,6 +83,18 @@
             </td>
             <td mat-footer-cell *matFooterCellDef> <span style="font-weight: bold; margin-right: 15px;">Total</span> {{ dataSource.filteredData | expenseTotalPrice:userBaseCurrency | currency: userBaseCurrency }} </td>
         </ng-container>
+        <ng-container  matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Status'>
+                <mat-slide-toggle *ngIf="editExpense?.id && element.id===editExpense?.id" (click)="onIsActiveChange(element)" [(ngModel)]="element.status" name="status" id="status" color="primary"></mat-slide-toggle>
+                <mat-chip-list>
+                    <mat-chip [color]="element.status === 'Unpaid' ? 'warn' : 'primary'" selected>
+                        {{ element.status }}
+                    </mat-chip>
+                </mat-chip-list>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
         <ng-container matColumnDef="Actions">
             <th mat-header-cell  *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let element">
