@@ -11,7 +11,9 @@ export class BankAccountService {
     private baseUrl = environment.apiUrl;
     private dataSource$: BehaviorSubject<BankAccount[]> = new BehaviorSubject([]);
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.loadBankAccounts();        
+    }
 
         get getBankAccountInfos(): Observable<BankAccount[]> {
             return this.dataSource$.asObservable();
@@ -20,18 +22,30 @@ export class BankAccountService {
         set setBankAccountInfos(bankInfos: BankAccount[]) {
             this.dataSource$.next(bankInfos);
         }
-    
-    getBanksByUserId(): Observable<BankAccount[]> {
+        
+    private loadBankAccounts() {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const url = `${this.baseUrl}user/${user.id}/bank/GetBanksByUserId`;
-
+        
         return this.http.get<BankAccount[]>(url, { observe: 'response' })
-        .pipe(
-        map(response => {
-            const bankAccount: BankAccount[] = response.body;
-            return bankAccount;
-        }));
+        .pipe(map(response => {
+            return (response.body as BankAccount[]).sort((a, b) => (a.name > b.name) ? 1 : -1);
+        })).subscribe((bankAccounts: BankAccount[]) => {
+            this.dataSource$.next(bankAccounts);
+        });
     }
+
+    // getBanksByUserId(): Observable<BankAccount[]> {
+    //     const user: User = JSON.parse(localStorage.getItem('user'));
+    //     const url = `${this.baseUrl}user/${user.id}/bank/GetBanksByUserId`;
+
+    //     return this.http.get<BankAccount[]>(url, { observe: 'response' })
+    //     .pipe(
+    //     map(response => {
+    //         const bankAccount: BankAccount[] = response.body;
+    //         return bankAccount;
+    //     }));
+    // }
         
     deleteBankInfo(bankId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
