@@ -25,7 +25,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 
 export class ExpenseHistoryComponent implements OnInit, OnDestroy {
-  displayedColumns = ['CreatedDate', 'Category', 'Description', 'Establishment', 'Price', 'Status', 'Actions'];
+  displayedColumns = ['CreatedDate', 'Category', 'Establishment', 'Price', 'Status', 'Actions'];
   dataSource = new MatTableDataSource<Expense>();
   private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;

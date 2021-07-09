@@ -18,9 +18,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
             builder.Property(t => t.Establishment)
                 .HasMaxLength(50);
 
-            builder.Property(t => t.Description)
-                .HasMaxLength(255);
-
             builder.Property(t => t.Price)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();

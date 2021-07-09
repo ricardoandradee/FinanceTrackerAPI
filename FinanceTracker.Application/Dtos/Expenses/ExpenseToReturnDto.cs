@@ -9,7 +9,6 @@ namespace FinanceTracker.Application.Dtos.Expenses
         public int Id { get; set; }
         public CategoryToReturnDto Category { get; set; }
         public string Establishment { get; set; }
-        public string Description { get; set; }
         public string Status
         {
             get

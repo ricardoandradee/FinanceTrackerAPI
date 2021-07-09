@@ -9,7 +9,6 @@ namespace FinanceTracker.Domain.Entities
         public virtual Category Category { get; set; }
         public int CategoryId { get; set; }
         public string Establishment { get; set; }
-        public string Description { get; set; }
         public int CurrencyId { get; set; }
         public virtual Currency Currency { get; set; }
         public decimal Price { get; set; }

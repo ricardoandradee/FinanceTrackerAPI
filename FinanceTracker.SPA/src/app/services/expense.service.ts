@@ -36,7 +36,6 @@ export class ExpenseService {
     createExpense(expense: Expense) {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const newExpense = {
-            description: expense.description,
             establishment: expense.establishment,
             categoryId: expense.category.id,
             currencyId: expense.currency.id,
@@ -54,7 +53,6 @@ export class ExpenseService {
         const newExpense = {
             categoryId: expense.category.id,
             establishment: expense.establishment,
-            description: expense.description,
             currencyId: expense.currency.id,
             price: expense.price
         };
