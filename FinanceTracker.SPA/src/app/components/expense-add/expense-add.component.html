@@ -19,7 +19,8 @@
                     <mat-error>Currency is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field [style.width.px]=90>
-                    <input type="number" matInput placeholder="Price" #priceInput="ngModel" [(ngModel)]="expense.price" name="price" id="price" ngModel required>
+                    <input type="number" matInput placeholder="Price" #priceInput="ngModel"
+                    [(ngModel)]="expense.price" name="price" id="price" ngModel required>
                     <mat-error>Price is required.</mat-error>
                 </mat-form-field>
             </div>
@@ -36,9 +37,25 @@
                 </mat-form-field>
             </div>
             <div mat-dialog-content>
+                <mat-radio-group name="payment" id="payment"
+                    class="payment-radio-group" [(ngModel)]="expense.status">
+                    <mat-radio-button class="actions-radio-button" *ngFor="let status of paymentStatuses"
+                    (change)="onPaymentStatusChange($event)" [value]="status">
+                        {{status}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div mat-dialog-content *ngIf="expense.status === 'Paid'">
                 <mat-form-field>
-                    <textarea matInput placeholder="Description" #descriptionInput="ngModel" [(ngModel)]="expense.description"
-                    maxlength="255" name="description" id="description"></textarea>
+                    <mat-label> Bank accounts </mat-label>
+                    <mat-select #bankAccountInput="ngModel" name="bankAccount"
+                        id="bankAccount" [(ngModel)]="expense.accountId" required>
+                        <mat-option value=""> -- Select -- </mat-option>
+                        <mat-option *ngFor="let p of bankAccountsKeyValue" [value]="p.key">
+                            {{p.value}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Bank account is required.</mat-error>
                 </mat-form-field>
             </div>
             <mat-dialog-actions align="end">
