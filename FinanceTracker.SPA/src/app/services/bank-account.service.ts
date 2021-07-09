@@ -5,14 +5,19 @@ import { environment } from 'src/environments/environment';
 import { BankAccount } from '../models/bank-account.model';
 import { User } from '../models/user.model';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class BankAccountService {
     private baseUrl = environment.apiUrl;
     private dataSource$: BehaviorSubject<BankAccount[]> = new BehaviorSubject([]);
 
-    constructor(private http: HttpClient) {
-        this.loadBankAccounts();        
+    constructor(private http: HttpClient, private authService: AuthService) {
+        this.authService.getIsAuthenticated.subscribe(isAuth => {
+            if (isAuth) {
+                this.loadBankAccounts();
+            }
+        })       
     }
 
         get getBankAccountInfos(): Observable<BankAccount[]> {
@@ -34,18 +39,6 @@ export class BankAccountService {
             this.dataSource$.next(bankAccounts);
         });
     }
-
-    // getBanksByUserId(): Observable<BankAccount[]> {
-    //     const user: User = JSON.parse(localStorage.getItem('user'));
-    //     const url = `${this.baseUrl}user/${user.id}/bank/GetBanksByUserId`;
-
-    //     return this.http.get<BankAccount[]>(url, { observe: 'response' })
-    //     .pipe(
-    //     map(response => {
-    //         const bankAccount: BankAccount[] = response.body;
-    //         return bankAccount;
-    //     }));
-    // }
         
     deleteBankInfo(bankId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
