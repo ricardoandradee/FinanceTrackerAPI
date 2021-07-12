@@ -88,22 +88,22 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
 
     var map = this.getMappedCurrency();
     if (map) {
+      this.expense.transaction.amount = map.price;
+      if (map.currencyFrom !== map.currencyTo) {
         let valueConverted = this.currencyService.convertCurrency(map);
-        this.currencyConverted = `Total payment in ${map.currencyTo}: ${valueConverted.toFixed(2)}`;
-        this.expense.transaction.action = 'Debit';
         this.expense.transaction.amount = valueConverted;
-        this.expense.transaction.description = `Payment at ${this.expense.establishment}.`;
+        this.currencyConverted = `Total payment in ${map.currencyTo}: ${valueConverted.toFixed(2)}`;
+      }
+      this.expense.transaction.action = 'Debit';
+      this.expense.transaction.description = `Payment at ${this.expense.establishment}.`;
     }
   }
 
   getMappedCurrency(): CurrencyConverterMapper {
     if (this.expense.transaction.accountId && this.expense.price > 0) {
       let item = this.accountDropdownList.find(a => a.accountId === this.expense.transaction.accountId);
-      if (this.expense.currency.code !== item.currency) {
-        var converter = { currencyFrom: this.expense.currency.code, currencyTo: item.currency,
+        return { currencyFrom: this.expense.currency.code, currencyTo: item.currency,
           price: this.expense.price } as CurrencyConverterMapper;
-          return converter;
-      }
     }
     return null;
   }

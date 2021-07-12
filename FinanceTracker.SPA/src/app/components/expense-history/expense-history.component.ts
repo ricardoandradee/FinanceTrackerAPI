@@ -17,6 +17,7 @@ import { User } from 'src/app/models/user.model';
 import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
 import { UserService } from 'src/app/services/user.service';
+import { BankAccountService } from 'src/app/services/bank-account.service';
 
 @Component({
   selector: 'app-expense-history',
@@ -47,7 +48,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   constructor(private uiService: UiService, private expenseService: ExpenseService,
               private userService: UserService, private dialog: MatDialog,
               private categoryService: CategoryService,
-              private commonService: CommonService, 
+              private commonService: CommonService,
+              private bankAccountService: BankAccountService,
               private store: Store<{ui: fromRoot.State}>) {
               }
 
@@ -135,6 +137,10 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     const subscription = this.expenseService.createExpense(expenseToBeCreated).subscribe(response => {
       if (response.ok) {
         const expenseCreated = response.body as Expense;
+        if (expenseCreated.account) {
+          this.bankAccountService.updateAccountBalanceAndTransactions = expenseCreated.account;
+        }
+        
         this.pushExpenseToDataSource(expenseCreated);
         this.uiService.showSnackBar('Expense was sucessfully created.', 3000);
       } else {

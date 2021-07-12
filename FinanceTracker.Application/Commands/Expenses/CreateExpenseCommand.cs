@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Expenses;
+using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
@@ -53,7 +54,12 @@ namespace FinanceTracker.Application.Commands.Expenses
                 {
                     expense.Category = await _unitOfWorkRepository.Context.Categories.FindAsync(expense.CategoryId);
                     expense.Currency = await _unitOfWorkRepository.Context.Currencies.FindAsync(expense.CurrencyId);
-                    return _mapper.Map<ExpenseToReturnDto>(expense);
+                    var expenseToReturn = _mapper.Map<ExpenseToReturnDto>(expense);
+                    if (expense.Transaction != null)
+                    {
+                        expenseToReturn.Account = _mapper.Map<AccountToReturnDto>(expense.Transaction.Account);
+                    }
+                    return expenseToReturn;
                 }
 
                 return null;

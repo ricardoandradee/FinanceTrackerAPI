@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { BankAccount } from '../models/bank-account.model';
 import { User } from '../models/user.model';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Account } from '../models/account.model';
 
 @Injectable()
-export class BankAccountService {
+export class BankAccountService implements OnDestroy {
     private baseUrl = environment.apiUrl;
+    private subscription: Subscription;
     private dataSource$: BehaviorSubject<BankAccount[]> = new BehaviorSubject([]);
 
     constructor(private http: HttpClient, private authService: AuthService) {
@@ -26,6 +28,16 @@ export class BankAccountService {
     
         set setBankAccountInfos(bankInfos: BankAccount[]) {
             this.dataSource$.next(bankInfos);
+        }
+    
+        set updateAccountBalanceAndTransactions(account: Account) {
+            this.subscription = this.dataSource$.pipe(take(1)).subscribe(banks => {
+                var bank  = banks.find(b => b.accounts.some(a => a.id == account.id));
+                var accountToBeUpdated = bank.accounts.find(a => a.id === account.id);
+                accountToBeUpdated.currentBalance = account.currentBalance;
+                accountToBeUpdated.transactions.push(account.transactions[0]);
+                this.setBankAccountInfos = banks;
+              });
         }
         
     private loadBankAccounts() {
@@ -81,5 +93,11 @@ export class BankAccountService {
         });
 
         return this.http.put(url, newBankInfo, { headers: httpHeaders, observe: 'response' });
+    }
+
+    ngOnDestroy(): void {
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
     }
 }

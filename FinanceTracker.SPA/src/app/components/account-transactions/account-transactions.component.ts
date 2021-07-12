@@ -26,7 +26,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const subscription = this.userService.getUserSettings.subscribe((user: User) => {
+    this.subscription = this.userService.getUserSettings.subscribe((user: User) => {
       this.userTimeZone = user.stateTimeZone.utc;
     });
   }
