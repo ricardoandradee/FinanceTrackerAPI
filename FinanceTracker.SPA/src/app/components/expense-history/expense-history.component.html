@@ -65,11 +65,12 @@
         <ng-container  matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
             <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Status'>
-                <mat-slide-toggle *ngIf="editExpense?.id && element.id===editExpense?.id"
-                [(ngModel)]="element.isPaid" name="status" id="status" color="primary"></mat-slide-toggle>
-                <mat-chip-list *ngIf="!editExpense?.id || element.id!==editExpense.id">
+                <span *ngIf="!editExpense?.id || element.id!==editExpense.id || element.isPaid">
+                    {{ element.isPaid ? 'Paid' : 'Unpaid' }}
+                </span>
+                <mat-chip-list *ngIf="editExpense?.id && element.id===editExpense?.id && !element.isPaid">
                     <mat-chip [color]="element.isPaid ? 'warn' : 'primary'" selected>
-                        {{ element.isPaid ? 'Paid' : 'Unpaid' }}
+                        Pay
                     </mat-chip>
                 </mat-chip-list>
             </td>
