@@ -9,7 +9,10 @@ import { CommonService } from 'src/app/services/common.service';
 import { Currency } from 'src/app/models/currency.model';
 import { User } from 'src/app/models/user.model';
 import { BankAccountService } from 'src/app/services/bank-account.service';
-import { KeyValuePair } from 'src/app/models/key-value-pair.model';
+import { CurrencyService } from 'src/app/services/currency.service';
+import { AccountDropdown } from 'src/app/models/account-dropdown.model';
+import { CurrencyConverterMapper } from 'src/app/models/currency.converter.mapper.model';
+import { Transaction } from 'src/app/models/transaction.model';
 
 @Component({
   selector: 'app-expense-add',
@@ -19,15 +22,17 @@ import { KeyValuePair } from 'src/app/models/key-value-pair.model';
 export class ExpenseAddComponent implements OnDestroy, OnInit {
   private allSubscriptions: Subscription[] = [];
   @ViewChild('addExpenseForm', { static: false }) form: NgForm
-  paymentStatuses: string[] = ['Paid', 'Unpaid'];
-  bankAccountsKeyValue: KeyValuePair<string, string>[];
+  paymentStatuses: boolean[] = [true, false];
+  accountDropdownList: AccountDropdown[];
   expense: Expense;
   categories: Category[] = [];
   currencies: Currency[];
+  currencyConverted = '';
 
   constructor(private dialogRef: MatDialogRef<ExpenseAddComponent>,
               private commonService: CommonService,
               private categoryService: CategoryService,
+              private currencyService: CurrencyService,
               private bankAccountService: BankAccountService) {
     
     var categorySubscription = this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
@@ -46,20 +51,22 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
     let userSettings = JSON.parse(localStorage.getItem('user')) as User;
     this.expense = {
       establishment: "",
-      status: 'Paid',
+      isPaid: true,
       category: { id: 0 } as Category,
-      currency: userSettings.currency
+      currency: userSettings.currency,
+      transaction: { } as Transaction
     } as Expense;
     
     const bankAccountSubscription = this.bankAccountService.getBankAccountInfos.subscribe(bank => {
-      this.bankAccountsKeyValue = [];
+      this.accountDropdownList = [];
       for (let b of bank) {
         let bankName = b.name;
         for (let a of b.accounts) {
-          this.bankAccountsKeyValue.push({
-            key: a.id.toString(),
-            value: bankName + ' - ' + a.number
-          } as KeyValuePair<string, string>);
+          this.accountDropdownList.push({
+            accountId: a.id,
+            description: bankName + ' - ' + a.number,
+            currency: a.currency.code
+          } as AccountDropdown);
         }
       }
     });
@@ -68,9 +75,37 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
 
   onPaymentStatusChange($event: MatRadioChange) {
     var selection = $event.value;
-    this.expense.amountPaid = selection === 'Paid' 
-                              ? this.expense.price
-                              : 0;
+    this.currencyConverted = '';
+    if (!selection) {
+      this.expense.transaction = null;
+    } else {
+      this.expense.transaction = { } as Transaction;
+    }
+  }
+
+  onPaymentChange() {
+    this.currencyConverted = '';
+
+    var map = this.getMappedCurrency();
+    if (map) {
+        let valueConverted = this.currencyService.convertCurrency(map);
+        this.currencyConverted = `Total payment in ${map.currencyTo}: ${valueConverted.toFixed(2)}`;
+        this.expense.transaction.action = 'Debit';
+        this.expense.transaction.amount = valueConverted;
+        this.expense.transaction.description = `Payment at ${this.expense.establishment}.`;
+    }
+  }
+
+  getMappedCurrency(): CurrencyConverterMapper {
+    if (this.expense.transaction.accountId && this.expense.price > 0) {
+      let item = this.accountDropdownList.find(a => a.accountId === this.expense.transaction.accountId);
+      if (this.expense.currency.code !== item.currency) {
+        var converter = { currencyFrom: this.expense.currency.code, currencyTo: item.currency,
+          price: this.expense.price } as CurrencyConverterMapper;
+          return converter;
+      }
+    }
+    return null;
   }
   
   onSave() {

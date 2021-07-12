@@ -2,7 +2,6 @@
     max-width: 100%;
 }
 
-
 .payment-radio-group {
     display: flex;
     flex-direction: row;
@@ -11,4 +10,8 @@
 
   .mat-radio-button {
     min-width: 80px;
+  }
+
+  .mat-form-field {
+    width: 250px;
   }

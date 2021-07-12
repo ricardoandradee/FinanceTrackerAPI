@@ -9,14 +9,7 @@ namespace FinanceTracker.Application.Dtos.Expenses
         public int Id { get; set; }
         public CategoryToReturnDto Category { get; set; }
         public string Establishment { get; set; }
-        public string Status
-        {
-            get
-            {
-                return AmountPaid == 0 ? "Unpaid" :
-                       (Price < AmountPaid ? "Partial" : "Paid");
-            }
-        }
+        public bool IsPaid { get; set; }
         public decimal AmountPaid { get; set; }
         public CurrencyDto Currency { get; set; }
         public decimal Price { get; set; }

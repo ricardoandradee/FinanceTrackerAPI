@@ -3,8 +3,9 @@ export interface Transaction {
     id?: number;
     description: string;
     amount: number;
-    action: 'Deposit' | 'Withdraw';
+    action: 'Deposit' | 'Withdraw' | 'Debit';
     balanceAfterTransaction: number;
+    accountId: number;
     account: Account;
     createdDate?: Date;
 }

@@ -19,20 +19,34 @@ namespace FinanceTracker.Application.Commands.Expenses
         public class CreateExpenseHandler : IRequestHandler<CreateExpenseCommand, ExpenseToReturnDto>
         {
             private readonly IExpenseRepository _expenseRepository;
+            private readonly ITransactionRepository _transactionRepository;
+            private readonly IAccountRepository _accountRepository;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
             private readonly IMapper _mapper;
 
             public CreateExpenseHandler(IExpenseRepository expenseRepository,
-                IMapper mapper, IUnitOfWorkRepository unitOfWorkRepository)
+                IMapper mapper, IUnitOfWorkRepository unitOfWorkRepository,
+                IAccountRepository accountRepository,
+                ITransactionRepository transactionRepository)
             {
                 _mapper = mapper;
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _expenseRepository = expenseRepository;
+                _transactionRepository = transactionRepository;
+                _accountRepository = accountRepository;
             }
 
             public async Task<ExpenseToReturnDto> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
             {
+                var transaction = _mapper.Map<Transaction>(request.ExpenseForCreationDto.Transaction);
+                if (transaction != null) {
+                    var accountFromRepo = await _accountRepository.RetrieveById(transaction.AccountId);
+                    accountFromRepo.CurrentBalance -= transaction.Amount;
+                    transaction.BalanceAfterTransaction = accountFromRepo.CurrentBalance;
+                }
+
                 var expense = _mapper.Map<Expense>(request.ExpenseForCreationDto);
+                expense.Transaction = transaction;
                 await _expenseRepository.Add(expense);
 
                 if (await _unitOfWorkRepository.SaveChanges() > 0)

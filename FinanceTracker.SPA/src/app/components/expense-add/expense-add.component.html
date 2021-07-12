@@ -8,7 +8,7 @@
                 </mat-form-field>
             </div>
             <div mat-dialog-content fxLayoutGap="20px">
-                <mat-form-field [style.width.px]=70>
+                <mat-form-field [style.width.px]=100>
                     <mat-label> Currency </mat-label>
                     <mat-select #currencyInput="ngModel" name="currency" id="currency" [(ngModel)]="expense.currency.id" required>
                         <mat-option value=""> - Select - </mat-option>
@@ -18,8 +18,9 @@
                     </mat-select>
                     <mat-error>Currency is required.</mat-error>
                 </mat-form-field>
-                <mat-form-field [style.width.px]=90>
-                    <input type="number" matInput placeholder="Price" #priceInput="ngModel"
+                <mat-form-field [style.width.px]=130>
+                    <input type="number" matInput (blur)="onPaymentChange()"
+                    placeholder="Price" #priceInput="ngModel"
                     [(ngModel)]="expense.price" name="price" id="price" ngModel required>
                     <mat-error>Price is required.</mat-error>
                 </mat-form-field>
@@ -38,26 +39,27 @@
             </div>
             <div mat-dialog-content>
                 <mat-radio-group name="payment" id="payment"
-                    class="payment-radio-group" [(ngModel)]="expense.status">
+                    class="payment-radio-group" [(ngModel)]="expense.isPaid">
                     <mat-radio-button class="actions-radio-button" *ngFor="let status of paymentStatuses"
                     (change)="onPaymentStatusChange($event)" [value]="status">
-                        {{status}}
+                        {{status ? 'Paid' : 'Unpaid'}}
                     </mat-radio-button>
                 </mat-radio-group>
             </div>
-            <div mat-dialog-content *ngIf="expense.status === 'Paid'">
+            <div mat-dialog-content *ngIf="expense.isPaid">
                 <mat-form-field>
                     <mat-label> Bank accounts </mat-label>
                     <mat-select #bankAccountInput="ngModel" name="bankAccount"
-                        id="bankAccount" [(ngModel)]="expense.accountId" required>
+                    (selectionChange)="onPaymentChange()" id="bankAccount" [(ngModel)]="expense.transaction.accountId" required>
                         <mat-option value=""> -- Select -- </mat-option>
-                        <mat-option *ngFor="let p of bankAccountsKeyValue" [value]="p.key">
-                            {{p.value}}
+                        <mat-option *ngFor="let p of accountDropdownList" [value]="p.accountId">
+                            {{p.description}}
                         </mat-option>
                     </mat-select>
                     <mat-error>Bank account is required.</mat-error>
                 </mat-form-field>
-            </div>
+                <span class="warn-label">{{currencyConverted}}</span>
+            </div> 
             <mat-dialog-actions align="end">
                 <button mat-button mat-dialog-close>Cancel</button>
                 <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="addExpenseForm.invalid" mat-raised-button color="primary">Save</button>

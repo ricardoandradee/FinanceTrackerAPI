@@ -8,9 +8,9 @@
                 <ng-container matColumnDef="CreatedDate">
                     <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <mat-icon class="mat-icon-action" [ngStyle]="{'color': element.action == 'Withdraw' ? 'red' : 'green' }"
+                        <mat-icon class="mat-icon-action" [ngStyle]="{'color': element.action == 'Deposit' ? 'green' : 'red' }"
                             [matTooltip]="element.action">
-                            {{ element.action == 'Withdraw' ? 'arrow_downward' : 'arrow_upward' }}
+                            {{ element.action == 'Deposit' ? 'arrow_upward' : 'arrow_downward' }}
                         </mat-icon>
                         {{ element.createdDate | date:'dd/MM/yyyy HH:mm':userTimeZone }}
                     </mat-cell>

@@ -9,7 +9,10 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Expense> builder)
         {
             builder.HasOne(t => t.Category);
-            builder.HasMany(t => t.Transactions);
+
+            builder.HasOne(u => u.Transaction)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(u => u.Currency)
                 .WithMany()
@@ -21,9 +24,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
             builder.Property(t => t.Price)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
-
-            builder.Property(t => t.AmountPaid)
-                .HasColumnType("decimal(18,2)");
         }
     }
 }

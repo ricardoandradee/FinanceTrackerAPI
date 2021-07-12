@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace FinanceTracker.Domain.Entities
 {
@@ -12,8 +11,9 @@ namespace FinanceTracker.Domain.Entities
         public int CurrencyId { get; set; }
         public virtual Currency Currency { get; set; }
         public decimal Price { get; set; }
-        public decimal AmountPaid { get; set; }
-        public virtual List<Transaction> Transactions { get; set; }
+        public bool IsPaid { get; set; }
+        public virtual Transaction Transaction { get; set; }
+        public int? TransactionId { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
     }
 }

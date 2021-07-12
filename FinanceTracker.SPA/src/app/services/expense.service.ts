@@ -39,7 +39,9 @@ export class ExpenseService {
             establishment: expense.establishment,
             categoryId: expense.category.id,
             currencyId: expense.currency.id,
-            price: expense.price
+            price: expense.price,
+            isPaid: expense.isPaid,
+            transaction: expense.transaction
         };
         const url = `${this.baseUrl}${user.id}/Expense/CreateExpense`;
         const httpHeaders = new HttpHeaders({
