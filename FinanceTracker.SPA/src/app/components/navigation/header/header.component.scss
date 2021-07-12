@@ -142,9 +142,11 @@ a.toolbar-link:active {
 }
 
 .mat-toolbar-row.second-toolbar {
-    color: black;
-    background-color: #f5f5f5;
+    color: white;
+    background-color: #a6e2dc;
     display: inline-block;
+    border-radius: 10px;
+    border: 2px solid #73AD21;
     margin: 0px auto;
     font-size: 25px;
     font-weight: 90;
@@ -152,5 +154,5 @@ a.toolbar-link:active {
     width: 100%;
     max-height: 35px;
     vertical-align: middle;
-    text-shadow: 0 2px 2px #999;
+    text-shadow: 0 2px 2px rgb(26, 25, 25);
 }
