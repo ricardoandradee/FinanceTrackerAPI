@@ -60,7 +60,6 @@ export class CategoryService {
         const newCategory = {
             userId: user.id,
             name: category.name,
-            description: category.description,
             createdDate: this.datePipe.transform(category.createdDate, "yyyy-MM-ddTHH:mm:ss")
         };
 
@@ -76,8 +75,7 @@ export class CategoryService {
     updateCategory(category: Category) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
         const newCategory = {
-            name: category.name,
-            description: category.description
+            name: category.name
         };
 
         const url = `${this.baseUrl}${user.id}/category/UpdateCategory/${category.id}`;

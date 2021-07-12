@@ -15,7 +15,7 @@ export class CategoryAddComponent {
   }
   
   onSave(form: NgForm) {
-    const category = { name: form.value.name, description: form.value.description, createdDate: new Date() } as Category;
+    const category = { name: form.value.name, createdDate: new Date() } as Category;
     this.dialogRef.close({ data: category });
   }
 }

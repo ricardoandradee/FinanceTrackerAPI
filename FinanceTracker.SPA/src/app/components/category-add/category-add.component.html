@@ -9,12 +9,6 @@
                 <mat-error>Name should contain at least 6 characters long.</mat-error>
             </mat-form-field>
         </div>
-        <div mat-dialog-content>
-            <mat-form-field>
-                <textarea matInput placeholder="Description" #descriptionInput="ngModel"
-                maxlength="255" name="description" id="description" ngModel></textarea>
-            </mat-form-field>
-        </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
             <button type="submit" mat-button [mat-dialog-close]="false" [disabled]="addCategoryForm.invalid" mat-raised-button color="primary">Save</button>

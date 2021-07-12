@@ -19,7 +19,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./category-list.component.scss']
 })
 export class CategoryListComponent implements OnInit, OnDestroy {
-  displayedColumns = ['CreatedDate', 'Description', 'Name', 'Actions'];
+  displayedColumns = ['CreatedDate', 'Name', 'Actions'];
   dataSource = new MatTableDataSource<Category>();
   isLoading$: Observable<boolean>;
   userTimeZone = '';
@@ -29,7 +29,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   private allSubscriptions: Subscription[] = [];
   
   editCategory: Category;
-  oldCategory: { id: number; userId: string; name: string; description: string; createdDate?: Date; };
+  oldCategory: { id: number; userId: string; name: string; createdDate?: Date; };
   rowInEditMode: boolean;
   
   constructor(private dialog: MatDialog, private uiService: UiService,
@@ -95,7 +95,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   }
 
   onSave(form: NgForm) {
-    this.createCategory({ name: form.value.name, description: form.value.description, createdDate: new Date() } as Category);
+    this.createCategory({ name: form.value.name, createdDate: new Date() } as Category);
   }
 
   onDelete(category: Category) {
