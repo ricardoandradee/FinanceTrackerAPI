@@ -33,25 +33,14 @@
         <ng-container matColumnDef="Category">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
             <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Category'>
-                <span *ngIf="!editExpense?.id || element.id!==editExpense.id">{{ element.category.name }}</span>
-                <mat-form-field *ngIf="editExpense?.id && element.id===editExpense?.id">
-                    <mat-label> Categories </mat-label>
-                    <mat-select name="category" id="category" [(ngModel)]="element.category.id">
-                        <mat-option *ngFor="let cat of allCategories" [value]="cat.id">
-                            {{cat.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <span>{{ element.category.name }}</span>
             </td>
             <td mat-footer-cell *matFooterCellDef> </td>
         </ng-container>
         <ng-container matColumnDef="Establishment">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Establishment </th>        
             <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Establishment'>
-                <span *ngIf="!editExpense?.id || element.id!==editExpense.id">{{ element.establishment }}</span>
-                <mat-form-field *ngIf="editExpense?.id && element.id===editExpense?.id" appearance="outline">
-                    <input type="text" matInput placeholder="Establishment" name="establishment" id="establishment" [(ngModel)]="element.establishment">
-                </mat-form-field>
+                <span>{{ element.establishment }}</span>
             </td>
             <td mat-footer-cell *matFooterCellDef> </td>
         </ng-container>
@@ -60,21 +49,16 @@
             <td mat-cell *matCellDef="let element" fxLayoutGap="15px" class='show-text-before' data-label='Price'>
                 <span>{{ element.price | currency: element.currency.code }}</span>
             </td>
-            <td mat-footer-cell *matFooterCellDef> <span style="font-weight: bold; margin-right: 15px;">Total</span> {{ dataSource.filteredData | expenseTotalPrice:userBaseCurrency | currency: userBaseCurrency }} </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
         </ng-container>
         <ng-container  matColumnDef="Status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
             <td mat-cell *matCellDef="let element" class='show-text-before' data-label='Status'>
-                <span *ngIf="!editExpense?.id || element.id!==editExpense.id || element.isPaid">
+                <span>
                     {{ element.isPaid ? 'Paid' : 'Unpaid' }}
                 </span>
-                <mat-chip-list *ngIf="editExpense?.id && element.id===editExpense?.id && !element.isPaid">
-                    <mat-chip [color]="element.isPaid ? 'warn' : 'primary'" selected>
-                        Pay
-                    </mat-chip>
-                </mat-chip-list>
             </td>
-            <td mat-footer-cell *matFooterCellDef> </td>
+            <td mat-footer-cell *matFooterCellDef> <span style="font-weight: bold; margin-right: 15px;">Total</span> {{ dataSource.filteredData | expenseTotalPrice:userBaseCurrency | currency: userBaseCurrency }} </td>
         </ng-container>
         <ng-container matColumnDef="Actions">
             <th mat-header-cell  *matHeaderCellDef> Actions </th>
@@ -84,12 +68,6 @@
                 </button>
                 <button mat-icon-button (click)="onEdit(element)" style="color:blue;" *ngIf="element.id!==editExpense?.id"  matTooltip="Edit">
                     <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-icon-button (click)="onUpdate()" style="color:green;" *ngIf="element.id===editExpense?.id" matTooltip="Save">
-                    <mat-icon>save</mat-icon>
-                </button>
-                <button mat-icon-button (click)="onCancelEdit()" style="color:red;" *ngIf="element.id===editExpense?.id" matTooltip="Cancel edit">
-                    <mat-icon>clear</mat-icon>
                 </button>
             </td>
             <td mat-footer-cell *matFooterCellDef> </td>

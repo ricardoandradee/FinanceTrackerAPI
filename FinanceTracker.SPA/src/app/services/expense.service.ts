@@ -53,10 +53,12 @@ export class ExpenseService {
     updateExpense(expense: Expense) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
         const newExpense = {
-            categoryId: expense.category.id,
             establishment: expense.establishment,
+            categoryId: expense.category.id,
             currencyId: expense.currency.id,
-            price: expense.price
+            price: expense.price,
+            isPaid: expense.isPaid,
+            transaction: expense.transaction
         };
         
         const url = `${this.baseUrl}${user.id}/Expense/UpdateExpense/${expense.id}`;

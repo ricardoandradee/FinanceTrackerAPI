@@ -1,13 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MatRadioChange } from '@angular/material';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef, MatRadioChange, MAT_DIALOG_DATA } from '@angular/material';
 import { Category } from '../../models/category.model';
-import { NgForm } from '@angular/forms';
 import { Expense } from '../../models/expense.model';
 import { CategoryService } from 'src/app/services/category.service';
 import { Subscription } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 import { Currency } from 'src/app/models/currency.model';
-import { User } from 'src/app/models/user.model';
 import { BankAccountService } from 'src/app/services/bank-account.service';
 import { CurrencyService } from 'src/app/services/currency.service';
 import { AccountDropdown } from 'src/app/models/account-dropdown.model';
@@ -21,19 +19,24 @@ import { Transaction } from 'src/app/models/transaction.model';
 })
 export class ExpenseAddComponent implements OnDestroy, OnInit {
   private allSubscriptions: Subscription[] = [];
-  @ViewChild('addExpenseForm', { static: false }) form: NgForm
   paymentStatuses: boolean[] = [true, false];
   accountDropdownList: AccountDropdown[];
   expense: Expense;
   categories: Category[] = [];
   currencies: Currency[];
+  isEditMode = false;
+  isInitiallyPaid = false;
   currencyConverted = '';
 
-  constructor(private dialogRef: MatDialogRef<ExpenseAddComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) public passedData: any,
+              private dialogRef: MatDialogRef<ExpenseAddComponent>,
               private commonService: CommonService,
               private categoryService: CategoryService,
               private currencyService: CurrencyService,
               private bankAccountService: BankAccountService) {
+                this.expense = passedData.expense as Expense;
+                this.isInitiallyPaid = this.expense.isPaid;
+                this.isEditMode = passedData.isEditMode;
     
     var categorySubscription = this.categoryService.getCategories.subscribe((categoryList: Category[]) => {
       this.categories = categoryList;
@@ -47,16 +50,7 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
     this.allSubscriptions.push(currencySubscription);
   }
   
-  ngOnInit() {
-    let userSettings = JSON.parse(localStorage.getItem('user')) as User;
-    this.expense = {
-      establishment: "",
-      isPaid: true,
-      category: { id: 0 } as Category,
-      currency: userSettings.currency,
-      transaction: { } as Transaction
-    } as Expense;
-    
+  ngOnInit() {    
     const bankAccountSubscription = this.bankAccountService.getBankAccountInfos.subscribe(bank => {
       this.accountDropdownList = [];
       for (let b of bank) {
@@ -85,8 +79,8 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
 
   onPaymentChange() {
     this.currencyConverted = '';
-
-    var map = this.getMappedCurrency();
+    const accountId = this.expense.transaction ? this.expense.transaction.accountId : null;
+    var map = this.getMappedCurrency(accountId, this.expense.price);
     if (map) {
       this.expense.transaction.amount = map.price;
       if (map.currencyFrom !== map.currencyTo) {
@@ -99,16 +93,20 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
     }
   }
 
-  getMappedCurrency(): CurrencyConverterMapper {
-    if (this.expense.transaction.accountId && this.expense.price > 0) {
-      let item = this.accountDropdownList.find(a => a.accountId === this.expense.transaction.accountId);
+  getMappedCurrency(accountId: number, price: number): CurrencyConverterMapper {
+    if (accountId && price > 0) {
+      let item = this.accountDropdownList.find(a => a.accountId === accountId);
         return { currencyFrom: this.expense.currency.code, currencyTo: item.currency,
-          price: this.expense.price } as CurrencyConverterMapper;
+          price: price } as CurrencyConverterMapper;
     }
     return null;
   }
   
   onSave() {
+    if (this.isEditMode) {
+      this.expense.isPaid = this.expense.transaction.accountId ? true : false;
+    }
+    this.expense.transaction = this.expense.transaction && this.expense.transaction.accountId ? this.expense.transaction : null;
     this.dialogRef.close({ data: this.expense });
   }
 

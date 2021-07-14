@@ -18,6 +18,7 @@ import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
 import { UserService } from 'src/app/services/user.service';
 import { BankAccountService } from 'src/app/services/bank-account.service';
+import { Transaction } from 'src/app/models/transaction.model';
 
 @Component({
   selector: 'app-expense-history',
@@ -30,9 +31,6 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<Expense>();
   private allSubscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
-  editExpense: Expense;
-  oldExpense: Expense;
-  rowInEditMode = false;
   currencies: Currency[];
   allCategories: Category[];
 
@@ -102,11 +100,34 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     }));
   }
 
-  onOpenAddExpenseDialog() {
-    const dialogRef = this.dialog.open(ExpenseAddComponent);
+  onOpenAddExpenseDialog(expense: Expense, isEditMode: boolean = false) {    
+    if (isEditMode) {
+      if (expense.transaction && expense.transaction.account) {
+        expense.transaction.accountId = expense.transaction.account.id;
+      } else {
+      expense.transaction = { } as Transaction;
+      }
+    } else {
+      let userSettings = JSON.parse(localStorage.getItem('user')) as User;
+      expense = {
+        establishment: "",
+        isPaid: false,
+        category: { id: 0 } as Category,
+        currency: userSettings.currency
+      } as Expense;
+    }
+
+    const dialogRef = this.dialog.open(ExpenseAddComponent,
+      {
+        data: { expense, isEditMode }
+      });
     this.allSubscriptions.push(dialogRef.afterClosed().subscribe(result => {
       if (result && result.data) {
-        this.createExpense(result.data as Expense);
+        if (isEditMode) {
+          this.updateExpense(result.data as Expense);
+        } else {
+          this.createExpense(result.data as Expense);
+        }
       }
     }));
   }
@@ -127,11 +148,6 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     }));
   }
   
-  onUpdate() {
-    this.store.dispatch(new UI.StartLoading());
-    this.updateExpense();
-  }
-
   private createExpense(expenseToBeCreated: Expense) {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.expenseService.createExpense(expenseToBeCreated).subscribe(response => {
@@ -161,13 +177,35 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     return this.currencies.find(x => x.id === id);
   }
   
-  private updateExpense() {
+  private updateExpense(expenseToBeEdited: Expense) {
     this.store.dispatch(new UI.StartLoading());
-    const subscription = this.expenseService.updateExpense(this.editExpense).subscribe(response => {
+    const subscription = this.expenseService.updateExpense(expenseToBeEdited).subscribe(response => {
       if (response.ok) {
-        this.editExpense.currency = this.getCurrencyById(this.editExpense.currency.id);
-        const targetIdx = this.dataSource.data.map(i => i.id).indexOf(this.editExpense.id);
-        this.dataSource[targetIdx] = this.editExpense;
+        const transactionCreated = response.body as Transaction;
+
+        if (transactionCreated) {
+          const account = { ...transactionCreated.account, transactions: [] };
+          const transactionToPush = {
+            description: transactionCreated.description,
+            amount: transactionCreated.amount,
+            action: transactionCreated.action,
+            balanceAfterTransaction: transactionCreated.balanceAfterTransaction,
+            accountId: transactionCreated.account.id,
+            createdDate: transactionCreated.createdDate
+          } as Transaction;
+          account.transactions.push(transactionToPush);
+          
+          if (account) {
+            this.bankAccountService.updateAccountBalanceAndTransactions = account;
+          }
+          expenseToBeEdited.transaction = transactionToPush;
+        }
+        
+        expenseToBeEdited.currency = this.getCurrencyById(expenseToBeEdited.currency.id);
+
+        console.log(expenseToBeEdited);
+        const targetIdx = this.dataSource.data.map(i => i.id).indexOf(expenseToBeEdited.id);
+        this.dataSource[targetIdx] = expenseToBeEdited;
 
         this.expenseService.setExpenses = this.dataSource.data;
         this.uiService.showSnackBar('Expense successfully updated.', 3000);
@@ -180,7 +218,6 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
 
     subscription.add(() => {
       this.store.dispatch(new UI.StopLoading());
-      this.onCancelEdit();
     });
 
     this.allSubscriptions.push(subscription);
@@ -249,15 +286,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   }
 
   onEdit(expense: Expense) {
-    this.editExpense = expense && expense.id ? expense : {} as Expense;
-    this.oldExpense = {...this.editExpense};
-    this.rowInEditMode = true;
-  }
-
-  onCancelEdit() {
-    this.rowInEditMode = false;
-    this.editExpense = {} as Expense;
-    this.oldExpense = {} as Expense;
+    var expenseToBeEdited = expense && expense.id ? expense : {} as Expense;
+    this.onOpenAddExpenseDialog(expenseToBeEdited, true);
   }
 
   ngOnDestroy(): void {
