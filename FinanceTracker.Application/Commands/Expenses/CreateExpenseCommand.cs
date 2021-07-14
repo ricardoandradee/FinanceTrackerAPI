@@ -39,15 +39,26 @@ namespace FinanceTracker.Application.Commands.Expenses
 
             public async Task<ExpenseToReturnDto> Handle(CreateExpenseCommand request, CancellationToken cancellationToken)
             {
-                var transaction = _mapper.Map<Transaction>(request.ExpenseForCreationDto.Transaction);
-                if (transaction != null) {
-                    var accountFromRepo = await _accountRepository.RetrieveById(transaction.AccountId);
-                    accountFromRepo.CurrentBalance -= transaction.Amount;
-                    transaction.BalanceAfterTransaction = accountFromRepo.CurrentBalance;
+                var expense = _mapper.Map<Expense>(request.ExpenseForCreationDto);
+                expense.Transaction = null;
+                var accountId = request.ExpenseForCreationDto.AccountId.GetValueOrDefault(0);
+                if (accountId > 0)
+                {
+                    var transactionAmout = request.ExpenseForCreationDto.TransactionAmount.GetValueOrDefault(0);
+                    var accountFromRepo = await _accountRepository.RetrieveById(accountId);
+                    accountFromRepo.CurrentBalance -= transactionAmout;
+                    
+                    expense.Transaction = new Transaction
+                    {
+                        AccountId = accountId,
+                        BalanceAfterTransaction = accountFromRepo.CurrentBalance,
+                        CreatedDate = expense.CreatedDate,
+                        Action = "Debit",
+                        Description = $"Payment at {expense.Establishment}",
+                        Amount = transactionAmout
+                    };
                 }
 
-                var expense = _mapper.Map<Expense>(request.ExpenseForCreationDto);
-                expense.Transaction = transaction;
                 await _expenseRepository.Add(expense);
 
                 if (await _unitOfWorkRepository.SaveChanges() > 0)

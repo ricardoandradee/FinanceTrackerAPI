@@ -8,6 +8,7 @@ namespace FinanceTracker.Application.Dtos.Expenses
         public string Establishment { get; set; }
         public bool IsPaid { get; set; }
         public decimal Price { get; set; }
-        public TransactionForCreationDto Transaction { get; set; }
+        public int? AccountId { get; set; }
+        public decimal? TransactionAmount { get; set; }
     }
 }

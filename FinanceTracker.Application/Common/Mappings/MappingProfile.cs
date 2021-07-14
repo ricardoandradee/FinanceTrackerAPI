@@ -39,6 +39,14 @@ namespace FinanceTracker.Application.Common.Mappings
             .ForMember(dest => dest.CreatedDateString, opt =>
             {
                 opt.MapFrom((s, d) => s.CreatedDate.ToString("MMM/yyyy"));
+            })
+            .ForMember(dest => dest.TransactionAmount, opt =>
+            {
+                opt.MapFrom((s, d) => s.Transaction?.Amount);
+            })
+            .ForMember(dest => dest.AccountId, opt =>
+            {
+                opt.MapFrom((s, d) => s.Transaction?.AccountId);
             }).ReverseMap();
 
 

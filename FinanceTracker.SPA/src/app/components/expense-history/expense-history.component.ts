@@ -101,13 +101,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   }
 
   onOpenAddExpenseDialog(expense: Expense, isEditMode: boolean = false) {    
-    if (isEditMode) {
-      if (expense.transaction && expense.transaction.account) {
-        expense.transaction.accountId = expense.transaction.account.id;
-      } else {
-      expense.transaction = { } as Transaction;
-      }
-    } else {
+    if (!isEditMode) {
       let userSettings = JSON.parse(localStorage.getItem('user')) as User;
       expense = {
         establishment: "",
@@ -181,33 +175,15 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.expenseService.updateExpense(expenseToBeEdited).subscribe(response => {
       if (response.ok) {
-        const transactionCreated = response.body as Transaction;
-
-        if (transactionCreated) {
-          const account = { ...transactionCreated.account, transactions: [] };
-          const transactionToPush = {
-            description: transactionCreated.description,
-            amount: transactionCreated.amount,
-            action: transactionCreated.action,
-            balanceAfterTransaction: transactionCreated.balanceAfterTransaction,
-            accountId: transactionCreated.account.id,
-            createdDate: transactionCreated.createdDate
-          } as Transaction;
-          account.transactions.push(transactionToPush);
-          
-          if (account) {
-            this.bankAccountService.updateAccountBalanceAndTransactions = account;
-          }
-          expenseToBeEdited.transaction = transactionToPush;
+        const expenseUpdated = response.body as Expense;
+        if (expenseUpdated.account) {
+          this.bankAccountService.updateAccountBalanceAndTransactions = expenseUpdated.account;
         }
         
-        expenseToBeEdited.currency = this.getCurrencyById(expenseToBeEdited.currency.id);
-
-        console.log(expenseToBeEdited);
         const targetIdx = this.dataSource.data.map(i => i.id).indexOf(expenseToBeEdited.id);
-        this.dataSource[targetIdx] = expenseToBeEdited;
-
+        this.dataSource[targetIdx] = expenseUpdated;
         this.expenseService.setExpenses = this.dataSource.data;
+
         this.uiService.showSnackBar('Expense successfully updated.', 3000);
         } else {
           this.uiService.showSnackBar('There was an error while trying to update your Expense. Please, try again later!', 3000);

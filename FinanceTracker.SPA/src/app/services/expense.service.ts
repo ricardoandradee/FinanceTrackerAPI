@@ -41,7 +41,8 @@ export class ExpenseService {
             currencyId: expense.currency.id,
             price: expense.price,
             isPaid: expense.isPaid,
-            transaction: expense.transaction
+            accountId: expense.accountId,
+            transactionAmount: expense.transactionAmount
         };
         const url = `${this.baseUrl}${user.id}/Expense/CreateExpense`;
         const httpHeaders = new HttpHeaders({
@@ -58,7 +59,8 @@ export class ExpenseService {
             currencyId: expense.currency.id,
             price: expense.price,
             isPaid: expense.isPaid,
-            transaction: expense.transaction
+            accountId: expense.accountId,
+            transactionAmount: expense.transactionAmount
         };
         
         const url = `${this.baseUrl}${user.id}/Expense/UpdateExpense/${expense.id}`;

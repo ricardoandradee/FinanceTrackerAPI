@@ -68,28 +68,20 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
   }
 
   onPaymentStatusChange($event: MatRadioChange) {
-    var selection = $event.value;
     this.currencyConverted = '';
-    if (!selection) {
-      this.expense.transaction = null;
-    } else {
-      this.expense.transaction = { } as Transaction;
-    }
+    this.expense.accountId = null;
   }
 
   onPaymentChange() {
     this.currencyConverted = '';
-    const accountId = this.expense.transaction ? this.expense.transaction.accountId : null;
-    var map = this.getMappedCurrency(accountId, this.expense.price);
+    var map = this.getMappedCurrency(this.expense.accountId, this.expense.price);
     if (map) {
-      this.expense.transaction.amount = map.price;
+      this.expense.transactionAmount = map.price;
       if (map.currencyFrom !== map.currencyTo) {
         let valueConverted = this.currencyService.convertCurrency(map);
-        this.expense.transaction.amount = valueConverted;
+        this.expense.transactionAmount = valueConverted;
         this.currencyConverted = `Total payment in ${map.currencyTo}: ${valueConverted.toFixed(2)}`;
       }
-      this.expense.transaction.action = 'Debit';
-      this.expense.transaction.description = `Payment at ${this.expense.establishment}.`;
     }
   }
 
@@ -104,9 +96,8 @@ export class ExpenseAddComponent implements OnDestroy, OnInit {
   
   onSave() {
     if (this.isEditMode) {
-      this.expense.isPaid = this.expense.transaction.accountId ? true : false;
+      this.expense.isPaid = this.expense.accountId ? true : false;
     }
-    this.expense.transaction = this.expense.transaction && this.expense.transaction.accountId ? this.expense.transaction : null;
     this.dialogRef.close({ data: this.expense });
   }
 

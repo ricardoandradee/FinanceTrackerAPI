@@ -13,5 +13,6 @@ export interface Expense {
     account?: Account;
     createdDateString?: string;
     createdDate?: Date;
-    transaction?: Transaction;
+    accountId?: number;
+    transactionAmount?: number;
 }

@@ -51,7 +51,13 @@ namespace FinanceTracker.API.Controllers
         {
             var command = new UpdateExpenseCommand(expenseId, expenseForUpdateDto);
             var result = await Mediator.Send(command);
-            return (IActionResult)Ok(result);
+            
+            if (result != null)
+            {
+                return (IActionResult)Ok(result);
+            }
+
+            throw new Exception($"Update Expense {expenseId} failed on save.");
         }
 
         [HttpPost]

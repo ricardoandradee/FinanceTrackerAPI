@@ -55,7 +55,7 @@
                     <mat-label> Bank accounts </mat-label>
                     <mat-select #bankAccountInput="ngModel" name="bankAccount"
                     (selectionChange)="onPaymentChange()" id="bankAccount" [disabled]="isEditMode && isInitiallyPaid"
-                    [(ngModel)]="expense.transaction.accountId" [required]="!isEditMode">
+                    [(ngModel)]="expense.accountId" [required]="!isEditMode">
                         <mat-option value=""> -- Select -- </mat-option>
                         <mat-option *ngFor="let p of accountDropdownList" [value]="p.accountId">
                             {{p.description}}

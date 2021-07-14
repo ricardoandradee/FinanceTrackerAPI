@@ -14,7 +14,7 @@ namespace FinanceTracker.Application.Dtos.Expenses
         public int? AccountId { get; set; }
         public string Establishment { get; set; }
         public bool IsPaid { get; set; }
-        public TransactionForCreationDto Transaction { get; set; }
+        public decimal? TransactionAmount { get; set; }
         public int CurrencyId { get; set; }
         public decimal Price { get; set; }
         public DateTimeOffset CreatedDate { get; set; }

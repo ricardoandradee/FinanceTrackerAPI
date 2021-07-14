@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTracker.Application.Commands.Expenses
 {
-    public class UpdateExpenseCommand : IRequest<TransactionToReturnDto>
+    public class UpdateExpenseCommand : IRequest<ExpenseToReturnDto>
     {
         public int ExpenseId { get; }
         public ExpenseForUpdateDto ExpenseForUpdateDto { get; }
@@ -20,7 +20,7 @@ namespace FinanceTracker.Application.Commands.Expenses
             ExpenseId = expenseId;
         }
 
-        public class UpdateExpenseHandler : IRequestHandler<UpdateExpenseCommand, TransactionToReturnDto>
+        public class UpdateExpenseHandler : IRequestHandler<UpdateExpenseCommand, ExpenseToReturnDto>
         {
             private readonly IExpenseRepository _expenseRepository;
             private readonly IAccountRepository _accountRepository;
@@ -37,9 +37,10 @@ namespace FinanceTracker.Application.Commands.Expenses
                 _accountRepository = accountRepository;
             }
 
-            public async Task<TransactionToReturnDto> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
+            public async Task<ExpenseToReturnDto> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
             {
                 var expenseFromRepo = await _expenseRepository.RetrieveById(request.ExpenseId);
+                expenseFromRepo.Transaction = null;
 
                 if (expenseFromRepo == null)
                 {
@@ -48,20 +49,29 @@ namespace FinanceTracker.Application.Commands.Expenses
 
                 _mapper.Map(request.ExpenseForUpdateDto, expenseFromRepo);
                 
-                var transaction = _mapper.Map<Transaction>(request.ExpenseForUpdateDto.Transaction);
-                if (transaction != null) {
-                    var accountFromRepo = await _accountRepository.RetrieveById(transaction.AccountId);
-                    accountFromRepo.CurrentBalance -= transaction.Amount;
-                    transaction.BalanceAfterTransaction = accountFromRepo.CurrentBalance;
+                var accountId = request.ExpenseForUpdateDto.AccountId.GetValueOrDefault(0);
+                if (accountId > 0)
+                {
+                    var transactionAmout = request.ExpenseForUpdateDto.TransactionAmount.GetValueOrDefault(0);
+                    var accountFromRepo = await _accountRepository.RetrieveById(accountId);
+                    accountFromRepo.CurrentBalance -= transactionAmout;
+                    
+                    expenseFromRepo.Transaction = new Transaction
+                    {
+                        AccountId = accountId,
+                        BalanceAfterTransaction = accountFromRepo.CurrentBalance,
+                        CreatedDate = System.DateTimeOffset.Now,
+                        Action = "Debit",
+                        Description = $"Payment at {expenseFromRepo.Establishment}",
+                        Amount = transactionAmout
+                    };
                 }
-                
-                expenseFromRepo.Transaction = transaction;
-
                 
                 if (await _unitOfWorkRepository.SaveChanges() > 0)
                 {
-                    var transactionToReturn = _mapper.Map<TransactionToReturnDto>(transaction);
-                    return transactionToReturn;
+                    expenseFromRepo.Category = await _unitOfWorkRepository.Context.Categories.FindAsync(expenseFromRepo.CategoryId);
+                    expenseFromRepo.Currency = await _unitOfWorkRepository.Context.Currencies.FindAsync(expenseFromRepo.CurrencyId);
+                    return _mapper.Map<ExpenseToReturnDto>(expenseFromRepo);
                 }
 
                 return null;
