@@ -54,7 +54,7 @@ namespace FinanceTracker.Application.Commands.Expenses
                         BalanceAfterTransaction = accountFromRepo.CurrentBalance,
                         CreatedDate = expense.CreatedDate,
                         Action = "Debit",
-                        Description = $"Payment at {expense.Establishment}",
+                        Description = $"Payment at {expense.Establishment}.",
                         Amount = transactionAmout
                     };
                 }

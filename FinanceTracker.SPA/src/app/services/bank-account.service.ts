@@ -6,7 +6,8 @@ import { BankAccount } from '../models/bank-account.model';
 import { User } from '../models/user.model';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
-import { Account } from '../models/account.model';
+import { AccountMinus } from '../models/account.minus.model';
+import { AccountTransaction } from '../models/account.transaction.model';
 
 @Injectable()
 export class BankAccountService implements OnDestroy {
@@ -30,12 +31,20 @@ export class BankAccountService implements OnDestroy {
             this.dataSource$.next(bankInfos);
         }
     
-        set updateAccountBalanceAndTransactions(account: Account) {
+        set addAccountTransaction(accountTransaction: AccountTransaction) {
             this.subscription = this.dataSource$.pipe(take(1)).subscribe(banks => {
-                var bank  = banks.find(b => b.accounts.some(a => a.id == account.id));
-                var accountToBeUpdated = bank.accounts.find(a => a.id === account.id);
-                accountToBeUpdated.currentBalance = account.currentBalance;
-                accountToBeUpdated.transactions.push(account.transactions[0]);
+                var bank  = banks.find(b => b.accounts.some(a => a.id == accountTransaction.id));
+                var accountToBeUpdated = bank.accounts.find(a => a.id === accountTransaction.id);
+                accountToBeUpdated.transactions.push(accountTransaction.transaction);
+                this.setBankAccountInfos = banks;
+              });
+        }
+
+        set updateAccountBalance(accountMinus: AccountMinus) {
+            this.subscription = this.dataSource$.pipe(take(1)).subscribe(banks => {
+                var bank  = banks.find(b => b.accounts.some(a => a.id == accountMinus.id));
+                var accountToBeUpdated = bank.accounts.find(a => a.id === accountMinus.id);
+                accountToBeUpdated.currentBalance += accountMinus.transactionAmount;
                 this.setBankAccountInfos = banks;
               });
         }

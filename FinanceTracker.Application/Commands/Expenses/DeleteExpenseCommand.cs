@@ -20,7 +20,8 @@ namespace FinanceTracker.Application.Commands.Expenses
             private readonly IExpenseRepository _expenseRepository;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
 
-            public DeleteExpenseHandler(IExpenseRepository expenseRepository, IUnitOfWorkRepository unitOfWorkRepository)
+            public DeleteExpenseHandler(IExpenseRepository expenseRepository,
+                                        IUnitOfWorkRepository unitOfWorkRepository)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _expenseRepository = expenseRepository;
@@ -33,6 +34,13 @@ namespace FinanceTracker.Application.Commands.Expenses
                 if (expenseFromRepo == null)
                 {
                     throw new NotFoundException(nameof(Expense), request.ExpenseId);
+                }
+
+                if (expenseFromRepo.TransactionId.HasValue)
+                {
+                    var transaction = await _unitOfWorkRepository.Context.Transactions.FindAsync(expenseFromRepo.TransactionId);
+                    var account = await _unitOfWorkRepository.Context.Accounts.FindAsync(transaction.AccountId);
+                    account.CurrentBalance += transaction.Amount;
                 }
 
                 _expenseRepository.Delete(expenseFromRepo);

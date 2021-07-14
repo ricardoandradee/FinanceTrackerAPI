@@ -18,6 +18,8 @@ import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
 import { UserService } from 'src/app/services/user.service';
 import { BankAccountService } from 'src/app/services/bank-account.service';
+import { AccountMinus } from 'src/app/models/account.minus.model';
+import { AccountTransaction } from 'src/app/models/account.transaction.model';
 import { Transaction } from 'src/app/models/transaction.model';
 
 @Component({
@@ -147,8 +149,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     const subscription = this.expenseService.createExpense(expenseToBeCreated).subscribe(response => {
       if (response.ok) {
         const expenseCreated = response.body as Expense;
-        if (expenseCreated.account) {
-          this.bankAccountService.updateAccountBalanceAndTransactions = expenseCreated.account;
+        if (expenseCreated.accountId) {
+          this.updateAccountDetails(expenseCreated);
         }
         
         this.pushExpenseToDataSource(expenseCreated);
@@ -167,8 +169,25 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     this.allSubscriptions.push(subscription);
   }
 
-  private getCurrencyById(id: number): Currency {
-    return this.currencies.find(x => x.id === id);
+  private updateAccountDetails(expense: Expense) {
+    var accountMinus = {
+      id: expense.accountId,
+      transactionAmount: expense.transactionAmount
+    } as AccountMinus;
+
+    this.bankAccountService.updateAccountBalance = accountMinus;
+    
+    var accountTransaction = {
+      id: expense.accountId,
+      transaction: {
+        amount: expense.transactionAmount,
+        description: `Payment at ${expense.establishment}.`,
+        action: 'Debit',
+        createdDate: new Date()
+      } as Transaction
+    } as AccountTransaction;
+
+    this.bankAccountService.addAccountTransaction = accountTransaction;
   }
   
   private updateExpense(expenseToBeEdited: Expense) {
@@ -176,8 +195,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     const subscription = this.expenseService.updateExpense(expenseToBeEdited).subscribe(response => {
       if (response.ok) {
         const expenseUpdated = response.body as Expense;
-        if (expenseUpdated.account) {
-          this.bankAccountService.updateAccountBalanceAndTransactions = expenseUpdated.account;
+        if (expenseUpdated.accountId) {
+          this.updateAccountDetails(expenseUpdated);
         }
         
         const targetIdx = this.dataSource.data.map(i => i.id).indexOf(expenseToBeEdited.id);
@@ -202,6 +221,14 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   private deleteExpense(expense: Expense) {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.expenseService.deleteExpense(expense.id).subscribe(response => {
+      if (expense.accountId) {
+        var accountMinus = {
+          id: expense.accountId,
+          transactionAmount: expense.transactionAmount
+        } as AccountMinus;
+        this.bankAccountService.updateAccountBalance = accountMinus;
+      }
+      
       this.removeExpenseFromDataSource(expense.id);
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while deleting expense info. Error code: ${err.status} - ${err.statusText}`, 3000);

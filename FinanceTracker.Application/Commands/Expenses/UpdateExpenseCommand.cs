@@ -2,7 +2,7 @@
 using FinanceTracker.Application.Common.Exceptions;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Dtos.Expenses;
-using FinanceTracker.Application.Dtos.Transactions;
+using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Domain.Entities;
 using MediatR;
 using System.Threading;
@@ -71,6 +71,13 @@ namespace FinanceTracker.Application.Commands.Expenses
                 {
                     expenseFromRepo.Category = await _unitOfWorkRepository.Context.Categories.FindAsync(expenseFromRepo.CategoryId);
                     expenseFromRepo.Currency = await _unitOfWorkRepository.Context.Currencies.FindAsync(expenseFromRepo.CurrencyId);
+                    var expenseToReturn = _mapper.Map<ExpenseToReturnDto>(expenseFromRepo);
+                    
+                    if (expenseFromRepo.Transaction != null)
+                    {
+                        expenseToReturn.Account = _mapper.Map<AccountToReturnDto>(expenseFromRepo.Transaction.Account);
+                    }
+
                     return _mapper.Map<ExpenseToReturnDto>(expenseFromRepo);
                 }
 
