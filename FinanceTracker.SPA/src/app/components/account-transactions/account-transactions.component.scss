@@ -1,10 +1,15 @@
-.mat-table {
-    max-width: 100%;
-    word-break: break-word;
-    display: block;
+.mat-dialog-content {
+    width: 600px;
+    height: 500px;
+    // border: 1px solid #AAA;
     overflow: hidden;
-    height: auto;
-    position: relative;
+}
+
+.mat-table {
+    height: 100%;
+    margin-right: -50px; /* Maximum width of scrollbar */
+    padding-right: 50px; /* Maximum width of scrollbar */
+    overflow-y: scroll;
 }
 
 .mat-icon-action {
