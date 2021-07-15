@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatTableDataSource, MatSort } from '@angular/material';
 import { Transaction } from 'src/app/models/transaction.model';
 import { Account } from 'src/app/models/account.model';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './account-transactions.component.html',
   styleUrls: ['./account-transactions.component.scss']
 })
-export class AccountTransactionsComponent implements OnInit, OnDestroy {
+export class AccountTransactionsComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscription: Subscription;
   account: Account;
   userTimeZone = '';
@@ -23,6 +23,21 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     this.account = { ...passedData.account };
     this.dataSource = new MatTableDataSource(this.account.transactions);
     setTimeout(() => { this.dataSource.sort = this.sort; }, 150);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property.toLowerCase()) {
+        case 'createddate': {
+          let newDate = new Date(item.createdDate);
+          return newDate;
+        }
+        default: {
+          return item[property];
+        }
+      }
+    };
   }
 
   ngOnInit() {

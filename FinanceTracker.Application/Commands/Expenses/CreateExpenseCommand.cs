@@ -44,19 +44,7 @@ namespace FinanceTracker.Application.Commands.Expenses
                 var accountId = request.ExpenseForCreationDto.AccountId.GetValueOrDefault(0);
                 if (accountId > 0)
                 {
-                    var transactionAmout = request.ExpenseForCreationDto.TransactionAmount.GetValueOrDefault(0);
-                    var accountFromRepo = await _accountRepository.RetrieveById(accountId);
-                    accountFromRepo.CurrentBalance -= transactionAmout;
-                    
-                    expense.Transaction = new Transaction
-                    {
-                        AccountId = accountId,
-                        BalanceAfterTransaction = accountFromRepo.CurrentBalance,
-                        CreatedDate = expense.CreatedDate,
-                        Action = "Debit",
-                        Description = $"Payment at {expense.Establishment}.",
-                        Amount = transactionAmout
-                    };
+                    expense.Transaction = await CreateTransaction(request, expense, accountId);
                 }
 
                 await _expenseRepository.Add(expense);
@@ -70,10 +58,28 @@ namespace FinanceTracker.Application.Commands.Expenses
                     {
                         expenseToReturn.Account = _mapper.Map<AccountToReturnDto>(expense.Transaction.Account);
                     }
+
                     return expenseToReturn;
                 }
 
                 return null;
+            }
+
+            private async Task<Transaction> CreateTransaction(CreateExpenseCommand request, Expense expense, int accountId)
+            {
+                var transactionAmout = request.ExpenseForCreationDto.TransactionAmount.GetValueOrDefault(0);
+                var accountFromRepo = await _accountRepository.RetrieveById(accountId);
+                accountFromRepo.CurrentBalance -= transactionAmout;
+
+                return new Transaction
+                {
+                    AccountId = accountId,
+                    BalanceAfterTransaction = accountFromRepo.CurrentBalance,
+                    CreatedDate = expense.CreatedDate,
+                    Action = "Debit",
+                    Description = $"Payment at {expense.Establishment}.",
+                    Amount = transactionAmout
+                };
             }
         }
     }
