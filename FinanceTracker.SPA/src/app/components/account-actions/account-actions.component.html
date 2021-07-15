@@ -25,7 +25,7 @@
             </mat-form-field>
         </div>
             <div *ngIf="!accountActionsForm.invalid">
-                <mat-label class="warn-label">You are going to {{ transaction.action | lowercase }} {{ transaction.amount | currency: transaction.account.currency.code }}   {{ transaction.action === 'Deposit' ? ' into ' : ' from '  }} your bank account.</mat-label>
+                <mat-label class="break-line-200 warn-label">You are going to {{ transaction.action | lowercase }} {{ transaction.amount | currency: transaction.account.currency.code }} {{ transaction.action === 'Deposit' ? ' into ' : ' from '  }} your bank account.</mat-label>
             </div>
         <mat-dialog-actions align="end">
             <button mat-button mat-dialog-close>Cancel</button>
