@@ -6,8 +6,6 @@ import { BankAccount } from '../models/bank-account.model';
 import { User } from '../models/user.model';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
-import { AccountMinus } from '../models/account.minus.model';
-import { AccountTransaction } from '../models/account.transaction.model';
 import { Account } from '../models/account.model';
 
 @Injectable()
@@ -58,7 +56,7 @@ export class BankAccountService implements OnDestroy {
         
     deleteBankInfo(bankId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}user/${user.id}/bank/DeleteBankInfo/${bankId}`;
+        const url = `${this.baseUrl}user/${user.id}/bank/${bankId}/DeleteBankInfo`;
         return this.http.delete(url, {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         });
@@ -84,7 +82,7 @@ export class BankAccountService implements OnDestroy {
 
     updateBankInfo(bankAccount: BankAccount) {
         const user: User = JSON.parse(localStorage.getItem('user')); 
-        const url = `${this.baseUrl}user/${user.id}/bank/updateBankInfo/${bankAccount.id}`;
+        const url = `${this.baseUrl}user/${user.id}/bank/${bankAccount.id}/updateBankInfo`;
         const newBankInfo = {
             name: bankAccount.name,
             branch: bankAccount.branch,

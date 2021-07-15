@@ -30,6 +30,7 @@ export class AccountAddEditComponent implements OnInit {
   }
   
   onSave() {
+    console.log(this.account);
     this.dialogRef.close(this.account);
   }
 

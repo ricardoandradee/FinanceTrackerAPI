@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace FinanceTracker.API.Controllers
 {
     [UserAuthorization]
-    [Route("api/user/{userId}/bank/{bankId}/account")]
+    [Route("api/user/{userId}/account/{accountId}")]
     public class AccountController : ApiController
     {        
         [HttpGet]
-        [Route("GetAccountById/{accountId}")]
+        [Route("GetAccountById")]
         public async Task<IActionResult> GetAccountById(int accountId)
         {
             var query = new GetAccountByIdQuery(accountId);
@@ -21,17 +21,8 @@ namespace FinanceTracker.API.Controllers
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
-        [HttpGet]
-        [Route("GetAccountByBankId")]
-        public async Task<IActionResult> GetAccountByBankId(int bankId)
-        {
-            var query = new GetAccountByBankIdQuery(bankId);
-            var result = await Mediator.Send(query);
-            return result != null ? (IActionResult)Ok(result) : NotFound();
-        }
-
         [HttpPut]
-        [Route("UpdateAccount/{accountId}")]
+        [Route("UpdateAccount")]
         public async Task<IActionResult> UpdateAccount(int accountId, AccountForUpdateDto accountForUpdateDto)
         {
             var command = new UpdateAccountCommand(accountForUpdateDto, accountId);
@@ -46,7 +37,7 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteAccount/{accountId}")]
+        [Route("DeleteAccount")]
         public async Task<IActionResult> DeleteAccount(int accountId)
         {
             var command = new DeleteAccountCommand(accountId);
@@ -58,18 +49,6 @@ namespace FinanceTracker.API.Controllers
             }
 
             throw new Exception("Error deleting the account.");
-        }
-
-        [HttpPost]
-        [Route("CreateAccount")]
-        public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
-        {
-            var command = new CreateAccountCommand(accountForCreationDto);
-            var result = await Mediator.Send(command);
-
-            return CreatedAtAction(nameof(GetAccountById),
-                new { accountId = result.Id, bankId, userId },
-                result);
         }
     }
 }

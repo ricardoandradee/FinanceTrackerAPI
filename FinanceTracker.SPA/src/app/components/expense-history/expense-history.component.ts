@@ -18,9 +18,6 @@ import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
 import { UserService } from 'src/app/services/user.service';
 import { BankAccountService } from 'src/app/services/bank-account.service';
-import { AccountMinus } from 'src/app/models/account.minus.model';
-import { AccountTransaction } from 'src/app/models/account.transaction.model';
-import { Transaction } from 'src/app/models/transaction.model';
 import { AccountService } from 'src/app/services/account.service';
 
 @Component({
@@ -151,8 +148,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     const subscription = this.expenseService.createExpense(expenseToBeCreated).subscribe(response => {
       if (response.ok) {
         const expenseCreated = response.body as Expense;
-        if (expenseCreated.account) {
-          this.accountService.getAccountById(expenseCreated.accountId, expenseCreated.account.bankId).subscribe(accout => {
+        if (expenseCreated.accountId) {
+          this.accountService.getAccountById(expenseCreated.accountId).subscribe(accout => {
             this.bankAccountService.replaceAccountDetails = accout;
           });
         }
@@ -178,8 +175,8 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     const subscription = this.expenseService.updateExpense(expenseToBeEdited).subscribe(response => {
       if (response.ok) {
         const expenseUpdated = response.body as Expense;
-        if (expenseUpdated.account) {
-          this.accountService.getAccountById(expenseUpdated.accountId, expenseUpdated.account.bankId).subscribe(accout => {
+        if (expenseUpdated.accountId) {
+          this.accountService.getAccountById(expenseUpdated.accountId).subscribe(accout => {
             this.bankAccountService.replaceAccountDetails = accout;
           });
         }
@@ -207,13 +204,10 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.expenseService.deleteExpense(expense.id).subscribe(response => {
       if (expense.accountId) {
-        var accountMinus = {
-          id: expense.accountId,
-          transactionAmount: expense.transactionAmount
-        } as AccountMinus;
-        this.bankAccountService.updateAccountBalance = accountMinus;
-      }
-      
+        this.accountService.getAccountById(expense.accountId).subscribe(accout => {
+          this.bankAccountService.replaceAccountDetails = accout;
+        });
+      }      
       this.removeExpenseFromDataSource(expense.id);
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while deleting expense info. Error code: ${err.status} - ${err.statusText}`, 3000);

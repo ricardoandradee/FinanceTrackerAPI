@@ -18,13 +18,16 @@ namespace FinanceTracker.Application.Commands.Expenses
         public class DeleteExpenseHandler : IRequestHandler<DeleteExpenseCommand, bool>
         {
             private readonly IExpenseRepository _expenseRepository;
+            private readonly ITransactionRepository _transactionRepository;
             private readonly IUnitOfWorkRepository _unitOfWorkRepository;
 
             public DeleteExpenseHandler(IExpenseRepository expenseRepository,
+                                        ITransactionRepository transactionRepository,
                                         IUnitOfWorkRepository unitOfWorkRepository)
             {
                 _unitOfWorkRepository = unitOfWorkRepository;
                 _expenseRepository = expenseRepository;
+                _transactionRepository = transactionRepository;
             }
 
             public async Task<bool> Handle(DeleteExpenseCommand request, CancellationToken cancellationToken)
@@ -41,6 +44,7 @@ namespace FinanceTracker.Application.Commands.Expenses
                     var transaction = await _unitOfWorkRepository.Context.Transactions.FindAsync(expenseFromRepo.TransactionId);
                     var account = await _unitOfWorkRepository.Context.Accounts.FindAsync(transaction.AccountId);
                     account.CurrentBalance += transaction.Amount;
+                    _transactionRepository.Delete(transaction);
                 }
 
                 _expenseRepository.Delete(expenseFromRepo);

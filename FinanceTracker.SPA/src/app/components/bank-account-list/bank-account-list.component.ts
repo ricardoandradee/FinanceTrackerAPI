@@ -135,7 +135,7 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
 
   private deleteAccount(account: Account) {
     this.store.dispatch(new UI.StartLoading());
-    const subscription = this.accountService.deleteAccount(account.bankId, account.id).subscribe(response => {
+    const subscription = this.accountService.deleteAccount(account.id).subscribe(response => {
       this.removeBankAccountFromDataSource(account.bankId, account.id);
     }, (err) => {
       this.uiService.showSnackBar(`An error occured while deleting account. Error code: ${err.status} - ${err.statusText}`, 3000);

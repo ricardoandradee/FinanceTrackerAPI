@@ -14,9 +14,9 @@ export class AccountService {
         private datePipe: DatePipe) { }
         
     
-    getAccountById(bankId: number, accountId: number) {
+    getAccountById(accountId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}user/${user.id}/bank/${bankId}/account/GetAccountById/${accountId}`;
+        const url = `${this.baseUrl}user/${user.id}/account/${accountId}/GetAccountById`;
         return this.http.get<Account>(url, { observe: 'response' })
         .pipe(
         map(response => {
@@ -25,9 +25,9 @@ export class AccountService {
         }));
     }
     
-    deleteAccount(bankId: number, accountId: number) {
+    deleteAccount(accountId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}user/${user.id}/bank/${bankId}/account/DeleteAccount/${accountId}`;
+        const url = `${this.baseUrl}user/${user.id}/account/${accountId}/DeleteAccount`;
         return this.http.delete(url, {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         });
@@ -56,11 +56,11 @@ export class AccountService {
 
     updateAccount(account: Account) {
         const user: User = JSON.parse(localStorage.getItem('user'));
-        const url = `${this.baseUrl}user/${user.id}/bank/${account.bankId}/account/UpdateAccount/${account.id}`;
+        const url = `${this.baseUrl}user/${user.id}/account/${account.id}/UpdateAccount`;
         const accountToUpdate = {
             name: account.name,
             number: account.number,
-            currencyId: account.currency.id,
+            currency: account.currency,
             isActive: account.isActive
         };
         const httpHeaders = new HttpHeaders({

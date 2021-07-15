@@ -1,6 +1,9 @@
 using FinanceTracker.API.AuthorizationAttributes;
+using FinanceTracker.Application.Commands.Accounts;
 using FinanceTracker.Application.Commands.Banks;
+using FinanceTracker.Application.Dtos.Accounts;
 using FinanceTracker.Application.Dtos.Banks;
+using FinanceTracker.Application.Queries.Accounts;
 using FinanceTracker.Application.Queries.Banks;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,8 +15,31 @@ namespace FinanceTracker.API.Controllers
     [Route("api/user/{userId}/bank")]
     public class BankController : ApiController
     {
+
         [HttpGet]
-        [Route("GetBankById")]
+        [Route("{bankId}/account/GetAccountByBankId")]
+        public async Task<IActionResult> GetAccountByBankId(int bankId)
+        {
+            var query = new GetAccountByBankIdQuery(bankId);
+            var result = await Mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
+
+        [HttpPost]
+        [Route("{bankId}/account/CreateAccount")]
+        public async Task<IActionResult> CreateAccount(int userId, int bankId, AccountForCreationDto accountForCreationDto)
+        {
+            var command = new CreateAccountCommand(accountForCreationDto);
+            var result = await Mediator.Send(command);
+
+            return CreatedAtAction(nameof(AccountController.GetAccountById),
+                "Account",
+                new { accountId = result.Id, bankId, userId },
+                result);
+        }
+
+        [HttpGet]
+        [Route("{bankId}/GetBankById")]
         public async Task<IActionResult> GetBankById(int bankId)
         {
             var query = new GetBankByIdQuery(bankId);
@@ -44,7 +70,7 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteBankInfo/{bankId}")]
+        [Route("{bankId}/DeleteBankInfo")]
         public async Task<IActionResult> DeleteBankInfo(int bankId)
         {
             var command = new DeleteBankInfoCommand(bankId);
@@ -59,7 +85,7 @@ namespace FinanceTracker.API.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateBankInfo/{bankId}")]
+        [Route("{bankId}/UpdateBankInfo")]
         public async Task<IActionResult> UpdateBankInfo(int bankId, BankForUpdateDto bankForUpdateDto)
         {
             var command = new UpdateBankInfoCommand(bankId, bankForUpdateDto);

@@ -42,6 +42,7 @@ namespace FinanceTracker.Application.Commands.Expenses
                 var expense = _mapper.Map<Expense>(request.ExpenseForCreationDto);
                 expense.Transaction = null;
                 var accountId = request.ExpenseForCreationDto.AccountId.GetValueOrDefault(0);
+
                 if (accountId > 0)
                 {
                     expense.Transaction = await CreateTransaction(request, expense, accountId);
