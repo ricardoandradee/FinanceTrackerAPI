@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Expense } from '../../models/expense.model';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
@@ -26,7 +26,7 @@ import { AccountService } from 'src/app/services/account.service';
   styleUrls: ['./expense-history.component.scss']
 })
 
-export class ExpenseHistoryComponent implements OnInit, OnDestroy {
+export class ExpenseHistoryComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns = ['CreatedDate', 'Category', 'Establishment', 'Price', 'Status', 'Actions'];
   dataSource = new MatTableDataSource<Expense>();
   private allSubscriptions: Subscription[] = [];
@@ -80,13 +80,12 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   }
 
   bindDataSource(expenses: Expense[]) {
-    this.dataSource = new MatTableDataSource(expenses);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    
+    this.dataSource = new MatTableDataSource(expenses);    
     this.dataSource.filterPredicate = (pr, filter) => {
       return this.dateFilterMatches(pr) && this.categoryFilterMatches(pr);
     };
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   populateDropDownLists(expenses: Expense[]) {
@@ -270,6 +269,21 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
   onEdit(expense: Expense) {
     var expenseToBeEdited = expense && expense.id ? expense : {} as Expense;
     this.onOpenAddExpenseDialog(expenseToBeEdited, true);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property.toLowerCase()) {
+        case 'createddate': {
+          let newDate = new Date(item.createdDate);
+          return newDate;
+        }
+        default: {
+          return item[property];
+        }
+      }
+    };
   }
 
   ngOnDestroy(): void {

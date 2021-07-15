@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ViewChildren, QueryList, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { YesNoDialogComponent } from '../../shared/yes.no.dialog.component';
 import { UiService } from '../../services/ui.service';
@@ -34,7 +34,7 @@ import { UserService } from 'src/app/services/user.service';
     ]),
   ],
 })
-export class BankAccountListComponent implements OnInit, OnDestroy {
+export class BankAccountListComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns = ['CreatedDate', 'Name', 'Branch', 'Status', 'Balance', 'Actions'];
   dataSource = new MatTableDataSource<BankAccount>();
   private allSubscriptions: Subscription[] = [];
@@ -400,6 +400,21 @@ export class BankAccountListComponent implements OnInit, OnDestroy {
     this.rowInEditMode = false;
     this.editBankInfo = {} as BankAccount;
     this.oldBankInfo = {} as BankAccount;
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property.toLowerCase()) {
+        case 'createddate': {
+          let newDate = new Date(item.createdDate);
+          return newDate;
+        }
+        default: {
+          return item[property];
+        }
+      }
+    };
   }
 
   ngOnDestroy(): void {
