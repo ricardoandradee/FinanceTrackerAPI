@@ -8,6 +8,7 @@ import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
 import { AccountMinus } from '../models/account.minus.model';
 import { AccountTransaction } from '../models/account.transaction.model';
+import { Account } from '../models/account.model';
 
 @Injectable()
 export class BankAccountService implements OnDestroy {
@@ -30,21 +31,15 @@ export class BankAccountService implements OnDestroy {
         set setBankAccountInfos(bankInfos: BankAccount[]) {
             this.dataSource$.next(bankInfos);
         }
-    
-        set addAccountTransaction(accountTransaction: AccountTransaction) {
-            this.subscription = this.dataSource$.pipe(take(1)).subscribe(banks => {
-                var bank  = banks.find(b => b.accounts.some(a => a.id == accountTransaction.id));
-                var accountToBeUpdated = bank.accounts.find(a => a.id === accountTransaction.id);
-                accountToBeUpdated.transactions.push(accountTransaction.transaction);
-                this.setBankAccountInfos = banks;
-              });
-        }
 
-        set updateAccountBalance(accountMinus: AccountMinus) {
+        set replaceAccountDetails(account: Account) {
             this.subscription = this.dataSource$.pipe(take(1)).subscribe(banks => {
-                var bank  = banks.find(b => b.accounts.some(a => a.id == accountMinus.id));
-                var accountToBeUpdated = bank.accounts.find(a => a.id === accountMinus.id);
-                accountToBeUpdated.currentBalance += accountMinus.transactionAmount;
+                var bank  = banks.find(b => b.accounts.some(a => a.id == account.id));
+                const accountIndex = bank.accounts.findIndex(x => x.id == account.id);
+                if (accountIndex > -1) {
+                    bank.accounts.splice(accountIndex, 1);
+                    bank.accounts.splice(accountIndex, 0, account);
+                }
                 this.setBankAccountInfos = banks;
               });
         }

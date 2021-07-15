@@ -21,6 +21,7 @@ import { BankAccountService } from 'src/app/services/bank-account.service';
 import { AccountMinus } from 'src/app/models/account.minus.model';
 import { AccountTransaction } from 'src/app/models/account.transaction.model';
 import { Transaction } from 'src/app/models/transaction.model';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-expense-history',
@@ -49,6 +50,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
               private userService: UserService, private dialog: MatDialog,
               private categoryService: CategoryService,
               private commonService: CommonService,
+              private accountService: AccountService,
               private bankAccountService: BankAccountService,
               private store: Store<{ui: fromRoot.State}>) {
               }
@@ -102,7 +104,7 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     }));
   }
 
-  onOpenAddExpenseDialog(expense: Expense, isEditMode: boolean = false) {    
+  onOpenAddExpenseDialog(expense: Expense = null, isEditMode: boolean = false) {    
     if (!isEditMode) {
       let userSettings = JSON.parse(localStorage.getItem('user')) as User;
       expense = {
@@ -149,8 +151,10 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
     const subscription = this.expenseService.createExpense(expenseToBeCreated).subscribe(response => {
       if (response.ok) {
         const expenseCreated = response.body as Expense;
-        if (expenseCreated.accountId) {
-          this.updateAccountDetails(expenseCreated);
+        if (expenseCreated.account) {
+          this.accountService.getAccountById(expenseCreated.accountId, expenseCreated.account.bankId).subscribe(accout => {
+            this.bankAccountService.replaceAccountDetails = accout;
+          });
         }
         
         this.pushExpenseToDataSource(expenseCreated);
@@ -168,35 +172,16 @@ export class ExpenseHistoryComponent implements OnInit, OnDestroy {
 
     this.allSubscriptions.push(subscription);
   }
-
-  private updateAccountDetails(expense: Expense) {
-    var accountMinus = {
-      id: expense.accountId,
-      transactionAmount: expense.transactionAmount
-    } as AccountMinus;
-
-    this.bankAccountService.updateAccountBalance = accountMinus;
-    
-    var accountTransaction = {
-      id: expense.accountId,
-      transaction: {
-        amount: expense.transactionAmount,
-        description: `Payment at ${expense.establishment}.`,
-        action: 'Debit',
-        createdDate: new Date()
-      } as Transaction
-    } as AccountTransaction;
-
-    this.bankAccountService.addAccountTransaction = accountTransaction;
-  }
   
   private updateExpense(expenseToBeEdited: Expense) {
     this.store.dispatch(new UI.StartLoading());
     const subscription = this.expenseService.updateExpense(expenseToBeEdited).subscribe(response => {
       if (response.ok) {
         const expenseUpdated = response.body as Expense;
-        if (expenseUpdated.accountId) {
-          this.updateAccountDetails(expenseUpdated);
+        if (expenseUpdated.account) {
+          this.accountService.getAccountById(expenseUpdated.accountId, expenseUpdated.account.bankId).subscribe(accout => {
+            this.bankAccountService.replaceAccountDetails = accout;
+          });
         }
         
         const targetIdx = this.dataSource.data.map(i => i.id).indexOf(expenseToBeEdited.id);

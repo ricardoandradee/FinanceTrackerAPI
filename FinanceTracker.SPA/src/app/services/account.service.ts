@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 import { DatePipe } from '@angular/common';
 import { Account } from '../models/account.model';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AccountService {
@@ -12,6 +13,18 @@ export class AccountService {
     constructor(private http: HttpClient,
         private datePipe: DatePipe) { }
         
+    
+    getAccountById(bankId: number, accountId: number) {
+        const user: User = JSON.parse(localStorage.getItem('user'));
+        const url = `${this.baseUrl}user/${user.id}/bank/${bankId}/account/GetAccountById/${accountId}`;
+        return this.http.get<Account>(url, { observe: 'response' })
+        .pipe(
+        map(response => {
+            const account: Account = response.body;
+            return account;
+        }));
+    }
+    
     deleteAccount(bankId: number, accountId: number) {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const url = `${this.baseUrl}user/${user.id}/bank/${bankId}/account/DeleteAccount/${accountId}`;

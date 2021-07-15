@@ -63,10 +63,10 @@
         <ng-container matColumnDef="Actions">
             <th mat-header-cell  *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let element">
-                <button mat-icon-button (click)="onDelete(element)" style="color:red;" *ngIf="element.id!==editExpense?.id" matTooltip="Delete">
+                <button mat-icon-button (click)="onDelete(element)" style="color:red;" matTooltip="Delete">
                     <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-icon-button (click)="onEdit(element)" style="color:blue;" *ngIf="element.id!==editExpense?.id"  matTooltip="Edit">
+                <button mat-icon-button (click)="onEdit(element)" style="color:blue;" matTooltip="Edit">
                     <mat-icon>edit</mat-icon>
                 </button>
             </td>
