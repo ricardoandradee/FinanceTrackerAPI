@@ -24,10 +24,10 @@ jobs:
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
-      working-directory: ./FinanceTracker.API/wwwroot
+      working-directory: ./FinanceTracker.SPA
 
     - name: dotnet publish
-      working-directory: ./FinanceTracker.API/wwwroot
+      working-directory: ./FinanceTracker.SPA
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     - name: Upload artifact for deployment job
