@@ -5,3 +5,5 @@ obj
 *.user
 *.pubxml
 **/wwwroot
+.vs/
+Properties
