@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { JwtModule } from '@auth0/angular-jwt';
 
@@ -34,10 +34,8 @@ import { TransactionService } from './services/transaction.service';
 import { CommonService } from './services/common.service';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { UserService } from './services/user.service';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
-export function tokenGetter() {
-  return localStorage.getItem('token');
-}
 
 @NgModule({
   declarations: [
@@ -63,14 +61,7 @@ export function tokenGetter() {
     BrowserAnimationsModule,
     MaterialModule,
     AuthModule,
-    StoreModule.forRoot(reducers),
-    JwtModule.forRoot({
-       config: {
-          tokenGetter: tokenGetter,
-          whitelistedDomains: ['localhost:5000'],
-          blacklistedRoutes: ['localhost:5000/api/auth']
-       }
-    })
+    StoreModule.forRoot(reducers)
   ],
   providers: [
     AuthService,
@@ -83,7 +74,8 @@ export function tokenGetter() {
     ExpenseService,
     UserService,
     UiService,
-    DatePipe
+    DatePipe,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
   entryComponents: [
