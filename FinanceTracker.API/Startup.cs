@@ -36,7 +36,7 @@ namespace FinanceTracker.API
             services.AddInfrastructure(Configuration);
 
             services.AddHttpContextAccessor();
-            
+
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -55,8 +55,10 @@ namespace FinanceTracker.API
             }
             else
             {
-                app.UseExceptionHandler(builder => {
-                    builder.Run(async context => {
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async context =>
+                    {
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         var error = context.Features.Get<IExceptionHandlerFeature>();
 
@@ -68,11 +70,13 @@ namespace FinanceTracker.API
                 });
             }
 
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("*"));
+
             app.Use(async (context, next) =>
             {
                 await next();
 
-                if(context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
                 {
                     context.Request.Path = "/index.html";
                     await next();
@@ -85,7 +89,6 @@ namespace FinanceTracker.API
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
