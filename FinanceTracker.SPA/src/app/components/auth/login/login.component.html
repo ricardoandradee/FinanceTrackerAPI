@@ -5,9 +5,10 @@
       <form fxLayout="column" fxLayoutAlign="center center" [formGroup]="loginForm" (ngSubmit)="onLogin()" fxLayoutGap="12px" novalidate>
         <p>
           <mat-form-field>
-            <input type="text" matInput formControlName="userName" placeholder="User Name">
-            <mat-error *ngIf="!loginForm.controls['userName'].errors?.required">At least 6 characters needed</mat-error>
-            <mat-error *ngIf="loginForm.controls['userName'].errors?.required">User Name is required</mat-error>
+            <input type="text" matInput formControlName="email" placeholder="Email" maxlength="100"
+              required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}">
+            <mat-error *ngIf="!loginForm.controls['email'].errors?.required">Please enter a valid email address</mat-error>
+            <mat-error *ngIf="loginForm.controls['email'].errors?.required">Email is required</mat-error>
           </mat-form-field>
         </p>
         <p>

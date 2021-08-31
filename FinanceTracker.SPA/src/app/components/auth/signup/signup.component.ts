@@ -15,10 +15,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit, OnDestroy {
-  private userNames = [];
   private emails = [];
-  isUserNameTaken = false;
-  userNameMatcher = new ErrorAlreadyTakenMatcher(this.userNames);
   emailMatcher = new ErrorAlreadyTakenMatcher(this.emails);
   private allSubscriptions: Subscription[] = [];
   maxDate = new Date();
@@ -41,7 +38,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     this.authService.allExistingUsersDetails.subscribe((un) => {
       un.forEach((i: any) => {
-          this.userNames.push(i.userName);
           this.emails.push(i.email);
       });
     });
@@ -51,7 +47,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm) {
       const user = Object.assign({}, form.value);
-      const subscription = this.authService.registerUser({ userName: user.userName, password: user.password,
+      const subscription = this.authService.registerUser({ fullName: user.fullName, password: user.password,
             stateTimeZoneId: user.timeZone, email: user.email,
             currency: { id: user.currency } as Currency } as User).subscribe((response) => {
               if (response) {
@@ -65,12 +61,12 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   login(form: NgForm) {
-    const loginSubscription = this.authService.login({userName: form.value.userName, password: form.value.password});
+    const loginSubscription = this.authService.login({email: form.value.email, password: form.value.password});
     loginSubscription.add(() => {
         const user: User = JSON.parse(localStorage.getItem('user'));
         const loginHistorySubscription = this.commonService.createUserLoginHistory(
         {
-          UserName: form.value.userName,
+          Email: form.value.email,
           UserId: user != null ? user.id : null,
           IsSuccessful: user != null ? true : false
         }).subscribe((response) => { this.uiService.showSnackBar('User login history successfully created.', 3000); });

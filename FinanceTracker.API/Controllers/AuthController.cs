@@ -58,7 +58,7 @@ namespace FinanceTracker.API.Controllers
             {
                 return Ok(new LoginResponseDto
                 {
-                    Token = result.Ok ? GenerateToken(userForLoginDto.UserName, result.Data.Id) : "",
+                    Token = result.Ok ? GenerateToken(userForLoginDto.Email, result.Data.Id) : "",
                     User = result
                 });
             }
@@ -66,11 +66,11 @@ namespace FinanceTracker.API.Controllers
             return BadRequest();
         }
 
-        private string GenerateToken(string userName, int userId)
+        private string GenerateToken(string email, int userId)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             };
 

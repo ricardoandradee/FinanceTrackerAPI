@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const userSettingsSubscription = this.userService.getUserSettings.subscribe((user: User) => {
       this.userBaseCurrency = user.currency;
       this.currentUser = user;
-      this.profileTooltipLabel = this.currentUser.userName + '\'s profile'; 
+      this.profileTooltipLabel = this.currentUser.fullName + '\'s profile'; 
     });
 
     this.commonService.getAllCurrencies.subscribe(c => {

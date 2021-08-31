@@ -7,10 +7,10 @@ namespace FinanceTracker.Application.Common.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<bool> UserExists(string userName);
+        Task<bool> UserExists(string email);
         Task<List<User>> GetExistingUsersDetails();
         Task<User> GetUserWithDependenciesById(int userId);
         Task<User> Register(User user, string password);
-        Task<Response<User>> Login(string userName, string password);
+        Task<Response<User>> Login(string email, string password);
     }
 }

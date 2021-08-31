@@ -15,11 +15,6 @@ namespace FinanceTracker.Infrastructure.Extensions
             return principal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        public static string GetUserName(this ClaimsPrincipal principal)
-        {
-            return principal.FindFirstValue(ClaimTypes.Name);
-        }
-
         public static bool IsCurrentUser(this ClaimsPrincipal principal, string id)
         {
             var currentUserId = GetUserId(principal);

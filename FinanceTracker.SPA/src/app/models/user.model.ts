@@ -3,7 +3,7 @@ import { TimeZone } from './timezone.model';
 
 export interface User {
     id: number;
-    userName: string;
+    fullName: string;
     email: string;
     currency: Currency;
     stateTimeZone: TimeZone;

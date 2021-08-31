@@ -11,21 +11,21 @@ namespace FinanceTracker.Infrastructure.Persistence.Data
             var users = new List<User>()
             {
                 new User {
-                    UserName = "Lauren",
+                    FullName = "Lauren Smith",
                     Email = "lauren@gmail.com",
                     CreatedDate = DateTime.Parse("2020-06-08"),
                     CurrencyId = 12,
                     StateTimeZoneId = 48
                     },
                 new User {
-                    UserName = "Cameron",
+                    FullName = "Cameron Campbell",
                     Email = "cameron@gmail.com",
                     CreatedDate = DateTime.Parse("2020-01-06"),
                     CurrencyId = 12,
                     StateTimeZoneId = 47
                     },
                 new User {
-                    UserName = "Joshwa",
+                    FullName = "Joshwa Lasterin",
                     Email = "joshwa@gmail.com",
                     CreatedDate = DateTime.Parse("2020-07-02"),
                     CurrencyId = 12,

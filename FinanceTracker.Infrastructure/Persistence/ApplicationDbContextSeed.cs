@@ -41,7 +41,8 @@ namespace FinanceTracker.Infrastructure.Persistence
 
                     user.PasswordHash = passwordHash;
                     user.PasswordSalt = passwordSalt;
-                    user.UserName = user.UserName.ToLower();
+                    user.Email = user.Email.ToLower().Trim();
+                    user.FullName = user.FullName.ToLower();
 
                     context.Users.Add(user);
                 }

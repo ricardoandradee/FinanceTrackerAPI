@@ -24,26 +24,26 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   createFormGroup() {
     return new FormGroup({
-      userName: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      email: new FormControl('', [Validators.required, Validators.minLength(6)]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
   }
 
   createFormGroupWithBuilder(formBuilder: FormBuilder) {
     return formBuilder.group({
-      userName: 'loren',
+      email: 'loren@gmail.com',
       password: 'password'
     });
   }
 
   onLogin() {
     const result: any = Object.assign({}, this.loginForm.value);
-    const loginSubscription = this.authService.login({ Username: result.userName, Password: result.password});
+    const loginSubscription = this.authService.login({ Email: result.email, Password: result.password});
     loginSubscription.add(() => {
       const user: User = JSON.parse(localStorage.getItem('user'));
       const loginHistorySubscription = this.commonService.createUserLoginHistory(
         {
-          UserName: result.userName,
+          Email: result.email,
           UserId: user != null ? user.id : null,
           IsSuccessful: user != null ? true : false
         }).subscribe((response) => { console.log('User login history successfully created.'); });

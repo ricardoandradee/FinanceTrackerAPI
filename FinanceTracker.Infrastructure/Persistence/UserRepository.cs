@@ -20,36 +20,36 @@ namespace FinanceTracker.Infrastructure.Persistence
         {
             return await _unitOfWork.Context.Users.Select(x => new User
             {
-                UserName = x.UserName,
+                FullName = x.FullName,
                 Email = x.Email
             }).ToListAsync();
         }
 
-        public async Task<bool> UserExists(string userName)
+        public async Task<bool> UserExists(string email)
         {
-            if (await _unitOfWork.Context.Users.AnyAsync(x => x.UserName == userName))
+            if (await _unitOfWork.Context.Users.AnyAsync(x => x.Email == email.ToLower().Trim()))
                 return true;
 
             return false;
         }
 
-        public async Task<Response<User>> Login(string userName, string password)
+        public async Task<Response<User>> Login(string email, string password)
         {
             var user = await _unitOfWork.Context.Users
                                 .Include(u => u.StateTimeZone)
                                 .Include(u => u.Currency)
-                                .FirstOrDefaultAsync(x => x.UserName == userName);
+                                .FirstOrDefaultAsync(x => x.Email == email.ToLower().Trim());
 
             var successfullyLoggedIn = user != null ? VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt) : false;
 
             if (!successfullyLoggedIn)
             {
-                return Response.Fail<User>("User name or Password is incorrect");
+                return Response.Fail<User>("Incorrect E-mail or Password!");
             }
 
             return Response.Success(user);
         }
-        
+
         public async Task<User> GetUserWithDependenciesById(int userId)
         {
             var user = await _unitOfWork.Context.Users

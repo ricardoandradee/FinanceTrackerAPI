@@ -27,8 +27,8 @@ export class AuthService {
                   
                   this.getExistingUsersDetails().subscribe((response) => {
                     if (response.ok) {
-                      const allUserNames = response.body as [];
-                      this.existingUsersDetails$.next(allUserNames);
+                      const allUserDetails = response.body as [];
+                      this.existingUsersDetails$.next(allUserDetails);
                     }
                   });
                 }
