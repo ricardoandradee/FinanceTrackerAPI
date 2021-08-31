@@ -78,7 +78,6 @@ namespace FinanceTracker.API
 
                 if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
                 {
-                    context.Request.Path = "/index.html";
                     await next();
                 }
             });
@@ -95,7 +94,6 @@ namespace FinanceTracker.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
