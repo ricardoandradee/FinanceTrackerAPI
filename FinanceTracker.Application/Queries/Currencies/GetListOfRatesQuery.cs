@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FinanceTracker.Application.Queries.Users
+namespace FinanceTracker.Application.Queries.Currencies
 {
     public class GetListOfRatesQuery : IRequest<string>
     {

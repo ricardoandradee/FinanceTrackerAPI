@@ -29,7 +29,7 @@ namespace FinanceTracker.API.Controllers
         {
             var query = new GetExistingUsersDetailsQuery();
             var result = await Mediator.Send(query);
-            return result != null ? (IActionResult)Ok(result) : NotFound();
+            return result != null ? (IActionResult)Ok(result) : BadRequest();
         }
 
         [HttpPost]
@@ -38,13 +38,7 @@ namespace FinanceTracker.API.Controllers
         {
             var command = new RegisterUserCommand(userForRegisterDto);
             var result = await Mediator.Send(command);
-
-            if (result.Ok)
-            {
-                return Ok(result.Data.Id);
-            }
-
-            return BadRequest(result.Message);
+            return result != null ? (IActionResult)Ok(result) : BadRequest();
         }
 
         [HttpPost]
