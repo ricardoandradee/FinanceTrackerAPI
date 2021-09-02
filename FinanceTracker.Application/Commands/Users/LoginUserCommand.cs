@@ -33,6 +33,12 @@ namespace FinanceTracker.Application.Commands.Users
 
                 if (userFromRepo.Ok)
                 {
+                    if (!userFromRepo.Data.IsVerified)
+                    {
+                        return Response.Fail<UserForDetailDto>("Your profile is not verified. " +
+                            "Please, click on 'Verify Email Now' button to confirm your account, " +
+                            "or use the 'Forgot password?' link.");
+                    }
                     return Response.Success(_mapper.Map<UserForDetailDto>(userFromRepo.Data));
                 }
 

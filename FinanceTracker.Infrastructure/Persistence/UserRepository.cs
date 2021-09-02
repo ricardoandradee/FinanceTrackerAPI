@@ -2,6 +2,7 @@
 using FinanceTracker.Application.Common.Models;
 using FinanceTracker.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,6 +82,8 @@ namespace FinanceTracker.Infrastructure.Persistence
 
             user.PasswordHash = passowrdHash;
             user.PasswordSalt = passowrdSalt;
+            user.IsVerified = false;
+            user.ConfirmationCode = Guid.NewGuid().ToString();
 
             await _unitOfWork.Context.Users.AddAsync(user);
             await _unitOfWork.SaveChanges();

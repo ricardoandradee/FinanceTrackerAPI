@@ -12,6 +12,13 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
                 .HasMaxLength(255)
                 .IsRequired();
 
+            builder.Property(t => t.ConfirmationCode)
+                .HasMaxLength(50);
+
+            builder.Property(t => t.IsVerified)
+                .HasDefaultValue(false)
+                .IsRequired();
+
             builder.HasOne(t => t.Currency);
 
             builder.Property(t => t.Email)

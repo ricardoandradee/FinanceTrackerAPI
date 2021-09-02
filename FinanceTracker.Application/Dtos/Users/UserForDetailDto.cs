@@ -12,6 +12,7 @@ namespace FinanceTracker.Application.Dtos.Users
         public decimal Wallet { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+        public string ConfirmationCode { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset LastActive { get; set; }
 
