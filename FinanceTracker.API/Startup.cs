@@ -1,3 +1,4 @@
+using FinanceTracker.API.EmailHandling;
 using FinanceTracker.Application;
 using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Infrastructure;
@@ -36,6 +37,7 @@ namespace FinanceTracker.API
             services.AddInfrastructure(Configuration);
 
             services.AddHttpContextAccessor();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
