@@ -1,6 +1,7 @@
-﻿using FinanceTracker.API.EmailHandling;
+﻿using FinanceTracker.Application.Commands.Email;
 using FinanceTracker.Application.Commands.Users;
 using FinanceTracker.Application.Common.Models;
+using FinanceTracker.Application.Dtos.Email;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Application.Queries.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +19,10 @@ namespace FinanceTracker.API.Controllers
     public class AuthController : ApiController
     {
         private readonly IConfiguration _config;
-        private readonly IEmailSender _emailSender;
 
-        public AuthController(IConfiguration config,
-            IEmailSender emailSender)
+        public AuthController(IConfiguration config)
         {
             _config = config;
-            _emailSender = emailSender;
         }
 
 
@@ -50,15 +48,18 @@ namespace FinanceTracker.API.Controllers
             return await SendAccountVerificationEmail(result);
         }
 
-        private async Task<IActionResult> SendAccountVerificationEmail(Response<UserForDetailDto> result)
+        [NonAction]
+        private async Task<IActionResult> SendAccountVerificationEmail(Response<UserForDetailDto> response)
         {
-            var emailResult = await _emailSender.SendVerificationEmail(new UserEmailDto
+            var command = new SendAccountVerificationEmailCommand(new UserEmailDto()
             {
-                EmailTo = result.Data.Email,
-                NameTo = result.Data.FullName
+                EmailTo = response.Data.Email,
+                NameTo = response.Data.FullName
             });
 
-            return emailResult == null ? (IActionResult)NotFound() : Ok(emailResult);
+            var result = await Mediator.Send(command);
+
+            return result == null ? (IActionResult)NotFound() : Ok(result);
         }
 
         [HttpPost]

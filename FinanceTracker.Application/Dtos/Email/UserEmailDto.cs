@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinanceTracker.API.EmailHandling
+namespace FinanceTracker.Application.Dtos.Email
 {
     public class UserEmailDto
     {

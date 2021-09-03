@@ -1,4 +1,6 @@
 ﻿using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Email;
+using FinanceTracker.Application.Utils;
 using FinanceTracker.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +41,11 @@ namespace FinanceTracker.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
             var assembly = typeof(UnitOfWorkRepository).Assembly;
-            var types = assembly.ExportedTypes.Where(x => x.IsClass && !x.IsGenericType && x.IsPublic && x.Name.Contains("Repository"));
+            var types = assembly.ExportedTypes.Where(x => 
+                x.IsClass &&
+                !x.IsGenericType &&
+                x.IsPublic &&
+                x.Name.Contains("Repository"));
 
             foreach (var type in types)
             {
@@ -49,6 +55,9 @@ namespace FinanceTracker.Infrastructure
                     services.AddScoped(repositoryType, type);
                 }
             }
+
+            services.AddScoped<IEmailHandler, EmailHandler>();
+            services.AddScoped<IFileHandler, FileHandler>();
 
             return services;
         }
