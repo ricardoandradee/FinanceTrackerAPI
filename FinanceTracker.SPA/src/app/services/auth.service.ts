@@ -9,6 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrencyService } from './currency.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
+import { UserValidation } from '../models/user-validation.model';
 
 @Injectable()
 export class AuthService {
@@ -35,6 +36,10 @@ export class AuthService {
 
   registerUser(user: User) {
     return this.http.post(this.baseUrl + 'register', {...user, currencyId: user.currency.id});
+  }
+
+  confirmUserRegistration(userValidation: UserValidation) {
+    return this.http.post(this.baseUrl + 'confirmuserregistration', userValidation);
   }
 
   get getIsAuthenticated(): Observable<boolean> {
