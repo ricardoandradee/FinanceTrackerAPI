@@ -14,7 +14,7 @@ namespace FinanceTracker.Domain.Entities
         public byte[] PasswordSalt { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public bool IsVerified { get; set; }
-        public string ConfirmationCode { get; set; }
+        public Guid? ConfirmationCode { get; set; }
         public virtual ICollection<Wallet> Wallets { get; set; }
         public virtual StateTimeZone StateTimeZone { get; set; }
         public int StateTimeZoneId { get; set; }

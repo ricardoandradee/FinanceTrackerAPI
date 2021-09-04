@@ -3,6 +3,7 @@ using FinanceTracker.Application.Dtos.Email;
 using FinanceTracker.Application.Email;
 using FinanceTracker.Application.Utils;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,11 +36,11 @@ namespace FinanceTracker.Application.Commands.Email
 
             private async Task<Response<string>> SendVerificationEmail(UserEmailDto emailDetails)
             {
-                string firstName = GetUsersFirstName(emailDetails);
+                string userName = GetUsersFirstName(emailDetails);
 
                 var emailDetailsDto = new EmailDetailsDto
                 {
-                    Body = GetVerificationEmailBody(firstName),
+                    Body = GetVerificationEmailBody(userName, emailDetails.UserId, emailDetails.ConfirmationCode),
                     SuccessMessage = $"An email was sent to {emailDetails.EmailTo}. Please, verify your account before login in.",
                     Subject = "Please confirm your SpendWise account"
                 };
@@ -47,10 +48,12 @@ namespace FinanceTracker.Application.Commands.Email
                 return await _emailHandler.SendEmail(emailDetails, emailDetailsDto);
             }
 
-            private string GetVerificationEmailBody(string firstName)
+            private string GetVerificationEmailBody(string userName, int userId, Guid confirmationCode)
             {
                 var fileContent = _fileHandler.ReadFile("./Assets/Confirmation - Verification Email.html");
-                fileContent = fileContent.Replace("{{User_Name}}", firstName);
+                fileContent = fileContent.Replace("{{User_Name}}", userName);
+                fileContent = fileContent.Replace("{{User_Id}}", userId.ToString());
+                fileContent = fileContent.Replace("{{Confirmation_Code}}", confirmationCode.ToString());
                 return fileContent;
             }
 

@@ -1,5 +1,6 @@
 ﻿using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Common.Models;
+using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,7 +12,6 @@ namespace FinanceTracker.Infrastructure.Persistence
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-
         public UserRepository(IUnitOfWorkRepository unitOfWork)
             : base(unitOfWork)
         {
@@ -42,13 +42,37 @@ namespace FinanceTracker.Infrastructure.Persistence
                                 .FirstOrDefaultAsync(x => x.Email == email.ToLower().Trim());
 
             var successfullyLoggedIn = user != null ? VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt) : false;
-
             if (!successfullyLoggedIn)
             {
                 return Response.Fail<User>("Incorrect E-mail or Password!");
             }
 
+            if (!user.IsVerified)
+            {
+                return Response.Fail<User>("Your profile is not verified. " +
+                    "Please, click on 'Verify Email Now' button to confirm your account, " +
+                    "or use the 'Forgot password?' link.");
+            }
+
             return Response.Success(user);
+        }
+
+        public async Task<Response<string>> ConfirmUserRegistration(UserValidationDto userValidation)
+        {
+            var user = await _unitOfWork.Context.Users.FindAsync(userValidation.UserId);
+            if (user == null || !IsUserConfirmationCodeValid(userValidation, user))
+                return Response.Fail<string>("It was not possible to validate your account! Please, contact the support!");
+
+            user.ConfirmationCode = null;
+            user.IsVerified = true;
+            await _unitOfWork.SaveChanges();
+
+            return Response.Success("Your account was successfully validated!");
+        }
+
+        private static bool IsUserConfirmationCodeValid(UserValidationDto userValidation, User user)
+        {
+            return user.ConfirmationCode == userValidation.ConfirmationCode && userValidation.ConfirmationCode != null;
         }
 
         public async Task<User> GetUserWithDependenciesById(int userId)
@@ -83,7 +107,7 @@ namespace FinanceTracker.Infrastructure.Persistence
             user.PasswordHash = passowrdHash;
             user.PasswordSalt = passowrdSalt;
             user.IsVerified = false;
-            user.ConfirmationCode = Guid.NewGuid().ToString();
+            user.ConfirmationCode = Guid.NewGuid();
 
             await _unitOfWork.Context.Users.AddAsync(user);
             await _unitOfWork.SaveChanges();

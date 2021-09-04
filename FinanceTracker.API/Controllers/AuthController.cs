@@ -25,7 +25,6 @@ namespace FinanceTracker.API.Controllers
             _config = config;
         }
 
-
         [HttpGet]
         [Route("GetExistingUsersDetails")]
         public async Task<IActionResult> GetExistingUsersDetails()
@@ -54,12 +53,24 @@ namespace FinanceTracker.API.Controllers
             var command = new SendAccountVerificationEmailCommand(new UserEmailDto()
             {
                 EmailTo = response.Data.Email,
-                NameTo = response.Data.FullName
+                NameTo = response.Data.FullName,
+                UserId = response.Data.Id,
+                ConfirmationCode = response.Data.ConfirmationCode ?? Guid.Empty
             });
 
             var result = await Mediator.Send(command);
 
             return result == null ? (IActionResult)NotFound() : Ok(result);
+        }
+
+        [HttpPost]
+        [Route("ConfirmUserRegistration")]
+        public async Task<IActionResult> ConfirmUserRegistration(UserValidationDto userValidationDto)
+        {
+            var command = new ConfirmUserRegistrationCommand(userValidationDto);
+            var result = await Mediator.Send(command);
+
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
         }
 
         [HttpPost]

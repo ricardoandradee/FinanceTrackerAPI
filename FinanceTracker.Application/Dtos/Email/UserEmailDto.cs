@@ -9,5 +9,7 @@ namespace FinanceTracker.Application.Dtos.Email
     {
         public string EmailTo { get; set; }
         public string NameTo { get; set; }
+        public int UserId { get; set; }
+        public Guid ConfirmationCode { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FinanceTracker.Application.Common.Models;
+using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,5 +13,6 @@ namespace FinanceTracker.Application.Common.Interfaces
         Task<User> GetUserWithDependenciesById(int userId);
         Task<User> Register(User user, string password);
         Task<Response<User>> Login(string email, string password);
+        Task<Response<string>> ConfirmUserRegistration(UserValidationDto userValidation);
     }
 }
