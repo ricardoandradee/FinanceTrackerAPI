@@ -8,6 +8,7 @@ import { ErrorAlreadyTakenMatcher } from 'src/app/errorMatchers/error-already-ta
 import { TimeZone } from 'src/app/models/timezone.model';
 import { Currency } from 'src/app/models/currency.model';
 import { CommonService } from 'src/app/services/common.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -24,6 +25,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private uiService: UiService,
+              private router: Router,
               private commonService: CommonService) {
               }
 
@@ -49,30 +51,17 @@ export class SignupComponent implements OnInit, OnDestroy {
       const user = Object.assign({}, form.value);
       const subscription = this.authService.registerUser({ fullName: user.fullName, password: user.password,
             stateTimeZoneId: user.timeZone, email: user.email,
-            currency: { id: user.currency } as Currency } as User).subscribe((response) => {
-              if (response) {
-                this.login(form);
+            currency: { id: user.currency } as Currency } as User).subscribe((response: any) => { 
+              if (response.ok) {
+                this.uiService.showSnackBar(response.data, 3000);
+                this.router.navigate(['/login']);
+              } else {
+                this.uiService.showSnackBar(response.message, 3000);
               }
-              this.uiService.showSnackBar('User successfully registered.', 3000);
       }, error => {
             this.uiService.showSnackBar(error, 3000);
       });
       this.allSubscriptions.push(subscription);
-  }
-
-  login(form: NgForm) {
-    const loginSubscription = this.authService.login({email: form.value.email, password: form.value.password});
-    loginSubscription.add(() => {
-        const user: User = JSON.parse(localStorage.getItem('user'));
-        const loginHistorySubscription = this.commonService.createUserLoginHistory(
-        {
-          Email: form.value.email,
-          UserId: user != null ? user.id : null,
-          IsSuccessful: user != null ? true : false
-        }).subscribe((response) => { this.uiService.showSnackBar('User login history successfully created.', 3000); });
-        this.allSubscriptions.push(loginHistorySubscription);
-    });
-    this.allSubscriptions.push(loginSubscription);
   }
 
   ngOnDestroy(): void {
