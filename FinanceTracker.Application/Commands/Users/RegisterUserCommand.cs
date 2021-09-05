@@ -31,11 +31,11 @@ namespace FinanceTracker.Application.Commands.Users
 
             public async Task<Response<UserForDetailDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
-                request.UserForRegisterDto.UserName = request.UserForRegisterDto.UserName.ToLower();
+                request.UserForRegisterDto.Email = request.UserForRegisterDto.Email.ToLower();
 
-                if (await _userRepository.UserExists(request.UserForRegisterDto.UserName))
+                if (await _userRepository.UserExistsByEmail(request.UserForRegisterDto.Email))
                 {
-                    return Response.Fail<UserForDetailDto>("User name is already registed in our database.");
+                    return Response.Fail<UserForDetailDto>("Email is already registed in our database.");
                 }
 
                 var UserToCreate = _mapper.Map<User>(request.UserForRegisterDto);

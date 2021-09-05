@@ -29,7 +29,7 @@ namespace FinanceTracker.Application.Commands.Users
 
             public async Task<Response<UserForDetailDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
             {
-                var userFromRepo = await _userRepository.Login(request.UserForLoginDto.UserName.ToLower(), request.UserForLoginDto.Password);
+                var userFromRepo = await _userRepository.Login(request.UserForLoginDto.Email.ToLower(), request.UserForLoginDto.Password);
 
                 if (userFromRepo.Ok)
                 {

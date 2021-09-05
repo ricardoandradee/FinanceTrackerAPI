@@ -8,10 +8,6 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<UserLoginHistory> builder)
         {
-            builder.Property(t => t.UserName)
-                .HasMaxLength(30)
-                .IsRequired();
-
             builder.Property(t => t.IPAddress)
                 .HasMaxLength(20)
                 .IsRequired();

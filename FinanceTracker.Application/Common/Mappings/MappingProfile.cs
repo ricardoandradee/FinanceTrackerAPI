@@ -17,7 +17,7 @@ namespace FinanceTracker.Application.Common.Mappings
         public MappingProfile()
         {
             #region User related mappings
-            
+
             CreateMap<User, UserInfoForSignupDto>().ReverseMap();
             CreateMap<User, UserForDetailDto>().ReverseMap();
             CreateMap<User, UserForRegisterDto>().ReverseMap();
@@ -89,6 +89,7 @@ namespace FinanceTracker.Application.Common.Mappings
             #region Currency related mappings
 
             CreateMap<Currency, CurrencyDto>().ReverseMap();
+            CreateMap<Currency, CurrencyToReturnDto>().ReverseMap();
 
             #endregion
 

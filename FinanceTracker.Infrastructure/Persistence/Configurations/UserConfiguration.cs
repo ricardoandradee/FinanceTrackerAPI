@@ -8,8 +8,15 @@ namespace FinanceTracker.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(t => t.UserName)
-                .HasMaxLength(30)
+            builder.Property(t => t.FullName)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            builder.Property(t => t.ConfirmationCode)
+                .IsRequired(false);
+
+            builder.Property(t => t.IsVerified)
+                .HasDefaultValue(false)
                 .IsRequired();
 
             builder.HasOne(t => t.Currency);

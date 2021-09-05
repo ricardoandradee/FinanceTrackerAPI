@@ -1,4 +1,7 @@
-﻿using FinanceTracker.Application.Commands.Users;
+﻿using FinanceTracker.Application.Commands.Email;
+using FinanceTracker.Application.Commands.Users;
+using FinanceTracker.Application.Common.Models;
+using FinanceTracker.Application.Dtos.Email;
 using FinanceTracker.Application.Dtos.Users;
 using FinanceTracker.Application.Queries.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -22,14 +25,13 @@ namespace FinanceTracker.API.Controllers
             _config = config;
         }
 
-
         [HttpGet]
         [Route("GetExistingUsersDetails")]
         public async Task<IActionResult> GetExistingUsersDetails()
         {
             var query = new GetExistingUsersDetailsQuery();
             var result = await Mediator.Send(query);
-            return result != null ? (IActionResult)Ok(result) : NotFound();
+            return result != null ? (IActionResult)Ok(result) : BadRequest();
         }
 
         [HttpPost]
@@ -39,12 +41,55 @@ namespace FinanceTracker.API.Controllers
             var command = new RegisterUserCommand(userForRegisterDto);
             var result = await Mediator.Send(command);
 
-            if (result.Ok)
-            {
-                return Ok(result.Data.Id);
-            }
+            if (result == null) return BadRequest();
+            if (!result.Ok) return Ok(result);
 
-            return BadRequest(result.Message);
+            return await SendAccountVerificationEmail(result);
+        }
+
+        [NonAction]
+        private async Task<IActionResult> SendAccountVerificationEmail(Response<UserForDetailDto> response)
+        {
+            var command = new SendAccountVerificationEmailCommand(new UserEmailDto()
+            {
+                EmailTo = response.Data.Email,
+                NameTo = response.Data.FullName,
+                UserId = response.Data.Id,
+                ConfirmationCode = response.Data.ConfirmationCode ?? Guid.Empty
+            });
+
+            var result = await Mediator.Send(command);
+
+            return result == null ? (IActionResult)NotFound() : Ok(result);
+        }
+
+        [HttpPost]
+        [Route("ConfirmUserRegistration")]
+        public async Task<IActionResult> ConfirmUserRegistration(UserValidationDto userValidationDto)
+        {
+            var command = new ConfirmUserRegistrationCommand(userValidationDto);
+            var result = await Mediator.Send(command);
+
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
+        }
+
+        [HttpGet]
+        [Route("SendPasswordResetEmail")]
+        public async Task<IActionResult> SendPasswordResetEmail([FromBody] string email)
+        {
+            var command = new SendPasswordResetEmailCommand(email);
+            var result = await Mediator.Send(command);
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
+        }
+
+        [HttpPost]
+        [Route("ResetUserPassword")]
+        public async Task<IActionResult> ResetUserPassword(UserPasswordResetDto userPasswordResetDto)
+        {
+            var command = new ResetUserPasswordCommand(userPasswordResetDto);
+            var result = await Mediator.Send(command);
+
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
         }
 
         [HttpPost]
@@ -58,7 +103,7 @@ namespace FinanceTracker.API.Controllers
             {
                 return Ok(new LoginResponseDto
                 {
-                    Token = result.Ok ? GenerateToken(userForLoginDto.UserName, result.Data.Id) : "",
+                    Token = result.Ok ? GenerateToken(userForLoginDto.Email, result.Data.Id) : "",
                     User = result
                 });
             }
@@ -66,11 +111,11 @@ namespace FinanceTracker.API.Controllers
             return BadRequest();
         }
 
-        private string GenerateToken(string userName, int userId)
+        private string GenerateToken(string email, int userId)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             };
 

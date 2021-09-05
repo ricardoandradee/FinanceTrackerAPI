@@ -6,13 +6,15 @@ namespace FinanceTracker.Domain.Entities
     public class User
     {
         public int Id { get; set; }
-        public string UserName { get; set; }
+        public string FullName { get; set; }
         public string Email { get; set; }
         public int CurrencyId { get; set; }
         public virtual Currency Currency { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
+        public bool IsVerified { get; set; }
+        public Guid? ConfirmationCode { get; set; }
         public virtual ICollection<Wallet> Wallets { get; set; }
         public virtual StateTimeZone StateTimeZone { get; set; }
         public int StateTimeZoneId { get; set; }
