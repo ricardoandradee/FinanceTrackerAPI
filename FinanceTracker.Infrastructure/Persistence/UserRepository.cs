@@ -26,12 +26,26 @@ namespace FinanceTracker.Infrastructure.Persistence
             }).ToListAsync();
         }
 
-        public async Task<bool> UserExists(string email)
+        public async Task<bool> UserExistsByEmail(string email)
         {
             if (await _unitOfWork.Context.Users.AnyAsync(x => x.Email == email.ToLower().Trim()))
                 return true;
 
             return false;
+        }
+
+        public async Task<Response<User>> SetUserConfirmationCodeByEmail(string email)
+        {
+            var user = await _unitOfWork.Context.Users.FirstOrDefaultAsync(x => x.Email == email.ToLower().Trim());
+            if (user == null)
+            {
+                return Response.Fail<User>("This email is not registered in our system!");
+            }
+
+            user.ConfirmationCode = Guid.NewGuid();
+            await _unitOfWork.SaveChanges();
+
+            return Response.Success(user);
         }
 
         public async Task<Response<User>> Login(string email, string password)
@@ -57,11 +71,16 @@ namespace FinanceTracker.Infrastructure.Persistence
             return Response.Success(user);
         }
 
+        private bool IsUserConfirmationCodeValid(Guid? confirmationCode, User user)
+        {
+            return confirmationCode.HasValue && user.ConfirmationCode == confirmationCode;
+        }
+
         public async Task<Response<string>> ConfirmUserRegistration(UserValidationDto userValidation)
         {
             var user = await _unitOfWork.Context.Users.FindAsync(userValidation.UserId);
-            if (user == null || !IsUserConfirmationCodeValid(userValidation, user))
-                return Response.Fail<string>("It was not possible to validate your account! Please, contact the support!");
+            if (user == null || !IsUserConfirmationCodeValid(userValidation.ConfirmationCode, user))
+                return Response.Fail<string>("It was not possible to validate your profile identity! Please, contact the support!");
 
             user.ConfirmationCode = null;
             user.IsVerified = true;
@@ -70,9 +89,18 @@ namespace FinanceTracker.Infrastructure.Persistence
             return Response.Success("Your account was successfully validated!");
         }
 
-        private static bool IsUserConfirmationCodeValid(UserValidationDto userValidation, User user)
+        public async Task<Response<string>> ResetUserPassword(UserPasswordResetDto userPasswordResetDto)
         {
-            return user.ConfirmationCode == userValidation.ConfirmationCode && userValidation.ConfirmationCode != null;
+            var user = await _unitOfWork.Context.Users.FindAsync(userPasswordResetDto.UserId);
+            if (user == null || !IsUserConfirmationCodeValid(userPasswordResetDto.ConfirmationCode, user))
+                return Response.Fail<string>("It was not possible to validate your profile identity! Please, contact the support!");
+
+            SetUserPassword(user, userPasswordResetDto.Password);
+            user.ConfirmationCode = null;
+            user.IsVerified = true;
+            await _unitOfWork.SaveChanges();
+
+            return Response.Success("Your password was successfully updated!");
         }
 
         public async Task<User> GetUserWithDependenciesById(int userId)
@@ -101,11 +129,7 @@ namespace FinanceTracker.Infrastructure.Persistence
 
         public async Task<User> Register(User user, string password)
         {
-            byte[] passowrdHash, passowrdSalt;
-            CreatePasswordHash(password, out passowrdHash, out passowrdSalt);
-
-            user.PasswordHash = passowrdHash;
-            user.PasswordSalt = passowrdSalt;
+            SetUserPassword(user, password);
             user.IsVerified = false;
             user.ConfirmationCode = Guid.NewGuid();
 
@@ -113,6 +137,15 @@ namespace FinanceTracker.Infrastructure.Persistence
             await _unitOfWork.SaveChanges();
 
             return user;
+        }
+
+        private void SetUserPassword(User user, string password)
+        {
+            byte[] passowrdHash, passowrdSalt;
+            CreatePasswordHash(password, out passowrdHash, out passowrdSalt);
+
+            user.PasswordHash = passowrdHash;
+            user.PasswordSalt = passowrdSalt;
         }
 
         private void CreatePasswordHash(string password, out byte[] passowrdHash, out byte[] passowrdSalt)

@@ -73,6 +73,25 @@ namespace FinanceTracker.API.Controllers
             return result == null ? (IActionResult)BadRequest() : Ok(result);
         }
 
+        [HttpGet]
+        [Route("SendPasswordResetEmail")]
+        public async Task<IActionResult> SendPasswordResetEmail([FromBody] string email)
+        {
+            var command = new SendPasswordResetEmailCommand(email);
+            var result = await Mediator.Send(command);
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
+        }
+
+        [HttpPost]
+        [Route("ResetUserPassword")]
+        public async Task<IActionResult> ResetUserPassword(UserPasswordResetDto userPasswordResetDto)
+        {
+            var command = new ResetUserPasswordCommand(userPasswordResetDto);
+            var result = await Mediator.Send(command);
+
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
+        }
+
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)

@@ -33,7 +33,7 @@ namespace FinanceTracker.Application.Commands.Users
             {
                 request.UserForRegisterDto.Email = request.UserForRegisterDto.Email.ToLower();
 
-                if (await _userRepository.UserExists(request.UserForRegisterDto.Email))
+                if (await _userRepository.UserExistsByEmail(request.UserForRegisterDto.Email))
                 {
                     return Response.Fail<UserForDetailDto>("Email is already registed in our database.");
                 }
