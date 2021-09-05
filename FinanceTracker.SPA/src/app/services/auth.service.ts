@@ -10,6 +10,7 @@ import { CurrencyService } from './currency.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 import { UserValidation } from '../models/user-validation.model';
+import { UserPasswordReset } from '../models/user-password-reset.model';
 
 @Injectable()
 export class AuthService {
@@ -40,6 +41,10 @@ export class AuthService {
 
   confirmUserRegistration(userValidation: UserValidation) {
     return this.http.post(this.baseUrl + 'confirmuserregistration', userValidation);
+  }
+
+  resetUserPassword(userValidation: UserPasswordReset) {
+    return this.http.post(this.baseUrl + 'resetuserpassword', userValidation);
   }
 
   get getIsAuthenticated(): Observable<boolean> {

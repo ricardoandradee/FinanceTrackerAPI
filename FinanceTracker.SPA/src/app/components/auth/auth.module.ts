@@ -6,12 +6,14 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { SharedModule } from '../../shared/shared.module';
 import { AuthRoutingModule } from './auth-routing.module';
 import { VerifyUserProfileComponent } from '../verify-user-account/verify-user-profile.component';
+import { PasswordResetComponent } from '../password-reset/password-reset.component';
 
 @NgModule({
     declarations: [
         SignupComponent,
         LoginComponent,
-        VerifyUserProfileComponent
+        VerifyUserProfileComponent,
+        PasswordResetComponent
     ],
     imports: [
         SharedModule,

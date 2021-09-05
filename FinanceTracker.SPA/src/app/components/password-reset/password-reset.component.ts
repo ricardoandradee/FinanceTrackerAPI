@@ -1,21 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UserValidation } from 'src/app/models/user-validation.model';
+import { ErrorPasswordMatcher } from 'src/app/errorMatchers/error-password.matcher';
+import { UserPasswordReset } from 'src/app/models/user-password-reset.model';
 import { AuthService } from 'src/app/services/auth.service';
 import validator from 'validator';
 
 @Component({
-  selector: 'app-verify-user-profile',
-  templateUrl: './verify-user-profile.component.html',
-  styleUrls: ['./verify-user-profile.component.scss']
+  selector: 'app-password-reset',
+  templateUrl: './password-reset.component.html',
+  styleUrls: ['./password-reset.component.scss']
 })
-export class VerifyUserProfileComponent implements OnInit, OnDestroy {
+export class PasswordResetComponent implements OnInit, OnDestroy {
+  private model: UserPasswordReset;
   isModelValid: boolean = false;
   private subscription: Subscription;
   processed = false;
   successfull = false;
   message_response = '';
+  passwordMatcher = new ErrorPasswordMatcher();
 
   constructor(private route: ActivatedRoute,
               private authService: AuthService) { }
@@ -23,17 +27,17 @@ export class VerifyUserProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     let userId = this.route.snapshot.queryParams["userId"];
     let confirmationCode: string = this.route.snapshot.queryParams["confirmationCode"];
-    
+
     if (userId && confirmationCode) {
       this.isModelValid = /^\d+$/.test(userId) && validator.isUUID(confirmationCode);
     }
 
     if (this.isModelValid) {
-      var model = {
+      this.model = {
         userId: Number(userId),
-        confirmationCode: confirmationCode
-      } as UserValidation;
-      this.confirmUserRegistration(model);
+        confirmationCode: confirmationCode,
+        password: ''
+      } as UserPasswordReset;
     } else {
       this.processed = true;
       this.successfull = false;
@@ -41,9 +45,15 @@ export class VerifyUserProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  confirmUserRegistration(model: UserValidation) {    
+  onSubmit(form: NgForm) {
+    const passwords = Object.assign({}, form.value);
+    this.model.password = passwords.password;
+    this.confirmUserRegistration();
+  }
+  
+  confirmUserRegistration() {    
     this.subscription = this.authService
-      .confirmUserRegistration(model).subscribe((response: any) => {
+      .resetUserPassword(this.model).subscribe((response: any) => {
         this.successfull = response.ok;
         this.message_response = this.successfull ? response.data : response.message;
     }, error => {
