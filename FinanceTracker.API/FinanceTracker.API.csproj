@@ -12,9 +12,13 @@
 
   <ItemGroup>
     <None Remove="Assets\Confirmation - Verification Email.html" />
+    <None Remove="Assets\Password Reset Email.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Password Reset Email.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Assets\Confirmation - Verification Email.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
