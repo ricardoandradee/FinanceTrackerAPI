@@ -75,7 +75,7 @@ namespace FinanceTracker.API.Controllers
 
         [HttpGet]
         [Route("SendPasswordResetEmail")]
-        public async Task<IActionResult> SendPasswordResetEmail([FromBody] string email)
+        public async Task<IActionResult> SendPasswordResetEmail([FromQuery] string email)
         {
             var command = new SendPasswordResetEmailCommand(email);
             var result = await Mediator.Send(command);
