@@ -1,0 +1,37 @@
+steps:
+  - uses: actions/checkout@v4
+
+  - name: Setup .NET
+    uses: actions/setup-dotnet@v4
+    with:
+      dotnet-version: '8.0.x'
+
+  - name: Restore
+    run: dotnet restore
+
+  - name: Build
+    run: dotnet build --configuration Release --no-restore
+
+  - name: Test
+    run: dotnet test --no-build --verbosity normal
+
+  - name: Install EF Tools
+    run: dotnet tool install --global dotnet-ef --version 8.* || true
+
+  - name: Run EF Migrations (optional)
+    env:
+      ConnectionStrings__DefaultConnectionAzure: ${{ secrets.DEV_CONNECTIONSTRING }}
+      Jwt__Key: ${{ secrets.DEV_JWT_KEY }}
+      ASPNETCORE_ENVIRONMENT: Development
+    run: |
+      if [ -n "${{ secrets.DEV_CONNECTIONSTRING }}" ]; then
+        dotnet ef database update --project FinanceTracker.Infrastructure --startup-project FinanceTracker.API
+      else
+        echo "Skipping migrations: no DEV_CONNECTIONSTRING secret provided"
+      fi
+
+  - name: Upload workflow logs
+    uses: actions/upload-artifact@v4
+    with:
+      name: ci-logs
+      path: ${{ github.workspace }}
