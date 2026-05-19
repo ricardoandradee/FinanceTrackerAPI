@@ -1,37 +1,34 @@
-﻿using FinanceTracker.Infrastructure.Persistence.Data;
+using FinanceTracker.Infrastructure.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 using FinanceTracker.Application.Common.Extensions;
 
 namespace FinanceTracker.Infrastructure.Persistence
 {
-    public class ApplicationDbContextSeed
+    public static class ApplicationDbContextSeed
     {
-        public static void SeedDataBase(ApplicationDbContext context)
+        public static async Task SeedDataBaseAsync(ApplicationDbContext context)
         {
-            if (!context.Currencies.Any())
+            if (!await context.Currencies.AnyAsync())
             {
                 var currencies = CurrencyData.GetCurrencyList();
-                foreach (var currency in currencies)
-                {
-                    context.Currencies.Add(currency);
-                }
-                context.SaveChanges();
+                context.Currencies.AddRange(currencies);
+                await context.SaveChangesAsync();
             }
-            if (!context.StateTimeZones.Any())
+
+            if (!await context.StateTimeZones.AnyAsync())
             {
                 var timeZones = TimeZoneData.GetTimeZoneList();
                 var timeZonesSplited = timeZones.SplitList(100);
                 foreach (var tzSplited in timeZonesSplited)
                 {
-                    foreach (var timeZone in tzSplited)
-                    {
-                        context.StateTimeZones.Add(timeZone);
-                    }
-                    context.SaveChanges();
+                    context.StateTimeZones.AddRange(tzSplited);
+                    await context.SaveChangesAsync();
                 }
             }
 
-            if (!context.Users.Any())
+            if (!await context.Users.AnyAsync())
             {
                 var users = UserData.GetUserList();
                 foreach (var user in users)
@@ -46,7 +43,7 @@ namespace FinanceTracker.Infrastructure.Persistence
 
                     context.Users.Add(user);
                 }
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
