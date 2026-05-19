@@ -42,12 +42,17 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         await context.Database.MigrateAsync();
-        await ApplicationDbContextSeed.SeedDataBaseAsync(context);
+
+        // Seed only in Development and only when DB tables are empty
+        if (app.Environment.IsDevelopment())
+        {
+            await ApplicationDbContextSeed.SeedDataBaseAsync(context);
+        }
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occured during migration.");
+        logger.LogError(ex, "An error occured during migration/seed.");
     }
 }
 
