@@ -20,8 +20,8 @@ namespace FinanceTracker.Application
             services.AddSingleton(mapper);
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            // Updated MediatR registration to use RegisterServicesFromAssembly for newer MediatR versions
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            // Use MediatR v11 registration (compatible with installed package)
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             return services;
         }
