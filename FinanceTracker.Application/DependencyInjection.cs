@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FinanceTracker.Application.Common.Mappings;
 using FluentValidation;
 using MediatR;
@@ -20,6 +20,7 @@ namespace FinanceTracker.Application
             services.AddSingleton(mapper);
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            // Use MediatR v11 registration (compatible with installed package)
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             return services;

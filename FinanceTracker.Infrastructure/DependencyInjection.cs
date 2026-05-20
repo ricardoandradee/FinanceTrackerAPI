@@ -1,4 +1,4 @@
-﻿using FinanceTracker.Application.Common.Interfaces;
+using FinanceTracker.Application.Common.Interfaces;
 using FinanceTracker.Application.Email;
 using FinanceTracker.Application.Utils;
 using FinanceTracker.Infrastructure.Persistence;
@@ -17,9 +17,17 @@ namespace FinanceTracker.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("DefaultConnectionAzure");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                throw new InvalidOperationException("Configuration value 'ConnectionStrings:DefaultConnectionAzure' is missing. Set it in appsettings or environment variables.");
+
+            var jwtKey = configuration["Jwt:Key"];
+            if (string.IsNullOrWhiteSpace(jwtKey))
+                throw new InvalidOperationException("Configuration value 'Jwt:Key' is missing. Set it in appsettings or environment variables.");
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionAzure"),
+                options.UseSqlServer(connectionString,
                         b => b.MigrationsAssembly("FinanceTracker.API"));
                 options.EnableSensitiveDataLogging();
             });
@@ -31,17 +39,17 @@ namespace FinanceTracker.Infrastructure
                     {
                         ValidateIssuerSigningKey = true,
                         ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("Jwt:Key").Value)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
                 });
 
             services.AddTransient<ApplicationDbContextSeed>();
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
             var assembly = typeof(UnitOfWorkRepository).Assembly;
-            var types = assembly.ExportedTypes.Where(x => 
+            var types = assembly.ExportedTypes.Where(x =>
                 x.IsClass &&
                 !x.IsGenericType &&
                 x.IsPublic &&
